@@ -46,7 +46,7 @@ const ItemsListSection: React.FC<ItemsListSectionProps> = ({ data }) => {
             </div>
           )}
         </div>
-        <ItemsListSectionContent data={data} />
+        <ItemsListSectionContent data={data}  />
       </ItemsListSectionStyled>
     </Container>
   );
