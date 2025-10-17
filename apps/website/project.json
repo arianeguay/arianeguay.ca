@@ -1,0 +1,58 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "prefix": "app",
+  "sourceRoot": "apps/website/src",
+  "targets": {
+    "build": {
+      "executor": "@nx/next:build",
+      "outputs": ["{workspaceRoot}/dist/apps/website"],
+      "options": {
+        "root": "apps/website",
+        "outputPath": "dist/apps/website",
+        "nextConfig": "apps/website/next.config.js",
+        "tsConfig": "apps/website/tsconfig.json"
+      },
+      "configurations": {
+        "development": {},
+        "production": {
+          "prod": true
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "serve": {
+      "executor": "@nx/next:server",
+      "options": {
+        "buildTarget": "website:build",
+        "dev": true
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "website:build:development"
+        },
+        "production": {
+          "buildTarget": "website:build:production",
+          "dev": false
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "export": {
+      "executor": "@nx/next:export",
+      "options": {
+        "buildTarget": "website:build:production",
+        "outputPath": "dist/apps/website/exported"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "lintFilePatterns": [
+          "apps/website/**/*.{ts,tsx,js,jsx}"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

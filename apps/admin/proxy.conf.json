@@ -1,0 +1,9 @@
+{
+  "/api/admin": {
+    "target": "http://localhost:4200",
+    "secure": false,
+    "pathRewrite": {
+      "^/api/admin": "http://localhost:4000/api/admin"
+    }
+  }
+}
