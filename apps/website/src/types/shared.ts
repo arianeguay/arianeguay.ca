@@ -36,22 +36,23 @@ export type Background =
   | "gradient5"
   | "none";
 
+export type CtaVariation =
+  | "vertical"
+  | "verticalReversed"
+  | "horizontal"
+  | "horizontalReversed";
+
 export type CTASection = {
   title: string;
   description?: CFMaybe<{ json: Document }>;
-  variation?: CFMaybe<string>;
+  variant?: CFMaybe<CtaVariation>;
   illustration?: CFMaybe<CfAsset>;
   primaryCta?: CFRef<LinkItem>;
   background?: CFMaybe<Background>;
   isScreen?: CFMaybe<boolean>;
 };
 
-export type ContactInfo = {
-  website?: CFMaybe<string>;
-  email?: CFMaybe<string>;
-  telephone?: CFMaybe<string>;
-  ctaName?: CFMaybe<string>;
-};
+
 
 export type GalleryItem = {
   image: CfAsset;

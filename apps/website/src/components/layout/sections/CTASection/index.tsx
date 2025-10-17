@@ -3,6 +3,7 @@ import Container from "../../container";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import { CtaSectionContentStyled } from "./styles";
 import CTA from "../../../common/cta";
+import Typography from "../../../common/typography";
 
 interface CTASectionProps {
   data: CTASection;
@@ -10,8 +11,11 @@ interface CTASectionProps {
 const CTASectionComponent: React.FC<CTASectionProps> = ({ data }) => {
   console.log(data);
   return (
-    <Container isScreen={!!data.isScreen} background={data.background ?? "none"}>
-      <CtaSectionContentStyled>
+    <Container
+      isScreen={!!data.isScreen}
+      background={data.background ?? "none"}
+    >
+      <CtaSectionContentStyled $variation={data.variant ?? "horizontal"}>
         {!!data.illustration && (
           <img
             src={data.illustration.url}
@@ -19,10 +23,12 @@ const CTASectionComponent: React.FC<CTASectionProps> = ({ data }) => {
           />
         )}
         <div>
-          <h2>{data.title}</h2>
-          {data.description?.json &&
-            documentToReactComponents(data.description.json)}
-            {data.primaryCta && <CTA data={data.primaryCta} />}
+          {!!data.title && <h2>{data.title}</h2>}
+          {!!data.description?.json &&
+          <Typography element="div" variant="body1">
+            {documentToReactComponents(data.description.json)}
+          </Typography>}
+          {!!data.primaryCta && <CTA data={data.primaryCta} />}
         </div>
       </CtaSectionContentStyled>
     </Container>

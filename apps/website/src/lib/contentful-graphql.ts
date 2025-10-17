@@ -97,9 +97,7 @@ export async function getPageBySlug(slug: string): Promise<PageEntry | null> {
           sectionsCollection(limit: $sectionLimit) {
             items {
               __typename
-              ... on ContactInfo {
-                city
-              }
+           
               ... on ItemsList {
                 title
                 description {
@@ -170,7 +168,7 @@ export async function getPageBySlug(slug: string): Promise<PageEntry | null> {
                         url
                         title
                       }
-                      
+
                       primaryCta {
                         kind
                         label

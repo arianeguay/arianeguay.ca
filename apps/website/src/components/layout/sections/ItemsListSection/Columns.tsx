@@ -1,5 +1,6 @@
 import theme from "apps/website/src/theme";
 import { ItemsList } from "apps/website/src/types/shared";
+import { DefaultCard } from "./Card";
 
 const ItemsListColumns: React.FC<ItemsList> = ({ itemsCollection }) => {
   return (
@@ -12,9 +13,7 @@ const ItemsListColumns: React.FC<ItemsList> = ({ itemsCollection }) => {
     >
       {itemsCollection?.items.map((item, index) => {
         return (
-          <div key={item?.text + index}>
-            <h3>{item?.text}</h3>
-          </div>
+         <DefaultCard key={item?.text + index} {...item} />
         );
       })}
     </div>

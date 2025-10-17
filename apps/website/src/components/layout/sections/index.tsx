@@ -20,6 +20,7 @@ const Sections: React.FC<SectionsProps> = ({ sections }) => {
         return <ItemsListSection key={s.__typename+index} data={s} />;
       case "Group":
         return <GroupSection key={s.__typename+index} data={s} />;
+
     }
   });
 };

@@ -12,8 +12,11 @@ const VerticalStyle = (theme: CustomTheme) => css`
 
 const TwoColsStyle = (side: string, theme: CustomTheme) => css`
   display: flex;
-  flex-direction: column;
-  gap: ${theme.spacing.xl};
+  flex-direction: row;
+  gap: ${theme.spacing.xxxxl};
+  &> * {
+    flex: 1;
+  }
   & > *:first-child {
     ${side === "left" ? `order: 1;` : `order: 2;`}
   }

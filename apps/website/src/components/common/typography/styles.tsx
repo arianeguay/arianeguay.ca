@@ -1,3 +1,4 @@
+"use client"
 import styled from "@emotion/styled";
 import { typeStyle, TypographyElement } from "apps/website/src/theme";
 
