@@ -1,5 +1,5 @@
 "use client"
-import styled from "@emotion/styled";
+import styled from "styled-components";
 import { typeStyle, TypographyElement } from "apps/website/src/theme";
 
 export interface TypographyStyledProps {

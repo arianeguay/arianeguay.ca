@@ -1,5 +1,5 @@
-import { keyframes } from "@emotion/react";
-import styled from "@emotion/styled";
+import { keyframes } from "styled-components";
+import styled from "styled-components";
 
 const fadein = keyframes`
   from {

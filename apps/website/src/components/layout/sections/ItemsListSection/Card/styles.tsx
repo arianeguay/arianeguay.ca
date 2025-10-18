@@ -1,6 +1,6 @@
 "use client";
-import { css } from "@emotion/react";
-import styled from "@emotion/styled";
+import { css } from "styled-components";
+import styled from "styled-components";
 import { ListItemVariant } from "apps/website/src/types/shared";
 
 const RowStyling = css`

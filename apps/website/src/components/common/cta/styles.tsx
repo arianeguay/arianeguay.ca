@@ -1,13 +1,9 @@
 "use client";
-import { css } from "@emotion/react";
-import styled from "@emotion/styled";
-import { CustomTheme } from "apps/website/src/theme";
-import { LinkItem, LinkItemVariant } from "apps/website/src/types/shared";
+import { css, DefaultTheme } from "styled-components";
+import styled from "styled-components";
+import { LinkItemVariant } from "apps/website/src/types/shared";
 
-const getColoredStyle = (
-  variant: LinkItemVariant,
-  theme: CustomTheme,
-) => {
+const getColoredStyle = (variant: LinkItemVariant, theme: DefaultTheme) => {
   return css`
     background: ${theme.button.colors[variant].background};
     color: ${theme.button.colors[variant].text};
@@ -29,23 +25,14 @@ const getColoredStyle = (
   `;
 };
 
-const variantStyle = (variant: LinkItemVariant, theme: CustomTheme) => {
+const variantStyle = (variant: LinkItemVariant, theme: DefaultTheme) => {
   switch (variant) {
     case "primary":
-      return getColoredStyle(
-        variant,
-        theme,
-      );
+      return getColoredStyle(variant, theme);
     case "secondary":
-      return getColoredStyle(
-        variant,
-        theme,
-      );
+      return getColoredStyle(variant, theme);
     case "tertiary":
-      return getColoredStyle(
-        variant,
-        theme,
-      );
+      return getColoredStyle(variant, theme);
     case "ghost":
       return css`
         border: none;
@@ -72,5 +59,5 @@ export const CTAStyled = styled.button<{ $variant?: LinkItemVariant }>`
   cursor: pointer;
   padding: ${({ theme }) => theme.spacing.sm};
 
-  ${({ $variant, theme }) => variantStyle($variant??"primary", theme)}
+  ${({ $variant, theme }) => variantStyle($variant ?? "primary", theme)}
 `;

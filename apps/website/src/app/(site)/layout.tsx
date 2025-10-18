@@ -4,7 +4,6 @@ import Header from "../../components/layout/header";
 import { Footer } from "../../components/layout";
 import StylingProvider from "../../context/theme-provider";
 import { getSiteSettings } from "../../lib/contentful-graphql";
-import { GlobalStyle } from "../../theme/global-style";
 import ScrollHijacker from "../../components/scroll/ScrollHijacker";
 
 // Layout components would be imported here
@@ -42,7 +41,6 @@ export default async function SiteLayout(props: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body>
-        <GlobalStyle />
         <StylingProvider>
           <Header nav={siteSettings?.navCollection?.items} currentPath={"/"} />
           <ScrollHijacker />

@@ -1,5 +1,5 @@
 "use client"
-import styled from "@emotion/styled";
+import styled from "styled-components";
 
 export const FooterStyled = styled.footer`
 display: flex;

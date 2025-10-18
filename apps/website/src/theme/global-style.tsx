@@ -1,15 +1,13 @@
-"use client"
+"use client";
 // GlobalStyle.ts
 import { typeStyle } from "./index";
-import { css, Global } from "@emotion/react";
+import { css, createGlobalStyle } from "styled-components";
 import theme from "./index";
 
-export const GlobalStyle = () => (
-  <Global
-    styles={css`
-      :root {
-        color-scheme: light;
-      }
+export const GlobalStyle = createGlobalStyle`
+  :root {
+    color-scheme: light;
+  }
 
       html,
       body {
@@ -46,6 +44,4 @@ export const GlobalStyle = () => (
       .overline {
         ${typeStyle("overline")}
       }
-    `}
-  />
-);
+    `;

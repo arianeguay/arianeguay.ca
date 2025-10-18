@@ -1,6 +1,6 @@
 "use client";
-import { css } from "@emotion/react";
-import styled from "@emotion/styled";
+import { css } from "styled-components";
+import styled from "styled-components";
 import theme, { CustomTheme } from "apps/website/src/theme";
 import { ItemsListVariant } from "apps/website/src/types/shared";
 
@@ -28,7 +28,7 @@ const TwoColsStyle = (side: string, theme: CustomTheme) => css`
 
 const ItemsListSectionStyled = styled.div<{ $variant: ItemsListVariant }>`
   ${({ $variant, theme }) => {
-    switch ($variant) {
+  switch ($variant) {
       case "verticalGrid":
         return VerticalStyle(theme);
       case "twoColsLeft":

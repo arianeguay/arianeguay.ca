@@ -1,7 +1,7 @@
 "use client";
-import styled from "@emotion/styled";
+import styled from "styled-components";
 import { Background } from "apps/website/src/types/shared";
-import { css } from "@emotion/react";
+import { css } from "styled-components";
 import { CFMaybe } from "apps/website/src/cms/cf-graphql";
 import { GradientStyle } from "apps/website/src/components/layout/container/styles";
 
