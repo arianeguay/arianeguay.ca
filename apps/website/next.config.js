@@ -20,11 +20,8 @@ const nextConfig = {
     minify: true,
     fileName:false,
   },
-
   // Ensure all pages are static by default
   output: 'export',
-  // Required for static export with App Router
-  distDir: 'dist/apps/website',
 };
 
 const plugins = [

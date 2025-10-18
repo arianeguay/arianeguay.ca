@@ -2,30 +2,55 @@ import { createClient } from 'contentful';
 import { SiteSettings } from '../types/settings';
 
 // Mock data to use when Contentful environment variables are not set
-export const mockData:{siteSettings: SiteSettings} = {
-  
+export const mockData: { siteSettings: SiteSettings } = {
   siteSettings: {
-    fields: {
-      nav: [
-        { fields: { label: 'Home', page: { slug: '/', title: 'Home' } } },
-        { fields: { label: 'Blog', page: { slug: '/blog', title: 'Blog' } } },
-        { fields: { label: 'Projects', page: { slug: '/projects', title: 'Projects' } } },
-        { fields: { label: 'About', page: { slug: '/about', title: 'About' } } },
-        { fields: { label: 'Contact', page: { slug: '/contact', title: 'Contact' } } },
+    sys: { id: 'mock-site-settings' },
+    __typename: 'SiteSettings',
+    navCollection: {
+      items: [
+        {
+          sys: { id: 'nav-home' },
+          __typename: 'NavItem',
+          label: 'Home',
+          page: { slug: 'home' } as any,
+        },
+        {
+          sys: { id: 'nav-blog' },
+          __typename: 'NavItem',
+          label: 'Blog',
+          page: { slug: 'blog' } as any,
+        },
+        {
+          sys: { id: 'nav-projects' },
+          __typename: 'NavItem',
+          label: 'Projects',
+          page: { slug: 'projects' } as any,
+        },
+        {
+          sys: { id: 'nav-about' },
+          __typename: 'NavItem',
+          label: 'About',
+          page: { slug: 'about' } as any,
+        },
+        {
+          sys: { id: 'nav-contact' },
+          __typename: 'NavItem',
+          label: 'Contact',
+          page: { slug: 'contact' } as any,
+        },
       ],
-      footer: {
-          copyright: '© 2025 Ariane Guay. All rights reserved.',
-        
-      },
-      socials: [
-        { platform: 'LinkedIn', url: 'https://linkedin.com/in/example' },
-        { platform: 'GitHub', url: 'https://github.com/example' },
-      ],
-      defaultSeo: {
-        title: 'Ariane Guay | Personal Website',
-        description: 'Personal website and portfolio of Ariane Guay.',
-        keywords: ['design', 'development', 'portfolio'],
-      },
+    },
+    footer: {
+      copyright: '© 2025 Ariane Guay. All rights reserved.',
+    },
+    socials: [
+      { platform: 'LinkedIn', url: 'https://linkedin.com/in/example' },
+      { platform: 'GitHub', url: 'https://github.com/example' },
+    ],
+    defaultSeo: {
+      title: 'Ariane Guay | Personal Website',
+      description: 'Personal website and portfolio of Ariane Guay.',
+      keywords: ['design', 'development', 'portfolio'],
     },
   },
 };

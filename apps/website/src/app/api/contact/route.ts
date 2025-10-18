@@ -18,7 +18,9 @@ const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KE
 export async function POST(req: NextRequest) {
   try {
     // Basic rate limiting
-    const ip = req.ip || req.headers.get('x-forwarded-for') || 'unknown';
+    const forwardedFor = req.headers.get('x-forwarded-for');
+    const realIp = req.headers.get('x-real-ip');
+    const ip = (forwardedFor?.split(',')[0]?.trim() || realIp || 'unknown');
     const now = Date.now();
     const rateLimit = rateLimits.get(ip);
 

@@ -5,7 +5,7 @@ import { SiteSettings } from "../types/settings";
 const SPACE_ID = process.env.CONTENTFUL_SPACE_ID;
 const ENV_ID = process.env.CONTENTFUL_ENV_ID || "master";
 const CDA_TOKEN = process.env.CONTENTFUL_CDA_TOKEN;
-const DEFAULT_LOCALE = process.env.CONTENTFUL_DEFAULT_LOCALE || "en-US";
+const DEFAULT_LOCALE = process.env.CONTENTFUL_DEFAULT_LOCALE || "fr";
 
 const ENDPOINT = SPACE_ID
   ? `https://graphql.contentful.com/content/v1/spaces/${SPACE_ID}/environments/${ENV_ID}`

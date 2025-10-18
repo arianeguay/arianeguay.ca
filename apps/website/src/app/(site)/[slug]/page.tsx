@@ -14,11 +14,13 @@ export async function generateStaticParams() {
   return slugs.filter(Boolean).map((slug) => ({ slug }));
 }
 
+interface PageProps {
+  params: Promise<{ slug: string }>;
+}
+
 export async function generateMetadata({
   params,
-}: {
-  params: { slug: string };
-}): Promise<Metadata> {
+}: PageProps): Promise<Metadata> {
   const slug =( await params).slug;
   const page = await getPageBySlug(slug);
   const seo = page?.seo;
@@ -45,7 +47,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function Page({ params }: { params: { slug: string } }) {
+export default async function Page({ params }:PageProps) {
   const slug =( await params).slug;
   const page = await getPageBySlug(slug);
 

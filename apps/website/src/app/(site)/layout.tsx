@@ -10,6 +10,10 @@ import ScrollHijacker from "../../components/scroll/ScrollHijacker";
 // Layout components would be imported here
 // import { Header, Footer } from '@/components/layout';
 
+interface LayoutConfig {
+  children: React.ReactNode;
+}
+
 export async function generateMetadata(): Promise<Metadata> {
   return {
     title: {
@@ -31,22 +35,16 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default async function SiteLayout(props: {
-  children: React.ReactNode;
-  params: { slug: string };
-}) {
-  const { children, params } = props;
+export default async function SiteLayout(props: { children: React.ReactNode }) {
+  const { children } = props;
   const siteSettings = await getSiteSettings();
-  const paramsValues = await params
-
-  const pathname = !!paramsValues.slug ? `/${paramsValues.slug}` : "/";
 
   return (
     <html lang="en">
       <body>
         <GlobalStyle />
         <StylingProvider>
-          <Header nav={siteSettings?.navCollection?.items} currentPath={pathname} />
+          <Header nav={siteSettings?.navCollection?.items} currentPath={"/"} />
           <ScrollHijacker />
 
           <main
