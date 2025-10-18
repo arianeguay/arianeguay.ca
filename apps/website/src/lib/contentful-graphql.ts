@@ -5,6 +5,7 @@ import { SiteSettings } from "../types/settings";
 const SPACE_ID = process.env.CONTENTFUL_SPACE_ID;
 const ENV_ID = process.env.CONTENTFUL_ENV_ID || "master";
 const CDA_TOKEN = process.env.CONTENTFUL_CDA_TOKEN;
+const DEFAULT_LOCALE = process.env.CONTENTFUL_DEFAULT_LOCALE || "en-US";
 
 const ENDPOINT = SPACE_ID
   ? `https://graphql.contentful.com/content/v1/spaces/${SPACE_ID}/environments/${ENV_ID}`
@@ -46,10 +47,10 @@ async function fetchGraphQL<T>(
 
 export type PageSlug = { slug: string };
 
-export async function getAllPageSlugs(): Promise<string[]> {
+export async function getAllPageSlugs(locale: string = DEFAULT_LOCALE): Promise<string[]> {
   const query = `
-    query AllPageSlugs($limit: Int = 200) {
-      pageCollection(limit: $limit) {
+    query AllPageSlugs($limit: Int = 200, $locale: String = "${DEFAULT_LOCALE}") {
+      pageCollection(limit: $limit, locale: $locale) {
         items {
           slug
         }
@@ -59,6 +60,7 @@ export async function getAllPageSlugs(): Promise<string[]> {
 
   const data = await fetchGraphQL<{ pageCollection: { items: PageSlug[] } }>(
     query,
+    { locale },
   );
   const slugs = (data.pageCollection?.items || [])
     .map((i) => i?.slug)
@@ -82,19 +84,25 @@ export type PageEntry = {
   seo?: SeoFields | null;
 };
 
-export async function getPageBySlug(slug: string): Promise<PageEntry | null> {
+export async function getPageBySlug(
+  slug: string,
+  options?: { locale?: string; preview?: boolean }
+): Promise<PageEntry | null> {
+  const locale = options?.locale || DEFAULT_LOCALE;
+  const preview = options?.preview ?? false;
   const query = /* GraphQL */ `
     query PageBySlug(
       $slug: String!
       $preview: Boolean = false
+      $locale: String = "${DEFAULT_LOCALE}"
       $sectionLimit: Int = 20
       $listItemLimit: Int = 50
     ) {
-      pageCollection(where: { slug: $slug }, limit: 1, preview: $preview) {
+      pageCollection(where: { slug: $slug }, limit: 1, preview: $preview, locale: $locale) {
         items {
           title
           slug
-          sectionsCollection(limit: $sectionLimit) {
+          sectionsCollection(limit: $sectionLimit, locale: $locale) {
             items {
               __typename
 
@@ -106,7 +114,7 @@ export async function getPageBySlug(slug: string): Promise<PageEntry | null> {
                 background
                 isScreen
                 variant
-                itemsCollection(limit: $listItemLimit) {
+                itemsCollection(limit: $listItemLimit, locale: $locale) {
                   items {
                     __typename
                     ... on ListItem {
@@ -148,7 +156,7 @@ export async function getPageBySlug(slug: string): Promise<PageEntry | null> {
               ... on Group {
                 background
                 isScreen
-                elementsCollection(limit: 2) {
+                elementsCollection(limit: 2, locale: $locale) {
                   items {
                     __typename
                     ... on ItemsList {
@@ -157,7 +165,7 @@ export async function getPageBySlug(slug: string): Promise<PageEntry | null> {
                         json
                       }
                       variant
-                      itemsCollection {
+                      itemsCollection(locale: $locale) {
                         items {
                           __typename
                           ... on ListItem {
@@ -238,22 +246,22 @@ export async function getPageBySlug(slug: string): Promise<PageEntry | null> {
 
   const data = await fetchGraphQL<{ pageCollection: { items: PageEntry[] } }>(
     query,
-    { slug },
+    { slug, preview, locale },
   );
   return data.pageCollection?.items?.[0] ?? null;
 }
 
 export { fetchGraphQL };
 
-export async function getSiteSettings(): Promise<SiteSettings> {
+export async function getSiteSettings(locale: string = DEFAULT_LOCALE): Promise<SiteSettings> {
   const query = `
-    query SiteSettings {
-      siteSettingsCollection(limit: 1) {
+    query SiteSettings($locale: String = "${DEFAULT_LOCALE}") {
+      siteSettingsCollection(limit: 1, locale: $locale) {
           items {
           sys {
               id
           }
-              navCollection {
+              navCollection(locale: $locale) {
                   items {
                   sys {
                       id
@@ -273,6 +281,6 @@ export async function getSiteSettings(): Promise<SiteSettings> {
 
   const data = await fetchGraphQL<{
     siteSettingsCollection: { items: SiteSettings[] };
-  }>(query);
+  }>(query, { locale });
   return data.siteSettingsCollection?.items?.[0] ?? null;
 }
