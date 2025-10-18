@@ -4,14 +4,17 @@ import { documentToReactComponents } from "@contentful/rich-text-react-renderer"
 import { CtaSectionContentStyled } from "./styles";
 import CTA from "../../../common/cta";
 import Typography from "../../../common/typography";
+import theme from "apps/website/src/theme";
 
 interface CTASectionProps {
   data: CTASection;
+  isHero?:boolean
 }
-const CTASectionComponent: React.FC<CTASectionProps> = ({ data }) => {
-  console.log(data);
+const CTASectionComponent: React.FC<CTASectionProps> = ({ data,isHero }) => {
+
   return (
     <Container
+    style={{paddingBlockStart:isHero && !data.isScreen ? theme.spacing.xxxxxxl : undefined}}
       isScreen={!!data.isScreen}
       background={data.background ?? "none"}
     >
@@ -23,7 +26,7 @@ const CTASectionComponent: React.FC<CTASectionProps> = ({ data }) => {
           />
         )}
         <div>
-          {!!data.title && <h2>{data.title}</h2>}
+          {!!data.title && <Typography element={isHero ? "h1" : "h2"} variant={isHero ? "h1" : "h2"}>{data.title}</Typography>}
           {!!data.description?.json &&
           <Typography element="div" variant="body1">
             {documentToReactComponents(data.description.json)}

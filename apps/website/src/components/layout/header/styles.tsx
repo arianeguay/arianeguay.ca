@@ -33,7 +33,7 @@ export const HeaderContentStyled = styled.div`
 
 export const HeaderNavStyled = styled.nav`
   display: flex;
-  gap: ${({ theme }) => theme.spacing.sm};
+  gap: ${({ theme }) => theme.spacing.lg};
 `;
 
 export const NavItemStyled = styled(Link)<{ $isCurrent?: boolean }>`

@@ -1,7 +1,7 @@
-"use client"
+"use client";
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
-import { CustomTheme } from "apps/website/src/theme";
+import theme, { CustomTheme } from "apps/website/src/theme";
 import { ItemsListVariant } from "apps/website/src/types/shared";
 
 const VerticalStyle = (theme: CustomTheme) => css`
@@ -14,11 +14,15 @@ const TwoColsStyle = (side: string, theme: CustomTheme) => css`
   display: flex;
   flex-direction: row;
   gap: ${theme.spacing.xxxxl};
-  &> * {
+  align-items: center;
+  & > * {
     flex: 1;
   }
   & > *:first-child {
     ${side === "left" ? `order: 1;` : `order: 2;`}
+  }
+  & > *:last-child {
+    ${side === "left" ? `order: 2;` : `order: 1;`}
   }
 `;
 
@@ -38,3 +42,11 @@ const ItemsListSectionStyled = styled.div<{ $variant: ItemsListVariant }>`
 `;
 
 export default ItemsListSectionStyled;
+
+export const GridStyled = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: ${({ theme }) => theme.spacing.lg};
+
+  grid-auto-rows: 1fr;
+`;

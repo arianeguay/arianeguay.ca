@@ -97,18 +97,26 @@ export async function getPageBySlug(slug: string): Promise<PageEntry | null> {
           sectionsCollection(limit: $sectionLimit) {
             items {
               __typename
-           
+
               ... on ItemsList {
                 title
                 description {
                   json
                 }
+                background
+                isScreen
                 variant
                 itemsCollection(limit: $listItemLimit) {
                   items {
                     __typename
                     ... on ListItem {
                       text
+                      title
+                      icon {
+                        url
+                        title
+                      }
+                      variant
                     }
                   }
                 }

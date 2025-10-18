@@ -6,12 +6,28 @@ interface DefaultCardProps extends ListItem {
   text: string;
   noWrap?: boolean;
 }
-const DefaultCard: React.FC<DefaultCardProps> = ({ text, noWrap }) => {
+const DefaultCard: React.FC<DefaultCardProps> = ({
+  text,
+  noWrap,
+  title,
+  icon,
+  variant,
+}) => {
   return (
-    <CardContainerStyled>
-      <Typography element="p" variant="body2" noWrap={noWrap}>{text}</Typography>
+    <CardContainerStyled $variant={variant ?? "row"}>
+      {!!icon && <img src={icon.url} alt={icon.title ?? ""} />}
+      <div>
+        {!!title && (
+          <Typography element="p" variant="h5" noWrap={noWrap}>
+            {title}
+          </Typography>
+        )}
+        <Typography element="p" variant="body2" noWrap={noWrap}>
+          {text}
+        </Typography>
+      </div>
     </CardContainerStyled>
   );
 };
 
-export default DefaultCard; 
+export default DefaultCard;

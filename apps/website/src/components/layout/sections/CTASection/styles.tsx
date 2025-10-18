@@ -6,6 +6,7 @@ export const CtaSectionContentStyled = styled.div<{ $variation: CtaVariation }>`
 display: flex;
 align-items:center;
 width:100%;
+padding-block: ${({theme}) => theme.spacing.xl};
 gap: ${({theme}) => theme.spacing.xl};
 ${({$variation}) => {
     switch ($variation) {

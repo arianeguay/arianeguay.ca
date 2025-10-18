@@ -5,6 +5,7 @@ import ItemsListSection from "../ItemsListSection";
 import { GroupStyled } from "./styles";
 interface GroupSectionProps {
   data: Group;
+  isHero?: boolean;
 }
 const GroupSection: React.FC<GroupSectionProps> = ({ data }) => {
   const { elementsCollection, background, isScreen } = data;

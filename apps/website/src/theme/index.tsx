@@ -27,8 +27,11 @@ const colors = {
     gradient3:
       "radial-gradient(180.02% 48.99% at 57.77% 49.99%, #5C6A52 0%, #3C2E2E 100%)",
     gradient4: "linear-gradient(323deg, #64394C 24.06%, #A75B4E 78.46%)",
+    gradient5:
+      "linear-gradient(280deg, #E29C45 2.22%, #A75B4E 40.43%, #7A3A2A 75.95%)",
+    gradient6:
+      "linear-gradient(198deg, #EAD8C8 12.11%, #FFDCAB 88.07%), linear-gradient(323deg, #64394C 24.06%, #A75B4E 78.46%)",
   },
-
 };
 
 const font = {
@@ -177,76 +180,75 @@ interface ButtonColor {
   text: string;
 }
 const buttonColors: Record<LinkItemVariant, ButtonColor> = {
-    primary: {
-      background: "#EAAA19",
-      backgroundHover: "#F0B93C",
-      backgroundDisabled: "#F2E2B5",
-      text: "#111114",
-    },
-    secondary: {
-      background: "#4E8A66",
-      backgroundHover: "#3F7455",
-      backgroundDisabled: "#BFD5C7",
-      text: "#ffffff",
-    },
-    tertiary: {
-      background: "#437C90",
-      backgroundHover: "#366A7D",
-      backgroundDisabled: "#B2C9D1",
-      text: "#ffffff",
-    },
-    ghost: {
-      background: "transparent",
-      backgroundHover: "transparent",
-      backgroundDisabled: "transparent",
-      text: "#111114",
-    },
-    link: {
-      background: "transparent",
-      backgroundHover: "transparent",
-      backgroundDisabled: "transparent",
-      text: "#111114",
-    },
-}
-
-const buttonSizes: Record<ButtonSizes, ButtonSize> = {
-    xs: {
-      minWidth: "120px",
-      minHeight: "36px",
-      paddingInline: "16px",
-    fontSize: "14px",
-      fontWeight: "400",
-    },
-    sm: {
-      minWidth: "180px",
-      minHeight: "40px",
-      paddingInline: "20px",
-      fontSize: "15px",
-      fontWeight: "500",
-    },
-    md: {
-      minWidth: "200px",
-      minHeight: "44px",
-      paddingInline: "24px",
-      fontSize: "16px",
-      fontWeight: "600",
-    },
-    lg: {
-      minWidth: "240px",
-      minHeight: "48px",
-      paddingInline: "28px",
-      fontSize: "17px",
-      fontWeight: "700",
-    },
-    xl: {
-      minWidth: "280px",
-      minHeight: "56px",
-      paddingInline: "32px",
-      fontSize: "18px",
-      fontWeight: "700",
-    },
+  primary: {
+    background: "#EAAA19",
+    backgroundHover: "#F0B93C",
+    backgroundDisabled: "#F2E2B5",
+    text: "#111114",
+  },
+  secondary: {
+    background: "#4E8A66",
+    backgroundHover: "#3F7455",
+    backgroundDisabled: "#BFD5C7",
+    text: "#ffffff",
+  },
+  tertiary: {
+    background: "#437C90",
+    backgroundHover: "#366A7D",
+    backgroundDisabled: "#B2C9D1",
+    text: "#ffffff",
+  },
+  ghost: {
+    background: "transparent",
+    backgroundHover: "transparent",
+    backgroundDisabled: "transparent",
+    text: "#111114",
+  },
+  link: {
+    background: "transparent",
+    backgroundHover: "transparent",
+    backgroundDisabled: "transparent",
+    text: "#111114",
+  },
 };
 
+const buttonSizes: Record<ButtonSizes, ButtonSize> = {
+  xs: {
+    minWidth: "120px",
+    minHeight: "36px",
+    paddingInline: "16px",
+    fontSize: "14px",
+    fontWeight: "400",
+  },
+  sm: {
+    minWidth: "180px",
+    minHeight: "40px",
+    paddingInline: "20px",
+    fontSize: "15px",
+    fontWeight: "500",
+  },
+  md: {
+    minWidth: "200px",
+    minHeight: "44px",
+    paddingInline: "24px",
+    fontSize: "16px",
+    fontWeight: "600",
+  },
+  lg: {
+    minWidth: "240px",
+    minHeight: "48px",
+    paddingInline: "28px",
+    fontSize: "17px",
+    fontWeight: "700",
+  },
+  xl: {
+    minWidth: "280px",
+    minHeight: "56px",
+    paddingInline: "32px",
+    fontSize: "18px",
+    fontWeight: "700",
+  },
+};
 
 export const theme = {
   colors,

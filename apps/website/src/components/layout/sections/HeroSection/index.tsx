@@ -6,6 +6,7 @@ import { HeroSectionContentStyled } from "./styles";
 
 interface HeroSectionProps {
 data: HeroSection
+isHero?:boolean;
 }
 const HeroSectionComponent: React.FC<HeroSectionProps> = ({data}) => {
     return (

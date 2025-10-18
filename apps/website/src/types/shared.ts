@@ -21,7 +21,13 @@ export type LinkItem = {
   variant?: CFMaybe<LinkItemVariant>;
 };
 
-export type ListItem = { text: string };
+export type ListItemVariant = "card" | "row";
+export type ListItem = {
+  text: string;
+  title?: string;
+  icon?: CFRef<CfAsset>;
+  variant?: CFMaybe<ListItemVariant>;
+};
 
 export type HighlightItem = {
   title: string;
@@ -51,8 +57,6 @@ export type CTASection = {
   background?: CFMaybe<Background>;
   isScreen?: CFMaybe<boolean>;
 };
-
-
 
 export type GalleryItem = {
   image: CfAsset;
@@ -109,6 +113,8 @@ export type ItemsList = {
   description?: CFMaybe<{ json: Document }>;
   itemsCollection?: CFMaybe<{ items: ListItem[] }>;
   variant?: CFMaybe<ItemsListVariant>;
+  background?: CFMaybe<Background>;
+  isScreen?: CFMaybe<boolean>;
 };
 
 export interface Group {

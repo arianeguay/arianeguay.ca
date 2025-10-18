@@ -1,21 +1,32 @@
-"use client"
+"use client";
+import { css } from "@emotion/react";
 import styled from "@emotion/styled";
+import { ListItemVariant } from "apps/website/src/types/shared";
 
-export const CardContainerStyled = styled.div`
+const RowStyling = css`
+  flex-direction: row;
+    align-items: center;
+    text-align: left;
+`;
+const ColumnStyling = css`
+  flex-direction: column;
+    align-items: center;
+    text-align: center;
+`;
+export const CardContainerStyled = styled.div<{ $variant?: ListItemVariant }>`
   display: flex;
   padding-block: 16px;
   padding-inline: 20px;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
+  ${({ $variant }) => $variant === "row" ? RowStyling : ColumnStyling}
+
   gap: 10px;
   border-radius: 8px;
   border: 1px solid var(--colors-border, #827b7f);
-  background: #fff;
+  background: rgba(255, 255, 255, 0.8);
 
   /* core/shadow/sm */
   box-shadow: 2px 2px 4px 0 rgba(17, 17, 20, 0.12);
-  color:${({ theme }) => theme.colors.ink1};
+  color: ${({ theme }) => theme.colors.ink1};
   p {
     margin: 0;
   }

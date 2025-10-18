@@ -25,6 +25,9 @@ export const getGradientTextColor = (
       return theme.colors.inkLight;
     case "gradient4":
       return theme.colors.inkLight;
+    case "gradient5":
+      return theme.colors.inkLight;
+
     default:
       return theme.colors.ink1;
   }

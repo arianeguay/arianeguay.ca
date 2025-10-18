@@ -1,14 +1,15 @@
 import { ItemsList } from "apps/website/src/types/shared";
-import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
+import DefaultCard from "./Card/Default";
+import { GridStyled } from "./styles";
 
-const Grid: React.FC<ItemsList> = ({itemsCollection}) => {
-    return <div style={{display:"grid",gridTemplateColumns:"repeat(2,1fr)",gap:"2rem"}}>
-        {itemsCollection?.items.map((item,index) => {
-            return <div key={item?.text+index}>
-                <h3>{item?.text}</h3>
-            </div>;
-        })}
-    </div>;
-};  
+const Grid: React.FC<ItemsList> = ({ itemsCollection }) => {
+  return (
+    <GridStyled>
+      {itemsCollection?.items.map((item, index) => {
+        return <DefaultCard key={item?.text + index} {...item} />;
+      })}
+    </GridStyled>
+  );
+};
 
 export default Grid;

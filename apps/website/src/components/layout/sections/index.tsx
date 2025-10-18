@@ -12,14 +12,14 @@ const Sections: React.FC<SectionsProps> = ({ sections }) => {
     if (!s) return null;
     console.log(s)
     switch (s.__typename) {
-      case "CtaSection":
-        return <CTASection key={s.__typename+index} data={s} />;
+      case "CtaSection": 
+        return <CTASection key={s.__typename+index} data={s} isHero={index===0} />;
       case "HeroSection":
-        return <HeroSection key={s.__typename+index} data={s} />;
+        return <HeroSection key={s.__typename+index} data={s} isHero={index===0} />;
       case "ItemsList":
-        return <ItemsListSection key={s.__typename+index} data={s} />;
+        return <ItemsListSection key={s.__typename+index} data={s} isHero={index===0} />;
       case "Group":
-        return <GroupSection key={s.__typename+index} data={s} />;
+        return <GroupSection key={s.__typename+index} data={s} isHero={index===0} />;
 
     }
   });

@@ -6,9 +6,11 @@ import Grid from "./Grid";
 import ItemsListColumns from "./Columns";
 import Scroller from "./Scroller";
 import ItemsListSectionStyled from "./styles";
+import Typography from "../../../common/typography";
 
 interface ItemsListSectionProps {
   data: ItemsList;
+  isHero?: boolean;
 }
 
 const ItemsListSectionContent: React.FC<ItemsListSectionProps> = ({ data }) => {
@@ -25,8 +27,11 @@ const ItemsListSectionContent: React.FC<ItemsListSectionProps> = ({ data }) => {
   }
 };
 
-const ItemsListSection: React.FC<ItemsListSectionProps> = ({ data }) => {
-  const { title, description, variant } = data;
+const ItemsListSection: React.FC<ItemsListSectionProps> = ({
+  data,
+  isHero,
+}) => {
+  const { title, description, variant, isScreen, background } = data;
 
   const textAlign = ["verticalScroll", "verticalGrid"].includes(
     variant ?? "column",
@@ -34,19 +39,27 @@ const ItemsListSection: React.FC<ItemsListSectionProps> = ({ data }) => {
     ? "center"
     : "left";
 
-  console.log(variant,data);
+  console.log(variant, data);
   return (
-    <Container>
+    <Container isScreen={isScreen ?? false} background={background ?? "none"}>
       <ItemsListSectionStyled $variant={variant ?? "twoColsLeft"}>
         <div>
-          <h2 style={{ textAlign }}>{title}</h2>
-          {description && (
-            <div style={{ textAlign }}>
+          {!!title && (
+            <Typography
+              element={isHero ? "h1" : "h2"}
+              style={{ textAlign, width: "100%" }}
+              variant={isHero ? "h1" : "h2"}
+            >
+              {title}
+            </Typography>
+          )}
+          {!!description?.json && (
+            <Typography element="div" variant="body1" style={{ textAlign }}>
               {documentToReactComponents(description.json)}
-            </div>
+            </Typography>
           )}
         </div>
-        <ItemsListSectionContent data={data}  />
+        <ItemsListSectionContent data={data} />
       </ItemsListSectionStyled>
     </Container>
   );
