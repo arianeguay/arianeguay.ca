@@ -67,6 +67,7 @@
     "@angular/platform-browser-dynamic": "^20.3.4",
     "@angular/router": "^20.3.4",
     "@contentful/rich-text-react-renderer": "^16.1.5",
+    "@contentful/rich-text-types": "^17.2.4",
     "@emotion/css": "^11.13.5",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
