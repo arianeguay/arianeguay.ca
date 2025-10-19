@@ -17,6 +17,10 @@ export const GlobalStyle = createGlobalStyle`
      
       }
 
+        * {
+          box-sizing: border-box;
+        }
+
       h1 {
         ${typeStyle("h1")}
       }

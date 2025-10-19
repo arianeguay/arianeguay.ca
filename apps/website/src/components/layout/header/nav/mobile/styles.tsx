@@ -47,7 +47,7 @@ export const DrawerHeaderStyled = styled.div`
   justify-content: space-between;
   align-items: center;
 
-  height: 72px;
+  height: var(--header-height);
   border-bottom: 1px solid rgba(17, 17, 20, 0.26);
   padding-inline: ${({ theme }) => theme.spacing.xl};
   padding-block: ${({ theme }) => theme.spacing.xs};

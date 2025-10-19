@@ -4,8 +4,12 @@ import styled, { css } from "styled-components";
 
 export const HeaderStyled = styled.header`
   display: flex;
-  height: 72px;
+  --header-height: 72px;
+  height: var(--header-height);
 
+  #header-logo {
+    width: 172px;
+  }
   padding-inline: ${({ theme }) => theme.spacing.xl};
   padding-block: ${({ theme }) => theme.spacing.xs};
   justify-content: center;
@@ -19,6 +23,14 @@ export const HeaderStyled = styled.header`
   left: 0;
   right: 0;
   z-index: 100;
+
+  @media (max-width: 720px) {
+    --header-height: 54px;
+    height: var(--header-height);
+    #header-logo {
+      width: 124px;
+    }
+  }
 `;
 
 export const HeaderContentStyled = styled.div`
