@@ -1,10 +1,10 @@
-import type { CFMaybe, CFRefs, CFRef, WithSys } from "../cms/cf-graphql";
+import type { Document } from "@contentful/rich-text-types";
+import type { CFMaybe, CFRef, WithSys } from "../cms/cf-graphql";
 import type { CfAsset } from "../types/asset";
 import type { SEO } from "../types/seo";
 import { SectionBlock } from "./blocks";
-import type { Document } from "@contentful/rich-text-types";
 /** Generic link that can resolve to an internal page or an external url */
-export type LinkItemKind = "Internal" | "External";
+export type LinkItemKind = "Internal" | "External" | "Action";
 export type LinkItemVariant =
   | "primary"
   | "secondary"
@@ -12,6 +12,7 @@ export type LinkItemVariant =
   | "ghost"
   | "link";
 
+export type LinkItemActionType = "openContactForm" | "none";
 export type LinkItem = {
   label: string;
   url?: CFMaybe<string>; // e.g., "/work/my-project"
@@ -19,6 +20,8 @@ export type LinkItem = {
   page?: CFRef<Page>;
   kind?: CFMaybe<LinkItemKind>;
   variant?: CFMaybe<LinkItemVariant>;
+  action?: CFMaybe<LinkItemActionType>;
+  actionForm?: CFRef<Form>;
 };
 
 export type ListItemVariant = "card" | "row";
@@ -56,6 +59,7 @@ export type CTASection = {
   primaryCta?: CFRef<LinkItem>;
   background?: CFMaybe<Background>;
   isScreen?: CFMaybe<boolean>;
+  splashesCollection?: CFMaybe<{ items: BackgroundSplash[] }>;
 };
 
 export type GalleryItem = {
@@ -93,14 +97,13 @@ export type ProjectMeta = {
 };
 
 /** Page-level hero */
-export type HeroSection = {
-  title: string;
-  subtitle?: CFMaybe<string>;
-  description?: CFMaybe<{ json: Document }>;
-  image?: CFMaybe<CfAsset>;
-  cta?: CFRef<LinkItem>;
-  background?: CFMaybe<Background>;
-};
+export type BackgroundSplashSide = "left" | "right";
+export interface BackgroundSplash {
+  asset: CFRef<CfAsset>;
+  margin: CFMaybe<number>;
+  top: CFMaybe<number>;
+  side: CFMaybe<BackgroundSplashSide>;
+}
 
 export type ItemsListVariant =
   | "twoColsRight"
@@ -115,6 +118,48 @@ export type ItemsList = {
   variant?: CFMaybe<ItemsListVariant>;
   background?: CFMaybe<Background>;
   isScreen?: CFMaybe<boolean>;
+  primaryCta: CFMaybe<LinkItem>;
+};
+
+/** Form model (Contentful) */
+export type FormItemFieldType =
+  | "text"
+  | "email"
+  | "tel"
+  | "textarea"
+  | "select"
+  | "checkbox"
+  | "radio"
+  | "date";
+
+export type FormItem = {
+  fieldName: string;
+  fieldType: FormItemFieldType;
+  label: string;
+  placeholder?: CFMaybe<string>;
+  helperText?: CFMaybe<string>;
+  required?: CFMaybe<boolean>;
+  maxLength?: CFMaybe<number>;
+  minLength?: CFMaybe<number>;
+  pattern?: CFMaybe<string>;
+  /** For select/radio/checkbox fields */
+  options?: CFMaybe<string[]>;
+  defaultValue?: CFMaybe<string>;
+  order?: CFMaybe<number>;
+};
+
+export type Form = {
+  title: string;
+  description?: CFMaybe<string>;
+  successTitle?: CFMaybe<string>;
+  successMessage?: CFMaybe<string>;
+  submitButtonLabel: string;
+  resetButtonLabel?: CFMaybe<string>;
+  emailRecipient?: CFMaybe<string>;
+  formItemsCollection?: CFMaybe<{ items: FormItem[] }>;
+  honeypotEnabled?: CFMaybe<boolean>;
+  rateLimitMax?: CFMaybe<number>;
+  rateLimitTimeframe?: CFMaybe<number>; // ms
 };
 
 export interface Group {

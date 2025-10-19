@@ -1,12 +1,12 @@
-import { SectionBlock } from "apps/website/src/types/blocks";
-import Container from "../../container";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import { ItemsList } from "apps/website/src/types/shared";
-import Grid from "./Grid";
+import CTA from "../../../common/cta";
+import Typography from "../../../common/typography";
+import Container from "../../container";
 import ItemsListColumns from "./Columns";
+import Grid from "./Grid";
 import Scroller from "./Scroller";
 import ItemsListSectionStyled from "./styles";
-import Typography from "../../../common/typography";
 
 interface ItemsListSectionProps {
   data: ItemsList;
@@ -31,7 +31,8 @@ const ItemsListSection: React.FC<ItemsListSectionProps> = ({
   data,
   isHero,
 }) => {
-  const { title, description, variant, isScreen, background } = data;
+  const { title, description, variant, isScreen, background, primaryCta } =
+    data;
 
   const textAlign = ["verticalScroll", "verticalGrid"].includes(
     variant ?? "column",
@@ -39,11 +40,10 @@ const ItemsListSection: React.FC<ItemsListSectionProps> = ({
     ? "center"
     : "left";
 
-  console.log(variant, data);
   return (
     <Container isScreen={isScreen ?? false} background={background ?? "none"}>
       <ItemsListSectionStyled $variant={variant ?? "twoColsLeft"}>
-        <div>
+        <div style={{ maxWidth: "100%", marginInline: "auto" }}>
           {!!title && (
             <Typography
               element={isHero ? "h1" : "h2"}
@@ -58,8 +58,9 @@ const ItemsListSection: React.FC<ItemsListSectionProps> = ({
               {documentToReactComponents(description.json)}
             </Typography>
           )}
+          {!!primaryCta && <CTA data={primaryCta} />}
         </div>
-        <ItemsListSectionContent data={data}  />
+        <ItemsListSectionContent data={data} />
       </ItemsListSectionStyled>
     </Container>
   );

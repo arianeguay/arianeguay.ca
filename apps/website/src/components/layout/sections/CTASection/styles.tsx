@@ -1,14 +1,14 @@
 "use client";
-import styled, { css } from "styled-components";
-import { CtaVariation } from "apps/website/src/types/shared";
 import { CustomTheme } from "apps/website/src/theme";
+import { CtaVariation } from "apps/website/src/types/shared";
+import styled, { css } from "styled-components";
 
 export const CtaSectionBodyStyled = styled.div``;
 
 const ContainerVerticalStyled = (theme: CustomTheme) => css`
   display: flex;
   flex-direction: column;
-  gap: ${theme.spacing.xl};
+  gap: ${theme.spacing.xxxl};
   align-items: center;
 
   ${CtaSectionBodyStyled} {
@@ -22,7 +22,7 @@ const ContainerVerticalStyled = (theme: CustomTheme) => css`
 const ContainerVerticalReversedStyled = (theme: CustomTheme) => css`
   display: flex;
   flex-direction: column;
-  gap: ${theme.spacing.xl};
+  gap: ${theme.spacing.xxxl};
   align-items: center;
 
   ${CtaSectionBodyStyled} {
@@ -36,27 +36,24 @@ const ContainerVerticalReversedStyled = (theme: CustomTheme) => css`
 const ContainerHorizontalStyled = (theme: CustomTheme) => css`
   display: flex;
   flex-direction: row;
-  gap: ${theme.spacing.xl};
+  gap: ${theme.spacing.md};
   align-items: center;
-
-
 `;
 
 const ContainerHorizontalReversedStyled = (theme: CustomTheme) => css`
   display: flex;
   flex-direction: row;
-  gap: ${theme.spacing.xl};
+  gap: ${theme.spacing.md};
   align-items: center;
-
-
 `;
 
 export const CtaSectionContentStyled = styled.div<{ $variation: CtaVariation }>`
   display: flex;
   align-items: center;
   width: 100%;
+  position: relative;
+  z-index: 1;
   padding-block: ${({ theme }) => theme.spacing.xl};
-  gap: ${({ theme }) => theme.spacing.xl};
   ${({ $variation, theme }) => {
     switch ($variation) {
       case "vertical":
@@ -69,4 +66,8 @@ export const CtaSectionContentStyled = styled.div<{ $variation: CtaVariation }>`
         return ContainerHorizontalReversedStyled(theme);
     }
   }}
+
+  @media screen and (max-width: ${({ theme }) => theme.breakpoints.md}px) {
+    ${({ theme }) => ContainerVerticalStyled(theme)}
+  }
 `;

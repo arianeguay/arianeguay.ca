@@ -1,6 +1,6 @@
 // theme.ts — styled-components theme (Ariane Light)
 
-import { LinkItem, LinkItemVariant } from "../types/shared";
+import { LinkItemVariant } from "../types/shared";
 
 /* -------------------------------------------------------------------------- */
 /* 1) Tokens mapped into semantic structure                                   */
@@ -128,11 +128,11 @@ export const typeStyle = (key: keyof typeof typography) => {
 };
 
 const radius = {
-  xs: "6px",
-  sm: "8px",
-  md: "10px",
-  lg: "14px",
-  xl: "18px",
+  xs: "2px",
+  sm: "4px",
+  md: "8px",
+  lg: "12px",
+  xl: "16px",
   pill: "9999px",
 };
 
@@ -162,6 +162,14 @@ const motion = {
   normal: "220ms ease-in-out",
   slow: "320ms ease-in-out",
 };
+
+const breakpoints = {
+  xs: 478,
+  sm: 767,
+  md: 1023,
+  lg: 1279,
+  xl: 1440,
+} as const;
 
 interface ButtonSize {
   minWidth: string;
@@ -258,6 +266,7 @@ export const theme = {
   shadows,
   spacing,
   motion,
+  breakpoints,
   focus: {
     ringColor: colors.brand.primary,
     ringWidth: "2px",

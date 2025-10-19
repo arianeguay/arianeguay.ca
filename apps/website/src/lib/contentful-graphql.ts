@@ -47,7 +47,9 @@ async function fetchGraphQL<T>(
 
 export type PageSlug = { slug: string };
 
-export async function getAllPageSlugs(locale: string = DEFAULT_LOCALE): Promise<string[]> {
+export async function getAllPageSlugs(
+  locale: string = DEFAULT_LOCALE,
+): Promise<string[]> {
   const query = `
     query AllPageSlugs($limit: Int = 200, $locale: String = "${DEFAULT_LOCALE}") {
       pageCollection(limit: $limit, locale: $locale) {
@@ -86,7 +88,7 @@ export type PageEntry = {
 
 export async function getPageBySlug(
   slug: string,
-  options?: { locale?: string; preview?: boolean }
+  options?: { locale?: string; preview?: boolean },
 ): Promise<PageEntry | null> {
   const locale = options?.locale || DEFAULT_LOCALE;
   const preview = options?.preview ?? false;
@@ -114,6 +116,45 @@ export async function getPageBySlug(
                 background
                 isScreen
                 variant
+                primaryCta {
+                label
+                kind
+                url
+                variant
+                openInNewTab
+                actionForm {
+                  title
+                  description
+                  emailRecipient
+                  formItemsCollection {
+                    items {
+                      fieldName
+                      fieldType
+                      label
+                      placeholder
+                      helperText
+                      required
+                      maxLength
+                      minLength
+                      pattern
+                      options
+                      defaultValue
+                      order
+                    }
+                  }
+                  honeypotEnabled
+                  rateLimitMax
+                  rateLimitTimeframe
+                  submitButtonLabel
+                  resetButtonLabel
+                  successTitle
+                  successMessage
+                }
+                page {
+                  title
+                  slug
+                }
+                }
                 itemsCollection(limit: $listItemLimit, locale: $locale) {
                   items {
                     __typename
@@ -148,6 +189,47 @@ export async function getPageBySlug(
                     slug
                   }
                   variant
+                  actionForm {
+                    title
+               description
+               emailRecipient
+               formItemsCollection {
+                 items {
+                   fieldName
+                   fieldType
+                   label
+                   placeholder
+                   helperText
+                   required
+                   maxLength
+                   minLength
+                   pattern
+                   options
+                   defaultValue
+                   order
+                 }
+               }
+               honeypotEnabled
+               rateLimitMax
+               rateLimitTimeframe
+               submitButtonLabel
+               resetButtonLabel
+               successTitle
+               successMessage
+               
+                 
+                  }
+                }
+                splashesCollection(limit: 2, locale: $locale) {
+                  items {
+                    asset {
+                      url
+                      title
+                    }
+                    margin
+                    top
+                    side
+                  }
                 }
                 background
                 isScreen
@@ -195,37 +277,55 @@ export async function getPageBySlug(
                           slug
                         }
                         variant
+                        actionForm {
+                          title
+                        description
+                        emailRecipient
+                        formItemsCollection {
+                          items {
+                            fieldName
+                            fieldType
+                            label
+                            placeholder
+                            helperText
+                            required
+                            maxLength
+                            minLength
+                            pattern
+                            options
+                            defaultValue
+                            order
+                          }
+                        }
+                        honeypotEnabled
+                        rateLimitMax
+                        rateLimitTimeframe
+                        submitButtonLabel
+                        resetButtonLabel
+                        successTitle
+                        successMessage
+                        
+                        honeypotEnabled
+                        }
                       }
                       background
                       isScreen
+                      splashesCollection(limit: 2, locale: $locale) {
+                        items {
+                          asset {
+                            url
+                            title
+                          }
+                          margin
+                          top
+                          side
+                        }
+                      }
                     }
                   }
                 }
               }
-              ... on HeroSection {
-                title
-                description {
-                  json
-                }
-                cta {
-                  kind
-                  label
-                  openInNewTab
-                  url
-                  page {
-                    title
-                    slug
-                  }
-                  variant
-                }
-                image {
-                  url
-                  title
-                }
-
-                background
-                variant
-              }
+          
             }
           }
           seo {
@@ -253,7 +353,9 @@ export async function getPageBySlug(
 
 export { fetchGraphQL };
 
-export async function getSiteSettings(locale: string = DEFAULT_LOCALE): Promise<SiteSettings> {
+export async function getSiteSettings(
+  locale: string = DEFAULT_LOCALE,
+): Promise<SiteSettings> {
   const query = `
     query SiteSettings($locale: String = "${DEFAULT_LOCALE}") {
       siteSettingsCollection(limit: 1, locale: $locale) {

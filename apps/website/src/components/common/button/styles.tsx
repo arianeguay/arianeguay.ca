@@ -1,6 +1,7 @@
 "use client";
 import { LinkItemVariant } from "apps/website/src/types/shared";
 import styled, { css, DefaultTheme } from "styled-components";
+import { ButtonSize } from ".";
 
 const getColoredStyle = (variant: LinkItemVariant, theme: DefaultTheme) => {
   return css`
@@ -58,9 +59,23 @@ const variantStyle = (variant: LinkItemVariant, theme: DefaultTheme) => {
   }
 };
 
-export const CTAStyled = styled.button<{ $variant?: LinkItemVariant }>`
+const getSizeStyle = (size: ButtonSize, theme: DefaultTheme) => {
+  return css`
+    min-width: ${theme.button.sizes[size].minWidth};
+    min-height: ${theme.button.sizes[size].minHeight};
+    font-size: ${theme.button.sizes[size].fontSize};
+    padding-inline: ${theme.button.sizes[size].paddingInline};
+    font-weight: ${theme.button.sizes[size].fontWeight};
+  `;
+};
+
+export const ButtonStyled = styled.button<{
+  $variant?: LinkItemVariant;
+  $size?: ButtonSize;
+}>`
   cursor: pointer;
   padding: ${({ theme }) => theme.spacing.sm};
 
   ${({ $variant, theme }) => variantStyle($variant ?? "primary", theme)}
+  ${({ $size, theme }) => getSizeStyle($size ?? "md", theme)}
 `;

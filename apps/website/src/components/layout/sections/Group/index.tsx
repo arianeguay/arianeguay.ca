@@ -1,6 +1,5 @@
 import { Group } from "apps/website/src/types/shared";
 import CTASection from "../CTASection";
-import HeroSection from "../HeroSection";
 import ItemsListSection from "../ItemsListSection";
 import { GroupStyled } from "./styles";
 interface GroupSectionProps {
@@ -20,8 +19,6 @@ const GroupSection: React.FC<GroupSectionProps> = ({ data }) => {
         switch (item.__typename) {
           case "CtaSection":
             return <CTASection key={item.__typename + index} data={item} />;
-          case "HeroSection":
-            return <HeroSection key={item.__typename + index} data={item} />;
           case "ItemsList":
             return (
               <ItemsListSection key={item.__typename + index} data={item} />

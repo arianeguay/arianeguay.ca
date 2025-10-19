@@ -1,8 +1,7 @@
 "use client";
-import { css } from "styled-components";
-import styled from "styled-components";
-import theme, { CustomTheme } from "apps/website/src/theme";
+import { CustomTheme } from "apps/website/src/theme";
 import { ItemsListVariant } from "apps/website/src/types/shared";
+import styled, { css } from "styled-components";
 
 const VerticalStyle = (theme: CustomTheme) => css`
   display: flex;
@@ -27,8 +26,9 @@ const TwoColsStyle = (side: string, theme: CustomTheme) => css`
 `;
 
 const ItemsListSectionStyled = styled.div<{ $variant: ItemsListVariant }>`
+  width: 100%;
   ${({ $variant, theme }) => {
-  switch ($variant) {
+    switch ($variant) {
       case "verticalGrid":
         return VerticalStyle(theme);
       case "twoColsLeft":

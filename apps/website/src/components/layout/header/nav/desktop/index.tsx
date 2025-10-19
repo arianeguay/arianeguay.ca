@@ -1,0 +1,28 @@
+"use client";
+
+import { NavItem } from "apps/website/src/types/settings";
+import { usePathname } from "next/navigation";
+import { HeaderNavStyled } from "../../styles";
+import NavItemComponent from "./NavItem";
+
+interface DesktopNavProps {
+  nav: NavItem[];
+}
+const DesktopNav: React.FC<DesktopNavProps> = ({ nav }) => {
+  const pathname = usePathname();
+  const effectivePath = pathname ?? "/";
+
+  return (
+    <HeaderNavStyled>
+      {nav?.map((item) => (
+        <NavItemComponent
+          key={item.sys.id}
+          {...item}
+          currentPath={effectivePath}
+        />
+      ))}
+    </HeaderNavStyled>
+  );
+};
+
+export default DesktopNav;

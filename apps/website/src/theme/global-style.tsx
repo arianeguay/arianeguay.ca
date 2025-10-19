@@ -1,8 +1,7 @@
 "use client";
 // GlobalStyle.ts
-import { typeStyle } from "./index";
-import { css, createGlobalStyle } from "styled-components";
-import theme from "./index";
+import { createGlobalStyle } from "styled-components";
+import theme, { typeStyle } from "./index";
 
 export const GlobalStyle = createGlobalStyle`
   :root {
@@ -15,7 +14,7 @@ export const GlobalStyle = createGlobalStyle`
         background: ${theme.colors.bg};
         color: ${theme.colors.ink1};
         ${typeStyle("body2")}
-        width: 100vw;
+     
       }
 
       h1 {

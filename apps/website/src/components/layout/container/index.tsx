@@ -1,16 +1,19 @@
-import { Background } from "apps/website/src/types/shared";
+import { Background, BackgroundSplash } from "apps/website/src/types/shared";
+import BackgroundSplashesComponent from "../splashes";
 import { ContainerContentStyled, ContainerStyled } from "./styles";
 interface ContainerProps {
   children: React.ReactNode;
   style?: React.CSSProperties;
   isScreen?: boolean;
   background?: Background;
+  splashes?: BackgroundSplash[];
 }
 const Container: React.FC<ContainerProps> = ({
   children,
   style,
   isScreen,
   background,
+  splashes,
 }) => {
   return (
     <ContainerStyled
@@ -19,7 +22,10 @@ const Container: React.FC<ContainerProps> = ({
       $background={background}
       data-screen-section={isScreen ? "true" : "false"}
     >
-      <ContainerContentStyled>{children}</ContainerContentStyled>
+      <ContainerContentStyled>
+        <BackgroundSplashesComponent data={splashes ?? []} />
+        {children}
+      </ContainerContentStyled>
     </ContainerStyled>
   );
 };

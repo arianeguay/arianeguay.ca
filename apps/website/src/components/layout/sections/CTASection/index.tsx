@@ -1,16 +1,17 @@
-import { CTASection } from "apps/website/src/types/shared";
-import Container from "../../container";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
-import { CtaSectionBodyStyled, CtaSectionContentStyled } from "./styles";
+import theme from "apps/website/src/theme";
+import { CTASection } from "apps/website/src/types/shared";
 import CTA from "../../../common/cta";
 import Typography from "../../../common/typography";
-import theme from "apps/website/src/theme";
+import Container from "../../container";
+import { CtaSectionBodyStyled, CtaSectionContentStyled } from "./styles";
 
 interface CTASectionProps {
   data: CTASection;
   isHero?: boolean;
 }
 const CTASectionComponent: React.FC<CTASectionProps> = ({ data, isHero }) => {
+  console.log(data.splashesCollection?.items);
   return (
     <Container
       style={{
@@ -19,6 +20,7 @@ const CTASectionComponent: React.FC<CTASectionProps> = ({ data, isHero }) => {
       }}
       isScreen={!!data.isScreen}
       background={data.background ?? "none"}
+      splashes={data.splashesCollection?.items ?? []}
     >
       <CtaSectionContentStyled $variation={data.variant ?? "horizontal"}>
         {!!data.illustration && (

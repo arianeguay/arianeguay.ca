@@ -1,5 +1,4 @@
-import { keyframes } from "styled-components";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 
 const fadein = keyframes`
   from {
@@ -19,11 +18,14 @@ const scroll = keyframes`
     transform: translateX(-50%);
 }
 `;
-export const ScrollerRow = styled.div<{$size:number}>`
+export const ScrollerRow = styled.div<{ $size: number; $duration?: number }>`
   display: flex;
   gap: 16px;
   width: fit-content;
-  animation: ${({$size}) => ($size??3) * 2}s linear 0s infinite normal none running ${scroll};
+  flex-wrap: nowrap;
+  will-change: transform;
+  animation: ${({ $duration, $size }) => $duration ?? ($size ?? 3) * 2}s linear
+    0s infinite normal none running ${scroll};
 `;
 
 export const ScrollerContainer = styled.div`
@@ -33,5 +35,5 @@ export const ScrollerContainer = styled.div`
   padding-block: 4px;
   display: flex;
 
-  height:fit-content;
+  height: fit-content;
 `;

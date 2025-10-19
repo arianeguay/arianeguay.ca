@@ -1,11 +1,9 @@
 "use client";
-import { css } from "styled-components";
-import styled from "styled-components";
 import Link from "next/link";
+import styled, { css } from "styled-components";
 
 export const HeaderStyled = styled.header`
   display: flex;
-  width: 100%;
   height: 72px;
 
   padding-inline: ${({ theme }) => theme.spacing.xl};
@@ -13,7 +11,6 @@ export const HeaderStyled = styled.header`
   justify-content: center;
   align-items: center;
   background: rgba(255, 255, 255, 0.6);
-  width: 100%;
   box-shadow: ${({ theme }) => theme.shadows.md};
 
   backdrop-filter: blur(6px);
@@ -21,6 +18,7 @@ export const HeaderStyled = styled.header`
   top: 0;
   left: 0;
   right: 0;
+  z-index: 100;
 `;
 
 export const HeaderContentStyled = styled.div`
@@ -36,20 +34,19 @@ export const HeaderNavStyled = styled.nav`
   gap: ${({ theme }) => theme.spacing.lg};
 `;
 
-export const NavItemStyled = styled(Link)<{ $isCurrent?: boolean }>`
+export const NavItemStyled = styled(Link)<{ $active?: boolean }>`
   text-decoration: none;
   color: ${({ theme }) => theme.colors.ink1};
 
   font-size: ${({ theme }) => theme.typography.body1.size}px;
   font-weight: ${({ theme }) => theme.font.weight.medium};
 
-  ${({ $isCurrent, theme }) =>
-    $isCurrent
+  ${({ $active, theme }) =>
+    $active
       ? css`
           color: ${theme.colors.brand.primary};
           &:hover {
             color: ${theme.colors.brand.primary};
-           
           }
         `
       : css`

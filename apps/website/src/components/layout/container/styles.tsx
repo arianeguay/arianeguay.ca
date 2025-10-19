@@ -1,13 +1,30 @@
 "use client";
-import { css } from "styled-components";
-import styled from "styled-components";
 import { CustomTheme } from "apps/website/src/theme";
 import { Background } from "apps/website/src/types/shared";
+import styled, { css } from "styled-components";
 
 export const ContainerContentStyled = styled.section`
-  max-width: 1200px;
   width: 100%;
-  padding-block: ${({ theme }) => theme.spacing.xxl};
+  padding-block: ${({ theme }) => theme.spacing.xxxxxl};
+  position: relative;
+  z-index: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  @media screen and (min-width: ${({ theme }) => theme.breakpoints.sm}px) {
+    max-width: 540px;
+  }
+  @media screen and (min-width: ${({ theme }) => theme.breakpoints.md}px) {
+    max-width: 768px;
+  }
+  @media screen and (min-width: ${({ theme }) => theme.breakpoints.lg}px) {
+    max-width: 1200px;
+  }
+  @media screen and (min-width: ${({ theme }) => theme.breakpoints.xl}px) {
+    max-width: 1440px;
+  }
 `;
 
 type Gradient = keyof CustomTheme["colors"]["gradients"];
@@ -40,6 +57,7 @@ export const GradientStyle = (gradient: string, theme: CustomTheme) => {
   return css`
     background: ${backgroundColor};
     color: ${textColor};
+    overflow: hidden;
   `;
 };
 
@@ -47,14 +65,13 @@ export const ContainerStyled = styled.div<{
   $isScreen?: boolean;
   $background?: Background;
 }>`
-  width: 100%;
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  align-items: stretch;
 
   justify-content: center;
-  padding-inline: ${({ theme }) => theme.spacing.xl};
-
+  padding-inline: 16px;
+  position: relative;
+  z-index: 0;
   ${({ $background, theme }) =>
     $background && $background !== "none" && GradientStyle($background, theme)}
 
@@ -63,4 +80,17 @@ export const ContainerStyled = styled.div<{
     css`
       min-height: 100vh;
     `}
+
+      @media screen and (min-width: ${({ theme }) => theme.breakpoints.sm}px) {
+    padding-inline: 20px;
+  }
+  @media screen and (min-width: ${({ theme }) => theme.breakpoints.md}px) {
+    padding-inline: 24px;
+  }
+  @media screen and (min-width: ${({ theme }) => theme.breakpoints.lg}px) {
+    padding-inline: 28px;
+  }
+  @media screen and (min-width: ${({ theme }) => theme.breakpoints.xl}px) {
+    padding-inline: 32px;
+  }
 `;

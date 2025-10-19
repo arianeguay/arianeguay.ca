@@ -1,12 +1,13 @@
 import { LinkItem } from "apps/website/src/types/shared";
 import Link from "next/link";
+import ActionModalWrapper from "./actions-modals";
 
 interface CTAWrapperProps {
   children: React.ReactNode;
   data: LinkItem;
 }
 const CTAWrapper: React.FC<CTAWrapperProps> = ({ children, data }) => {
-  const { url, page, kind } = data;
+  const { url, page, kind, actionForm } = data;
 
   switch (kind) {
     case "Internal":
@@ -18,6 +19,13 @@ const CTAWrapper: React.FC<CTAWrapperProps> = ({ children, data }) => {
     case "External":
       if (!url) return children;
       return <a href={url}>{children}</a>;
+    case "Action":
+      if (!actionForm) return children;
+      return (
+        <ActionModalWrapper actionForm={actionForm}>
+          {children}
+        </ActionModalWrapper>
+      );
     default:
       return children;
   }
