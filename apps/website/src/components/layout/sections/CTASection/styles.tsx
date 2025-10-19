@@ -16,6 +16,7 @@ const ContainerVerticalStyled = (theme: CustomTheme) => css`
     flex-direction: column;
     gap: ${theme.spacing.sm};
     align-items: center;
+    text-align: center;
   }
 `;
 
@@ -30,6 +31,7 @@ const ContainerVerticalReversedStyled = (theme: CustomTheme) => css`
     flex-direction: column;
     gap: ${theme.spacing.sm};
     align-items: center;
+    text-align: center;
   }
 `;
 

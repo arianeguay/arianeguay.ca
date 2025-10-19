@@ -6,7 +6,7 @@ import styled, { css } from "styled-components";
 const VerticalStyle = (theme: CustomTheme) => css`
   display: flex;
   flex-direction: column;
-  gap: ${theme.spacing.lg};
+  gap: ${theme.spacing.xxxl};
 `;
 
 const TwoColsStyle = (side: string, theme: CustomTheme) => css`
@@ -39,6 +39,14 @@ const ItemsListSectionStyled = styled.div<{ $variant: ItemsListVariant }>`
         return VerticalStyle(theme);
     }
   }}
+
+  @media screen and (max-width: ${({ theme }) => theme.breakpoints.md}px) {
+    ${({ theme }) => VerticalStyle(theme)}
+
+    & > * {
+      width: 100%;
+    }
+  }
 `;
 
 export default ItemsListSectionStyled;
@@ -49,4 +57,8 @@ export const GridStyled = styled.div`
   gap: ${({ theme }) => theme.spacing.lg};
 
   grid-auto-rows: 1fr;
+  width: 100%;
+  @media screen and (max-width: ${({ theme }) => theme.breakpoints.md}px) {
+    grid-template-columns: 1fr;
+  }
 `;

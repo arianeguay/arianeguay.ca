@@ -16,7 +16,7 @@ const DesktopNav: React.FC<DesktopNavProps> = ({ nav }) => {
     <HeaderNavStyled>
       {nav?.map((item) => (
         <NavItemComponent
-          key={item.sys.id}
+          key={item.label}
           {...item}
           currentPath={effectivePath}
         />
