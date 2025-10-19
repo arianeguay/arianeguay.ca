@@ -71,6 +71,12 @@ export type TypographyElement =
   | "body1"
   | "body2"
   | "body3";
+
+// Type for accessing both desktop and mobile typography
+export interface ResponsiveTypography {
+  desktop: Record<TypographyElement, Typography>;
+  mobile: Record<TypographyElement, Typography>;
+}
 // raw token map (sizes in px, letterSpacing in px to match your Figma tokens)
 const typography: Record<TypographyElement, Typography> = {
   caption: { family: "body", weight: "medium", size: 12, letterSpacing: 0.32 },
@@ -102,28 +108,70 @@ const typography: Record<TypographyElement, Typography> = {
   body3: { family: "body", weight: "regular", size: 14, letterSpacing: 0 },
 } as const;
 
+// Mobile typography with smaller font sizes
+const mobileTypography: Record<TypographyElement, Typography> = {
+  caption: { family: "body", weight: "medium", size: 11, letterSpacing: 0.32 },
+  overline: {
+    family: "display",
+    weight: "semibold",
+    size: 10,
+    letterSpacing: 1.2,
+    transform: "uppercase",
+  },
+
+  h1: { family: "display", weight: "bold", size: 38, letterSpacing: -0.24 },
+  h2: { family: "display", weight: "bold", size: 32, letterSpacing: -0.16 },
+  h3: { family: "display", weight: "semibold", size: 24, letterSpacing: 0 },
+  h4: { family: "display", weight: "semibold", size: 22, letterSpacing: 0 },
+  h5: { family: "display", weight: "medium", size: 20, letterSpacing: 0 },
+  h6: { family: "display", weight: "medium", size: 18, letterSpacing: 0 },
+
+  subtitle1: {
+    family: "display",
+    weight: "semibold",
+    size: 16,
+    letterSpacing: 0,
+  },
+  subtitle2: { family: "body", weight: "medium", size: 15, letterSpacing: 0 },
+
+  body1: { family: "body", weight: "regular", size: 16, letterSpacing: 0 },
+  body2: { family: "body", weight: "regular", size: 15, letterSpacing: 0 },
+  body3: { family: "body", weight: "regular", size: 13, letterSpacing: 0 },
+} as const;
+
 // helper to produce CSS from a typography token (includes line-height suggestions)
 export const typeStyle = (key: keyof typeof typography) => {
-  const t = typography[key];
-  const lh = key.startsWith("h")
-    ? 1.15
-    : key.startsWith("subtitle")
-      ? 1.4
-      : key.startsWith("body")
-        ? t.size >= 16
-          ? 1.55
-          : 1.5
-        : key === "caption"
-          ? 1.3
-          : 1.2;
+  const desktop = typography[key];
+  const mobile = mobileTypography[key];
+  
+  // Calculate line height based on typography type
+  const getLh = (t: Typography) => {
+    if (key.startsWith("h")) return 1.15;
+    if (key.startsWith("subtitle")) return 1.4;
+    if (key.startsWith("body")) return t.size >= 16 ? 1.55 : 1.5;
+    return key === "caption" ? 1.3 : 1.2;
+  };
 
-  return `
+  const desktopLh = getLh(desktop);
+  const mobileLh = getLh(mobile);
+  
+  // Generate base typography style
+  const baseStyle = (t: Typography, lh: number) => `
     font-family: ${t.family === "display" ? font.family.display : font.family.body};
     font-weight: ${font.weight[t.weight]};
     font-size: ${t.size}px;
     line-height: ${lh};
     letter-spacing: ${t.letterSpacing}px;
     ${t.transform ? `text-transform: ${t.transform};` : ""}
+  `;
+
+  // Return responsive typography with mobile first approach
+  return `
+    ${baseStyle(mobile, mobileLh)}
+    
+    @media (min-width: ${breakpoints.sm}px) {
+      ${baseStyle(desktop, desktopLh)}
+    }
   `;
 };
 
@@ -258,10 +306,18 @@ const buttonSizes: Record<ButtonSizes, ButtonSize> = {
   },
 };
 
+// Helper object for responsive typography
+const responsiveTypography: ResponsiveTypography = {
+  desktop: typography,
+  mobile: mobileTypography
+};
+
 export const theme = {
   colors,
   font,
   typography,
+  mobileTypography,
+  responsiveTypography,
   radius,
   shadows,
   spacing,
