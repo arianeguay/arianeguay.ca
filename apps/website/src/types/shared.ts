@@ -189,3 +189,50 @@ export type WorkItemBase = {
   featured?: CFMaybe<boolean>;
   featuredImage?: CFMaybe<CfAsset>;
 };
+
+/** Tag model for skills and technologies */
+export type Tag = {
+  name: string;
+};
+
+/** Enterprise/Company experience item */
+export type Enterprise = {
+  companyName: string;
+  dateEnd?: CFMaybe<string>;
+  dateStart: string;
+  description?: CFMaybe<{ json: Document }>;
+  highlights?: CFMaybe<{ json: Document }>;
+  location?: CFMaybe<string>;
+  roleTitle: string;
+  tagsCollection?: CFMaybe<{ items: Tag[] }>;
+};
+
+/** Education/Formation item */
+export type Formation = {
+  school: string;
+  program: string;
+  years: string;
+  description?: CFMaybe<{ json: Document }>;
+};
+
+/** Competence/Skills category */
+export type Competence = {
+  title: string;
+  tagsCollection?: CFMaybe<{ items: Tag[] }>;
+};
+
+/** Experience section with professional and educational background */
+export type ExperienceSection = {
+  title: string;
+  description?: CFMaybe<{ json: Document }>;
+  enterpriseTitle?: CFMaybe<string>;
+  enterpriseCollection?: CFMaybe<{ items: Enterprise[] }>;
+  formationsTitle?: CFMaybe<string>;
+  formationsCollection?: CFMaybe<{ items: Formation[] }>;
+  competencesTitle?: CFMaybe<string>;
+  competencesCollection?: CFMaybe<{ items: Competence[] }>;
+  cvFile?: CFMaybe<{ url: string }>;
+  cvFileTitle?: CFMaybe<string>;
+  cvFileCta?: CFMaybe<string>;
+  cvFileDescription?: CFMaybe<string>;
+};

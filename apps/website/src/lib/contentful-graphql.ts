@@ -97,8 +97,8 @@ export async function getPageBySlug(
       $slug: String!
       $preview: Boolean = false
       $locale: String = "${DEFAULT_LOCALE}"
-      $sectionLimit: Int = 20
-      $listItemLimit: Int = 50
+      $sectionLimit: Int = 12
+      $listItemLimit: Int = 30
     ) {
       pageCollection(where: { slug: $slug }, limit: 1, preview: $preview, locale: $locale) {
         items {
@@ -125,7 +125,6 @@ export async function getPageBySlug(
                 actionForm {
                   title
                   description
-                  emailRecipient
                   formItemsCollection {
                     items {
                       fieldName
@@ -147,17 +146,13 @@ export async function getPageBySlug(
                   rateLimitTimeframe
                   submitButtonLabel
                   resetButtonLabel
-                  successTitle
-                  successMessage
                 }
                 page {
-                  title
                   slug
                 }
                 }
                 itemsCollection(limit: $listItemLimit, locale: $locale) {
                   items {
-                    __typename
                     ... on ListItem {
                       text
                       title
@@ -170,6 +165,61 @@ export async function getPageBySlug(
                   }
                 }
               }
+                ...  on ExperienceSection {
+                 title
+      description {
+        json
+      }
+      enterpriseTitle
+      enterpriseCollection(limit: 3) {
+        items {
+          companyName
+          dateEnd
+          dateStart
+          description {
+            json
+          }
+          highlights {
+            json
+          }
+          location
+          roleTitle
+          tagsCollection {
+            items {
+              name
+            }
+          }
+        }
+      }
+      formationsTitle
+      formationsCollection (limit: 3) {
+        items {
+          school
+          description {
+            json
+          }
+          program
+          years
+        }
+      }
+      competencesTitle
+      competencesCollection(limit: 3) {
+        items {
+          title
+          tagsCollection {
+            items {
+              name
+            }
+          }
+        }
+      }
+      cvFile {
+        url
+      }
+      cvFileTitle
+      cvFileCta
+      cvFileDescription 
+                }
               ... on CtaSection {
                 variant
                 description {
@@ -185,14 +235,12 @@ export async function getPageBySlug(
                   openInNewTab
                   url
                   page {
-                    title
                     slug
                   }
                   variant
                   actionForm {
                     title
                description
-               emailRecipient
                formItemsCollection {
                  items {
                    fieldName
@@ -214,10 +262,6 @@ export async function getPageBySlug(
                rateLimitTimeframe
                submitButtonLabel
                resetButtonLabel
-               successTitle
-               successMessage
-               
-                 
                   }
                 }
                 splashesCollection(limit: 2, locale: $locale) {
@@ -249,7 +293,6 @@ export async function getPageBySlug(
                       variant
                       itemsCollection(locale: $locale) {
                         items {
-                          __typename
                           ... on ListItem {
                             text
                           }
@@ -273,14 +316,12 @@ export async function getPageBySlug(
                         openInNewTab
                         url
                         page {
-                          title
                           slug
                         }
                         variant
                         actionForm {
                           title
                         description
-                        emailRecipient
                         formItemsCollection {
                           items {
                             fieldName
@@ -302,10 +343,7 @@ export async function getPageBySlug(
                         rateLimitTimeframe
                         submitButtonLabel
                         resetButtonLabel
-                        successTitle
-                        successMessage
                         
-                        honeypotEnabled
                         }
                       }
                       background
@@ -333,10 +371,8 @@ export async function getPageBySlug(
             seoDescription
             canonicalUrl
             noindex
-            structuredData
             ogImage {
               url
-              title
             }
           }
         }

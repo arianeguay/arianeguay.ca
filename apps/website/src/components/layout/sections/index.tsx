@@ -1,5 +1,6 @@
 import { SectionBlock } from "apps/website/src/types/blocks";
 import CTASection from "./CTASection";
+import ExperienceSectionComponent from "./ExperienceSection";
 import GroupSection from "./Group";
 import ItemsListSection from "./ItemsListSection";
 interface SectionsProps {
@@ -29,6 +30,14 @@ const Sections: React.FC<SectionsProps> = ({ sections }) => {
       case "Group":
         return (
           <GroupSection
+            key={s.__typename + index}
+            data={s}
+            isHero={index === 0}
+          />
+        );
+      case "ExperienceSection":
+        return (
+          <ExperienceSectionComponent
             key={s.__typename + index}
             data={s}
             isHero={index === 0}
