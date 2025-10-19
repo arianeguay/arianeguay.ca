@@ -79,6 +79,7 @@ export const ContainerStyled = styled.div<{
     $isScreen &&
     css`
       min-height: 100vh;
+      height: auto; /* Allow container to grow beyond 100vh if content requires it */
     `}
 
       @media screen and (min-width: ${({ theme }) => theme.breakpoints.sm}px) {

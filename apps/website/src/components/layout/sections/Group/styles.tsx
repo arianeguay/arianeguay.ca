@@ -15,6 +15,9 @@ export const GroupStyled = styled.div<{
     css`
       padding: 0;
       min-height: 100vh;
+      height: auto; /* Allow element to grow beyond 100vh if content requires it */
+      display: flex;
+      flex-direction: column;
     `};
   width: 100%;
 `;

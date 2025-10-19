@@ -8,11 +8,14 @@ interface GroupSectionProps {
 }
 const GroupSection: React.FC<GroupSectionProps> = ({ data }) => {
   const { elementsCollection, background, isScreen } = data;
+  // Determine if this group should use snap scrolling (customize based on your needs)
+  // For this example, we'll use a naming convention to identify snap sections
+
   return (
     <GroupStyled
       $background={background}
       $isScreen={isScreen}
-      data-screen-section={isScreen ? "true" : undefined}
+      data-screen-section={isScreen ? "snap" : undefined}
     >
       {elementsCollection?.items.map((item, index) => {
         if (!item) return null;

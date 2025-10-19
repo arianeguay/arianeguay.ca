@@ -17,9 +17,9 @@ const HeaderMobileToggle = ({ onClick }: HeaderMobileToggleProps) => {
         <path
           d="M5.33301 6.66675H26.6663M5.33301 16.0001H26.6663M5.33301 25.3334H26.6663"
           stroke="black"
-          stroke-width="2.66667"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          strokeWidth="2.66667"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         />
       </svg>
     </MobileToggleStyled>

@@ -21,7 +21,9 @@ const BackgroundSplashesComponent: React.FC<BackgroundSplashesProps> = ({
 
         return (
           <img
-            key={splash.asset?.sys?.id}
+            key={["splash", splash.side, splash.top, splash.margin]
+              .filter(Boolean)
+              .join("-")}
             src={splash.asset?.url}
             alt={splash.asset?.title ?? ""}
             style={{

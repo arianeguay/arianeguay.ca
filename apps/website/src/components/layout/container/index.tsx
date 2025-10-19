@@ -20,7 +20,7 @@ const Container: React.FC<ContainerProps> = ({
       style={style}
       $isScreen={isScreen}
       $background={background}
-      data-screen-section={isScreen ? "true" : "false"}
+      data-screen-section={isScreen ? "snap" : undefined}
     >
       <ContainerContentStyled>
         <BackgroundSplashesComponent data={splashes ?? []} />

@@ -9,6 +9,11 @@ const ScrollHijacker: React.FC = () => {
   const touchHandledRef = useRef(false);
   const wheelAccumRef = useRef(0);
   const lastWheelTimeRef = useRef(0);
+  const currentSectionRef = useRef<number | null>(null);
+  const wheelTimeoutRef = useRef<number | null>(null);
+  const scrollEndTimeoutRef = useRef<number | null>(null);
+  const lastScrollYRef = useRef(0);
+  const isScrollingUpRef = useRef(false);
 
   // Smooth scroll and lock during animation
   const scrollToIndex = (index: number) => {
@@ -18,8 +23,14 @@ const ScrollHijacker: React.FC = () => {
     const el = sections[clamped];
     if (!el) return;
 
+    // Update the current section we're scrolling to
+    currentSectionRef.current = clamped;
+
     const headerOffset = headerHeightRef.current || 0;
-    const top = Math.max(0, el.getBoundingClientRect().top + window.pageYOffset - headerOffset);
+    const top = Math.max(
+      0,
+      el.getBoundingClientRect().top + window.pageYOffset - headerOffset,
+    );
 
     isAnimatingRef.current = true;
     lastJumpAtRef.current = Date.now();
@@ -49,13 +60,16 @@ const ScrollHijacker: React.FC = () => {
 
   useEffect(() => {
     const querySections = () => {
-      const nodeList = document.querySelectorAll<HTMLElement>("[data-screen-section='true']");
+      // Get all sections marked for snap scrolling
+      const nodeList = document.querySelectorAll<HTMLElement>(
+        "[data-screen-section='snap']",
+      );
       sectionsRef.current = Array.from(nodeList);
     };
 
     const readHeaderHeight = () => {
       const header = document.querySelector<HTMLElement>("header");
-      headerHeightRef.current = header?.offsetHeight ?? 0; // HeaderStyled height is 72px
+      headerHeightRef.current = header?.offsetHeight ?? 0;
     };
 
     const recompute = () => {
@@ -65,98 +79,169 @@ const ScrollHijacker: React.FC = () => {
 
     recompute();
 
-    // Current section index helper
-    const currentIndex = () => {
+    // Track scroll direction
+    const getSectionToSnapTo = () => {
       const sections = sectionsRef.current;
-      if (!sections.length) return 0;
-      const header = headerHeightRef.current || 0;
-      const viewportCenter = window.scrollY + header + window.innerHeight / 2;
-      let idx = 0;
-      for (let i = 0; i < sections.length; i++) {
-        const top = sections[i].offsetTop;
-        if (viewportCenter >= top) idx = i; else break;
-      }
-      return idx;
-    };
+      if (!sections.length) return null;
 
-    // Determine if viewport is within the hijack region (between first and last screen sections)
-    const inHijackZone = () => {
-      const sections = sectionsRef.current;
-      if (!sections.length) return false;
-      const header = headerHeightRef.current || 0;
-      const yTop = window.scrollY + header;
-      const firstTop = sections[0].offsetTop;
-      const lastTop = sections[sections.length - 1].offsetTop;
-      return yTop >= firstTop - 1 && yTop <= lastTop + 1;
+      const viewportTop = window.scrollY;
+      const viewportHeight = window.innerHeight;
+      const viewportBottom = viewportTop + viewportHeight;
+      const snapThreshold = viewportHeight * 0.1; // 20% visibility threshold
+
+      // Update scroll direction detection
+      const scrollingUp = viewportTop < lastScrollYRef.current;
+      isScrollingUpRef.current = scrollingUp;
+      lastScrollYRef.current = viewportTop;
+
+      // Find sections with at least 20% visibility
+      let sectionsWithThresholdVisibility = [];
+
+      for (let i = 0; i < sections.length; i++) {
+        const section = sections[i];
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.offsetHeight;
+        const sectionBottom = sectionTop + sectionHeight;
+
+        // Calculate visible area of section
+        const visibleTop = Math.max(sectionTop, viewportTop);
+        const visibleBottom = Math.min(sectionBottom, viewportBottom);
+        const visibleHeight = Math.max(0, visibleBottom - visibleTop);
+        const visibilityPercentage = visibleHeight / viewportHeight;
+
+        // If section meets threshold, add to list
+        if (visibleHeight >= snapThreshold) {
+          sectionsWithThresholdVisibility.push({
+            index: i,
+            element: section,
+            visibleHeight,
+            visibilityPercentage,
+            sectionTop,
+          });
+        }
+      }
+
+      if (sectionsWithThresholdVisibility.length === 0) return null;
+
+      // When scrolling up, prefer the section that's coming into view from the top
+      if (scrollingUp) {
+        // Sort sections by their top position (ascending)
+        sectionsWithThresholdVisibility.sort(
+          (a, b) => a.sectionTop - b.sectionTop,
+        );
+
+        // Find the highest visible section that meets threshold
+        for (const section of sectionsWithThresholdVisibility) {
+          // If this section is above the current section, snap to it
+          if (
+            currentSectionRef.current === null ||
+            section.index < currentSectionRef.current
+          ) {
+            currentSectionRef.current = section.index;
+            return { index: section.index };
+          }
+        }
+      }
+
+      // When scrolling down - different behavior from scrolling up
+      if (!scrollingUp) {
+        // First identify the most visible section to mark as current
+        let mostVisibleSection = null;
+        let maxVisibleArea = 0;
+
+        for (const section of sectionsWithThresholdVisibility) {
+          if (section.visibleHeight > maxVisibleArea) {
+            maxVisibleArea = section.visibleHeight;
+            mostVisibleSection = section;
+          }
+        }
+
+        // Set the most visible section as current
+        if (mostVisibleSection) {
+          currentSectionRef.current = mostVisibleSection.index;
+        }
+        
+        // For scrolling down, we want a higher threshold before snapping
+        // Find sections that have significant visibility (30%) and are below current
+        const downScrollThreshold = window.innerHeight * 0.3; // 30% for downward scrolling
+        
+        for (const section of sectionsWithThresholdVisibility) {
+          // Only consider sections below current section when scrolling down
+          if (currentSectionRef.current !== null && 
+              section.index > currentSectionRef.current &&
+              section.visibleHeight >= downScrollThreshold) {
+            return { index: section.index };
+          }
+        }
+      }
+
+      return null;
     };
 
     const cooldownActive = () => Date.now() - lastJumpAtRef.current < 1000;
+
+    // Check if we need to snap to any section
+    const checkForSnap = () => {
+      // Don't check during animations
+      if (isAnimatingRef.current || cooldownActive()) return;
+
+      // See if we should snap to any section
+      const sectionToSnapTo = getSectionToSnapTo();
+
+      // If there's a section to snap to, do it
+      if (sectionToSnapTo) {
+        scrollToIndex(sectionToSnapTo.index);
+      }
+    };
 
     // Wheel handler
     const onWheel = (e: WheelEvent) => {
       if (!sectionsRef.current.length) return;
 
-      // Outside zone: allow default
-      if (!inHijackZone()) return;
+      // Wait a bit after wheel events to see if we should snap
+      const handleWheelEnd = () => {
+        if (isAnimatingRef.current) return; // Don't interrupt animations
 
-      const now = Date.now();
-      if (now - lastWheelTimeRef.current > 250) {
-        wheelAccumRef.current = 0; // new gesture
+        // Check if we've stopped scrolling for a moment
+        const now = Date.now();
+        if (now - lastWheelTimeRef.current > 250) {
+          checkForSnap();
+        }
+      };
+
+      // Update wheel time
+      lastWheelTimeRef.current = Date.now();
+
+      // Schedule a check after some delay
+      if (wheelTimeoutRef.current) {
+        window.clearTimeout(wheelTimeoutRef.current);
       }
-      lastWheelTimeRef.current = now;
-
-      // Accumulate wheel to avoid multiple jumps on high-resolution trackpads
-      wheelAccumRef.current += e.deltaY;
-
-      const idx = currentIndex();
-      const sections = sectionsRef.current;
-      const lastIdx = sections.length - 1;
-      const header = headerHeightRef.current || 0;
-      const firstTop = sections[0].offsetTop - header;
-      const lastTop = sections[lastIdx].offsetTop - header;
-
-      // At extremes by position: allow default to continue normal page scroll
-      if ((e.deltaY > 0 && window.scrollY >= lastTop) || (e.deltaY < 0 && window.scrollY <= firstTop)) {
-        return;
-      }
-
-      // Inside zone: consume the wheel
-      e.preventDefault();
-
-      // One jump per gesture/cooldown
-      if (isAnimatingRef.current || cooldownActive()) return;
-
-      // Trigger only when accumulated magnitude crosses a threshold
-      const threshold = 60; // pixels/lines depending on deltaMode, good heuristic
-      if (Math.abs(wheelAccumRef.current) < threshold) return;
-      const next = wheelAccumRef.current > 0 ? idx + 1 : idx - 1;
-      wheelAccumRef.current = 0;
-      scrollToIndex(next);
+      wheelTimeoutRef.current = window.setTimeout(
+        handleWheelEnd,
+        300,
+      ) as unknown as number;
     };
 
     // Keyboard (PageUp/PageDown/Space/Arrow)
     const onKeyDown = (e: KeyboardEvent) => {
       if (!sectionsRef.current.length) return;
-      if (!inHijackZone()) return;
-      const keys = ["PageDown", "PageUp", "ArrowDown", "ArrowUp", "Space", " "] as const;
+
+      const keys = [
+        "PageDown",
+        "PageUp",
+        "ArrowDown",
+        "ArrowUp",
+        "Space",
+        " ",
+      ] as const;
       if (!keys.includes(e.key as any)) return;
-      const idx = currentIndex();
-      const dirDown = ["PageDown", "ArrowDown", "Space", " "].includes(e.key);
-      const sections = sectionsRef.current;
-      const lastIdx = sections.length - 1;
-      const header = headerHeightRef.current || 0;
-      const firstTop = sections[0].offsetTop - header;
-      const lastTop = sections[lastIdx].offsetTop - header;
 
-      // Allow default at extremes by position
-      if ((dirDown && window.scrollY >= lastTop) || (!dirDown && window.scrollY <= firstTop)) {
-        return;
-      }
-
-      e.preventDefault();
-      if (isAnimatingRef.current || cooldownActive()) return;
-      const next = dirDown ? idx + 1 : idx - 1;
-      scrollToIndex(next);
+      // Let default scroll happen, then check if we need to snap
+      const keyTimeout = window.setTimeout(() => {
+        if (!isAnimatingRef.current) {
+          checkForSnap();
+        }
+      }, 300);
     };
 
     // Touch handlers for mobile
@@ -166,38 +251,42 @@ const ScrollHijacker: React.FC = () => {
       touchHandledRef.current = false;
       touchStartY = e.touches[0].clientY;
     };
+
     const onTouchMove = (e: TouchEvent) => {
       if (!sectionsRef.current.length) return;
-      if (!inHijackZone()) return;
-      const dy = touchStartY - e.touches[0].clientY;
-      if (Math.abs(dy) < 24) return; // threshold
-      const idx = currentIndex();
-      const sections = sectionsRef.current;
-      const lastIdx = sections.length - 1;
-      const header = headerHeightRef.current || 0;
-      const firstTop = sections[0].offsetTop - header;
-      const lastTop = sections[lastIdx].offsetTop - header;
+      if (touchHandledRef.current) return;
 
-      // Allow default at extremes by position
-      if ((dy > 0 && window.scrollY >= lastTop) || (dy < 0 && window.scrollY <= firstTop)) {
-        return;
-      }
-
-      if (touchHandledRef.current) {
-        e.preventDefault();
-        return;
-      }
-      e.preventDefault();
-      if (isAnimatingRef.current || cooldownActive()) return;
-      const next = dy > 0 ? idx + 1 : idx - 1;
-      scrollToIndex(next);
-      touchHandledRef.current = true; // only one jump per gesture
+      // Let normal touch scrolling happen
     };
+
     const onTouchEnd = () => {
+      if (isAnimatingRef.current) return;
+
+      // Check for snap after touch scroll ends
+      window.setTimeout(() => {
+        checkForSnap();
+      }, 300);
+
       touchHandledRef.current = false;
     };
 
+    // Scroll end detection using debounced scroll listener
+    const onScroll = () => {
+      if (isAnimatingRef.current) return; // Don't check during animation
+
+      // Clear existing timeout
+      if (scrollEndTimeoutRef.current) {
+        window.clearTimeout(scrollEndTimeoutRef.current);
+      }
+
+      // Set new timeout to detect scroll end
+      scrollEndTimeoutRef.current = window.setTimeout(() => {
+        checkForSnap();
+      }, 200) as unknown as number;
+    };
+
     // Listeners
+    window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("wheel", onWheel, { passive: false });
     window.addEventListener("keydown", onKeyDown, { passive: false });
     window.addEventListener("touchstart", onTouchStart, { passive: true });
@@ -212,6 +301,13 @@ const ScrollHijacker: React.FC = () => {
     mo.observe(document.body, { childList: true, subtree: true });
 
     return () => {
+      if (wheelTimeoutRef.current) {
+        window.clearTimeout(wheelTimeoutRef.current);
+      }
+      if (scrollEndTimeoutRef.current) {
+        window.clearTimeout(scrollEndTimeoutRef.current);
+      }
+      window.removeEventListener("scroll", onScroll as any);
       window.removeEventListener("wheel", onWheel as any);
       window.removeEventListener("keydown", onKeyDown as any);
       window.removeEventListener("touchstart", onTouchStart as any);
