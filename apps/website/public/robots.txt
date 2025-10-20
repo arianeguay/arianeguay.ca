@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://arianeguay.ca/sitemap.xml
