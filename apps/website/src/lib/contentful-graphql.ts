@@ -209,7 +209,7 @@ export async function getPageBySlug(
         }
       }
       competencesTitle
-      competencesCollection(limit: 3) {
+      competencesCollection(limit: 6) {
         items {
           title
           tagsCollection {
