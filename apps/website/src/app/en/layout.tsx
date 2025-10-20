@@ -58,7 +58,6 @@ export async function generateMetadata(
 
 export default async function SiteLayout(props: LayoutConfig) {
   const { children, params } = props;
-  const siteSettings = await getSiteSettings("en");
   const slug = params.slug || "home";
 
   const { page: currentPage, otherLocalePage } = await getSimplePageBySlug(

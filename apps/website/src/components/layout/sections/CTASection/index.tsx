@@ -11,7 +11,6 @@ interface CTASectionProps {
   isHero?: boolean;
 }
 const CTASectionComponent: React.FC<CTASectionProps> = ({ data, isHero }) => {
-  console.log(data.splashesCollection?.items);
   return (
     <Container
       style={{
