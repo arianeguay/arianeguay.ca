@@ -21,6 +21,7 @@ export interface SiteDefaultSeo {
 export interface NavItem {
   label: string;
   page: Page;
+  subitemsCollection: { items: NavItem[] };
 }
 
 export type SiteSettingsFields = {

@@ -1,6 +1,6 @@
 import Sections from "apps/website/src/components/layout/sections";
 import {
-  getAllPageSlugs,
+  getAllPageSlugsWithParents,
   getPageBySlug,
   getSimplePageBySlug,
 } from "apps/website/src/lib/contentful-graphql";
@@ -12,18 +12,19 @@ export const dynamicParams = false;
 export const revalidate = false;
 
 export async function generateStaticParams() {
-  const slugs = await getAllPageSlugs("fr");
-  return slugs.filter(Boolean).map((slug) => ({ slug }));
+  const entries = await getAllPageSlugsWithParents("fr");
+  return entries
+    .filter((e) => e.parentSlug)
+    .map((e) => ({ slug: [e.parentSlug as string, e.slug] }));
 }
 
 interface PageProps {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string[] }>;
 }
 
-export async function generateMetadata({
-  params,
-}: PageProps): Promise<Metadata> {
-  const slug = (await params).slug;
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const parts = (await params).slug;
+  const slug = parts?.[parts.length - 1];
   const { page, otherLocalePage } = await getSimplePageBySlug(slug, {
     locale: "fr",
   });
@@ -33,21 +34,17 @@ export async function generateMetadata({
   const description = seo?.seoDescription || undefined;
   const canonicalUrl = seo?.canonicalUrl || undefined;
   const baseUrl =
-    process.env.NEXT_PUBLIC_SITE_URL ||
-    process.env.SITE_URL ||
-    "https://arianeguay.ca";
+    process.env.NEXT_PUBLIC_SITE_URL || process.env.SITE_URL || "https://arianeguay.ca";
 
   const otherLocaleUrl = otherLocalePage?.slug
     ? `${baseUrl}/en/${otherLocalePage.slug}`
     : undefined;
 
-  const currentLocaleUrl = `${baseUrl}/${slug}`;
+  const currentLocaleUrl = `${baseUrl}/${parts.join("/")}`;
   return {
     title,
     description,
-    robots: seo?.noindex
-      ? { index: false, follow: false }
-      : { index: true, follow: true },
+    robots: seo?.noindex ? { index: false, follow: false } : { index: true, follow: true },
     alternates: {
       canonical: canonicalUrl || currentLocaleUrl,
       languages: {
@@ -67,19 +64,12 @@ export async function generateMetadata({
 }
 
 export default async function Page({ params }: PageProps) {
-  const slug = (await params).slug;
+  const parts = (await params).slug;
+  const slug = parts?.[parts.length - 1];
   if (!slug) return notFound();
   const page = await getPageBySlug(slug);
 
-  if (!page || !page.sectionsCollection?.items) {
-    // In static export, missing pages should be excluded by generateStaticParams.
-    // This is a safeguard during dev.
-    return (
-      <div className="container mx-auto px-4 py-12">
-        <h1 className="text-3xl font-bold">Page not found</h1>
-      </div>
-    );
-  }
+  if (!page || !page.sectionsCollection?.items) return notFound();
 
   return <Sections sections={page.sectionsCollection?.items} />;
 }

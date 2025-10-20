@@ -1,0 +1,11 @@
+{
+  "name": "contentful-seed",
+  "version": "1.0.0",
+  "description": "Contentful seed script",
+  "main": "index.js",
+  "scripts": {
+    "seed": "node   seed_services.js"
+  },
+  "author": "Ariane Guay",
+  "license": "ISC"
+}

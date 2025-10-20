@@ -6,8 +6,10 @@ interface NavItemProps extends NavItem {
 }
 const NavItem: React.FC<NavItemProps> = ({ label, page, currentPath }) => {
   const { locale } = useLocale();
-  const handle = page.slug === "home" ? "/" : `/${page.slug}`;
-  const localisedHandle = locale === "fr" ? handle : `/${locale}${handle}`;
+  const parentSlug: string | undefined = (page as any)?.parentPage?.slug;
+  const basePath =
+    page.slug === "home" ? "/" : parentSlug ? `/${parentSlug}/${page.slug}` : `/${page.slug}`;
+  const localisedHandle = locale === "fr" ? basePath : `/${locale}${basePath}`;
   return (
     <MobileNavItemStyled
       href={localisedHandle}

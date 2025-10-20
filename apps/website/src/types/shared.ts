@@ -174,6 +174,7 @@ export interface Group {
 export type Page = WithSys<{
   title: string;
   slug: string;
+  parentPage?: CFRef<Page>;
   seo?: CFRef<SEO>;
   sections?: CFMaybe<SectionBlock[]>; // or use SectionBlock[]
 }>;

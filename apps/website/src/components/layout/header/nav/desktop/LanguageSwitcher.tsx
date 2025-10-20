@@ -6,12 +6,13 @@ import { PageEntry } from "apps/website/src/lib/contentful-graphql";
 import Link from "next/link";
 
 function getSwitchHref(locale: string, otherLocalePage: PageEntry) {
-  const slug =
-    otherLocalePage.slug === "home" ? "/" : `/${otherLocalePage.slug}`;
+  const slug = otherLocalePage?.slug || "home";
+  const parentSlug: string | undefined = (otherLocalePage as any)?.parentPage?.slug;
+  const basePath = slug === "home" ? "/" : parentSlug ? `/${parentSlug}/${slug}` : `/${slug}`;
   if (locale === "fr") {
-    return `/en${slug}`;
+    return `/en${basePath}`;
   }
-  return `${slug}`;
+  return `${basePath}`;
 }
 
 const LanguageSwitcher = () => {
