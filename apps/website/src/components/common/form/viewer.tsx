@@ -19,7 +19,6 @@ const FormViewer: React.FC<FormModel> = (props) => {
 
   const items = formItemsCollection?.items ?? [];
 
-  console.log(items);
   const [values, setValues] = React.useState<Record<string, any>>(() =>
     items.reduce(
       (acc, it) => ({ ...acc, [it.fieldName]: it.defaultValue ?? "" }),
@@ -90,7 +89,33 @@ const FormViewer: React.FC<FormModel> = (props) => {
     if (!validate()) return;
     setSubmitting(true);
     try {
-      await new Promise((r) => setTimeout(r, 300));
+      const payload = {
+        name: values["name"],
+        email: values["email"],
+        message: values["message"],
+      };
+
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json().catch(() => null as any);
+
+      if (!res.ok) {
+        if (data?.details && Array.isArray(data.details)) {
+          const next: Record<string, string | undefined> = { ...errors };
+          for (const issue of data.details) {
+            const field = Array.isArray(issue.path) ? issue.path[0] : undefined;
+            const message = typeof issue.message === "string" ? issue.message : "Invalid";
+            if (typeof field === "string") next[field] = message;
+          }
+          setErrors(next);
+        }
+        throw new Error(data?.error || "Submission failed");
+      }
+
       setValues(
         items.reduce(
           (acc, it) => ({ ...acc, [it.fieldName]: it.defaultValue ?? "" }),
