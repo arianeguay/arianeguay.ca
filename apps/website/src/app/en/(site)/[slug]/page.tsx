@@ -1,17 +1,18 @@
-import Sections from "apps/website/src/components/layout/sections";
+import LocaleProvider from "apps/website/src/context/locale-provider";
+import type { Metadata } from "next";
+import Sections from "../../../../components/layout/sections";
 import {
   getAllPageSlugs,
   getPageBySlug,
   getSimplePageBySlug,
-} from "apps/website/src/lib/contentful-graphql";
-import type { Metadata } from "next";
+} from "../../../../lib/contentful-graphql";
 
 export const dynamic = "error";
 export const dynamicParams = false;
 export const revalidate = false;
 
 export async function generateStaticParams() {
-  const slugs = await getAllPageSlugs("fr");
+  const slugs = await getAllPageSlugs("en");
   return slugs.filter(Boolean).map((slug) => ({ slug }));
 }
 
@@ -24,7 +25,7 @@ export async function generateMetadata({
 }: PageProps): Promise<Metadata> {
   const slug = (await params).slug;
   const { page, otherLocalePage } = await getSimplePageBySlug(slug, {
-    locale: "fr",
+    locale: "en",
   });
   const seo = page?.seo;
 
@@ -37,10 +38,10 @@ export async function generateMetadata({
     "https://arianeguay.ca";
 
   const otherLocaleUrl = otherLocalePage?.slug
-    ? `${baseUrl}/en/${otherLocalePage.slug}`
+    ? `${baseUrl}/${otherLocalePage.slug}`
     : undefined;
 
-  const currentLocaleUrl = `${baseUrl}/${slug}`;
+  const currentLocaleUrl = `${baseUrl}/en/${slug}`;
   return {
     title,
     description,
@@ -50,8 +51,8 @@ export async function generateMetadata({
     alternates: {
       canonical: canonicalUrl || currentLocaleUrl,
       languages: {
-        "fr-CA": currentLocaleUrl,
-        "en-CA": otherLocaleUrl,
+        "fr-CA": otherLocaleUrl,
+        "en-CA": currentLocaleUrl,
       },
     },
     openGraph: {
@@ -65,17 +66,28 @@ export async function generateMetadata({
   };
 }
 
-export default async function Page({ params }: PageProps) {
+export default async function PageEn({ params }: PageProps) {
   const slug = (await params).slug;
-  const page = await getPageBySlug(slug);
+  const page = await getPageBySlug(slug, { locale: "en" });
+
+  const { page: currentPage, otherLocalePage } = await getSimplePageBySlug(
+    slug,
+    {
+      locale: "en",
+    },
+  );
 
   if (!page || !page.sectionsCollection?.items) {
-    // In static export, missing pages should be excluded by generateStaticParams.
-    // This is a safeguard during dev.
     return (
-      <div className="container mx-auto px-4 py-12">
-        <h1 className="text-3xl font-bold">Page not found</h1>
-      </div>
+      <LocaleProvider
+        locale="en"
+        currentPage={currentPage}
+        otherLocalePage={otherLocalePage}
+      >
+        <div className="container mx-auto px-4 py-12">
+          <h1 className="text-3xl font-bold">Page not found</h1>
+        </div>
+      </LocaleProvider>
     );
   }
 

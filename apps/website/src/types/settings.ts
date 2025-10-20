@@ -1,7 +1,7 @@
 // Adapter to the exact interface shape you asked for (“fields” wrapper)
 
-import { Page } from "./page";
 import { CFItem } from "apps/website/src/cms/cf-graphql";
+import { Page } from "./page";
 
 export interface SiteSocial {
   platform: string;
@@ -18,21 +18,17 @@ export interface SiteDefaultSeo {
   keywords: string[];
 }
 
-
 export interface NavItem {
-    label: string;
-    page: Page;
-  
+  label: string;
+  page: Page;
 }
-
-
 
 export type SiteSettingsFields = {
-    navCollection:  {items: CFItem<NavItem,"NavItem">[]};
-    footer: SiteFooter;
-    socials: SiteSocial[];
-    defaultSeo: SiteDefaultSeo;
-  
-}
+  navCollection: { items: CFItem<NavItem, "NavItem">[] };
+  footer: SiteFooter;
+  socials: SiteSocial[];
+  defaultSeo: SiteDefaultSeo;
+  siteName: string;
+};
 
-export type SiteSettings = CFItem<SiteSettingsFields,"SiteSettings">;
+export type SiteSettings = CFItem<SiteSettingsFields, "SiteSettings">;

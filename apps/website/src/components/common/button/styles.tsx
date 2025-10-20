@@ -43,6 +43,17 @@ const variantStyle = (variant: LinkItemVariant, theme: DefaultTheme) => {
         background: transparent;
         color: ${theme.colors.brand.primary};
       `;
+    case "outline":
+      return css`
+        border: 1px solid ${theme.button.colors[variant].background};
+        background: transparent;
+        color: ${theme.button.colors[variant].text};
+        &:not(:disabled):hover {
+          border-color: ${theme.button.colors[variant].backgroundHover};
+          box-shadow: ${theme.shadows.lg};
+          transform: translateY(-2px);
+        }
+      `;
     case "link":
       return css`
         border: none;
@@ -59,14 +70,26 @@ const variantStyle = (variant: LinkItemVariant, theme: DefaultTheme) => {
   }
 };
 
-const getSizeStyle = (size: ButtonSize, theme: DefaultTheme) => {
-  return css`
-    min-width: ${theme.button.sizes[size].minWidth};
-    min-height: ${theme.button.sizes[size].minHeight};
-    font-size: ${theme.button.sizes[size].fontSize};
-    padding-inline: ${theme.button.sizes[size].paddingInline};
-    font-weight: ${theme.button.sizes[size].fontWeight};
-  `;
+const getSizeStyle = (
+  size: ButtonSize,
+  theme: DefaultTheme,
+  variant: LinkItemVariant,
+) => {
+  if (["ghost", "outline", "link"].includes(variant)) {
+    return css`
+      font-size: ${theme.button.sizes[size].fontSize};
+      padding-inline: ${theme.spacing.sm};
+      font-weight: ${theme.button.sizes[size].fontWeight};
+    `;
+  } else {
+    return css`
+      min-width: ${theme.button.sizes[size].minWidth};
+      min-height: ${theme.button.sizes[size].minHeight};
+      font-size: ${theme.button.sizes[size].fontSize};
+      padding-inline: ${theme.button.sizes[size].paddingInline};
+      font-weight: ${theme.button.sizes[size].fontWeight};
+    `;
+  }
 };
 
 export const ButtonStyled = styled.button<{
@@ -77,5 +100,6 @@ export const ButtonStyled = styled.button<{
   padding: ${({ theme }) => theme.spacing.sm};
 
   ${({ $variant, theme }) => variantStyle($variant ?? "primary", theme)}
-  ${({ $size, theme }) => getSizeStyle($size ?? "md", theme)}
+  ${({ $size, theme, $variant }) =>
+    getSizeStyle($size ?? "md", theme, $variant ?? "primary")}
 `;

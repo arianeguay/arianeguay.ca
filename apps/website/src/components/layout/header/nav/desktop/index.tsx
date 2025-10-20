@@ -3,6 +3,7 @@
 import { NavItem } from "apps/website/src/types/settings";
 import { usePathname } from "next/navigation";
 import { HeaderNavStyled } from "../../styles";
+import LanguageSwitcher from "./LanguageSwitcher";
 import NavItemComponent from "./NavItem";
 
 interface DesktopNavProps {
@@ -21,6 +22,7 @@ const DesktopNav: React.FC<DesktopNavProps> = ({ nav }) => {
           currentPath={effectivePath}
         />
       ))}
+      <LanguageSwitcher />
     </HeaderNavStyled>
   );
 };

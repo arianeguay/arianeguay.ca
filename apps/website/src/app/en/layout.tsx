@@ -1,30 +1,41 @@
 import { Metadata } from "next";
 import Script from "next/script";
+import LocaleProvider from "../../context/locale-provider";
 import StylingProvider from "../../context/theme-provider";
 import {
   getSimplePageBySlug,
   getSiteSettings,
 } from "../../lib/contentful-graphql";
 import "../globals.css";
-import LocaleProvider from "../../context/locale-provider";
 
 // Layout components would be imported here
 // import { Header, Footer } from '@/components/layout';
 
 interface LayoutConfig {
   children: React.ReactNode;
+  params: {
+    slug: string;
+  };
 }
 
 export async function generateMetadata(
   _props: LayoutConfig,
 ): Promise<Metadata> {
+  const siteSettings = await getSiteSettings();
+  const siteName = siteSettings?.siteName || "Ariane Guay";
+  const defaultSeo = siteSettings?.defaultSeo as
+    | { title?: string; description?: string; keywords?: string[] }
+    | undefined;
+
   return {
     title: {
-      default: "Ariane Guay",
-      template: "%s | Ariane Guay",
+      default: defaultSeo?.title || siteName,
+      template: `${siteName} | %s`,
     },
-    description: "Personal website and portfolio of Ariane Guay",
-    keywords: ["design", "development", "portfolio"],
+    description:
+      defaultSeo?.description ||
+      "Personal website and portfolio of Ariane Guay",
+    keywords: defaultSeo?.keywords || ["design", "development", "portfolio"],
     metadataBase: new URL(
       process.env.NEXT_PUBLIC_SITE_URL ||
         process.env.SITE_URL ||
@@ -33,7 +44,7 @@ export async function generateMetadata(
     openGraph: {
       type: "website",
       locale: "en_CA",
-      siteName: "Ariane Guay",
+      siteName,
     },
     robots: {
       index: true,
@@ -46,18 +57,19 @@ export async function generateMetadata(
 }
 
 export default async function SiteLayout(props: LayoutConfig) {
-  const { children } = props;
-  const siteSettings = await getSiteSettings();
+  const { children, params } = props;
+  const siteSettings = await getSiteSettings("en");
+  const slug = params.slug || "home";
 
   const { page: currentPage, otherLocalePage } = await getSimplePageBySlug(
-    "home",
+    slug,
     {
-      locale: "fr",
+      locale: "en",
     },
   );
 
   return (
-    <html lang="fr">
+    <html lang="en">
       <body>
         {process.env.NEXT_PUBLIC_GA_ID ? (
           <>
@@ -77,7 +89,7 @@ export default async function SiteLayout(props: LayoutConfig) {
         ) : null}
         <StylingProvider>
           <LocaleProvider
-            locale="fr"
+            locale="en"
             currentPage={currentPage}
             otherLocalePage={otherLocalePage}
           >

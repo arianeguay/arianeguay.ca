@@ -143,7 +143,7 @@ const mobileTypography: Record<TypographyElement, Typography> = {
 export const typeStyle = (key: keyof typeof typography) => {
   const desktop = typography[key];
   const mobile = mobileTypography[key];
-  
+
   // Calculate line height based on typography type
   const getLh = (t: Typography) => {
     if (key.startsWith("h")) return 1.15;
@@ -154,7 +154,7 @@ export const typeStyle = (key: keyof typeof typography) => {
 
   const desktopLh = getLh(desktop);
   const mobileLh = getLh(mobile);
-  
+
   // Generate base typography style
   const baseStyle = (t: Typography, lh: number) => `
     font-family: ${t.family === "display" ? font.family.display : font.family.body};
@@ -260,6 +260,12 @@ const buttonColors: Record<LinkItemVariant, ButtonColor> = {
     backgroundDisabled: "transparent",
     text: "#111114",
   },
+  outline: {
+    background: colors.border,
+    backgroundHover: colors.brand.primary,
+    backgroundDisabled: "transparent",
+    text: "#111114",
+  },
   link: {
     background: "transparent",
     backgroundHover: "transparent",
@@ -309,7 +315,7 @@ const buttonSizes: Record<ButtonSizes, ButtonSize> = {
 // Helper object for responsive typography
 const responsiveTypography: ResponsiveTypography = {
   desktop: typography,
-  mobile: mobileTypography
+  mobile: mobileTypography,
 };
 
 export const theme = {

@@ -44,6 +44,7 @@ export const HeaderContentStyled = styled.div`
 export const HeaderNavStyled = styled.nav`
   display: flex;
   gap: ${({ theme }) => theme.spacing.lg};
+  align-items: center;
 `;
 
 export const NavItemStyled = styled(Link)<{ $active?: boolean }>`

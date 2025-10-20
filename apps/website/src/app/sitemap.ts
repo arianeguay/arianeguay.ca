@@ -11,15 +11,33 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "weekly",
       priority: 1.0,
     },
+    {
+      url: `${baseUrl}/en`,
+      changeFrequency: "weekly",
+      priority: 1.0,
+    },
   ];
 
   try {
-    const slugs = await getAllPageSlugs();
-    for (const slug of slugs) {
+    const [frSlugs, enSlugs] = await Promise.all([
+      getAllPageSlugs("fr"),
+      getAllPageSlugs("en"),
+    ]);
+
+    for (const slug of frSlugs) {
       // Avoid duplicating homepage if slug corresponds to root
       if (!slug || slug === "/" || slug === "index" || slug === "home") continue;
       entries.push({
         url: `${baseUrl}/${slug}`,
+        changeFrequency: "weekly",
+        priority: 0.7,
+      });
+    }
+
+    for (const slug of enSlugs) {
+      if (!slug || slug === "/" || slug === "index" || slug === "home") continue;
+      entries.push({
+        url: `${baseUrl}/en/${slug}`,
         changeFrequency: "weekly",
         priority: 0.7,
       });

@@ -9,6 +9,7 @@ export type LinkItemVariant =
   | "primary"
   | "secondary"
   | "tertiary"
+  | "outline"
   | "ghost"
   | "link";
 

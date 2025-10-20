@@ -54,7 +54,7 @@ export type PageSlug = { slug: string };
 export async function getAllPageSlugs(
   locale: string = DEFAULT_LOCALE,
 ): Promise<string[]> {
-  const query = `
+  const query = /* GraphQL */ `
     query AllPageSlugs($limit: Int = 200, $locale: String = "${DEFAULT_LOCALE}") {
       pageCollection(limit: $limit, locale: $locale) {
         items {
@@ -88,7 +88,83 @@ export type PageEntry = {
   slug?: string | null;
   sectionsCollection: { items: SectionBlock[] | null } | null;
   seo?: SeoFields | null;
+  sys?: { id: string } | null;
 };
+
+export async function getSimplePageBySlug(
+  slug: string,
+  options?: { locale?: string; preview?: boolean },
+): Promise<{ page: PageEntry | null; otherLocalePage: PageEntry | null }> {
+  const locale = options?.locale || DEFAULT_LOCALE;
+  const otherLocale = locale === "fr" ? "en" : "fr";
+
+  const preview = options?.preview ?? false;
+  const query = /* GraphQL */ `
+    query PageBySlug(
+      $slug: String!
+      $preview: Boolean = false
+      $locale: String = "${DEFAULT_LOCALE}"
+      $sectionLimit: Int = 12
+    ) {
+      pageCollection(where: { slug: $slug }, limit: 1, preview: $preview, locale: $locale) {
+        items {
+    
+          title
+            sys {
+        id
+      }
+          slug
+          sectionsCollection(limit: $sectionLimit, locale: $locale) {
+            items {
+              __typename
+            }
+          }
+        }
+      }
+    }
+  `;
+
+  const data = await fetchGraphQL<{ pageCollection: { items: PageEntry[] } }>(
+    query,
+    { slug, preview, locale },
+  );
+
+  const id = data.pageCollection?.items?.[0]?.sys?.id;
+
+  const queryOtherLocale = /* GraphQL */ `
+    query PageBySlug(
+      $id: String!
+      $preview: Boolean = false
+      $locale: String = "${DEFAULT_LOCALE}"
+      $sectionLimit: Int = 12
+    ) {
+      pageCollection(where: { sys: { id: $id } }, limit: 1, preview: $preview, locale: $locale) {
+        items {
+    
+          title
+          slug  
+          sys {
+        id
+      }
+          sectionsCollection(limit: $sectionLimit, locale: $locale) {
+            items {
+              __typename
+            }
+          }
+        }
+      }
+    }
+  `;
+  //Fetch other locale
+  const dataOtherLocale = await fetchGraphQL<{
+    pageCollection: { items: PageEntry[] };
+  }>(queryOtherLocale, { id, preview, locale: otherLocale });
+
+  return {
+    page: data.pageCollection?.items?.[0] ?? null,
+    otherLocalePage: dataOtherLocale.pageCollection?.items?.[0] ?? null,
+  };
+}
 
 export async function getPageBySlug(
   slug: string,
