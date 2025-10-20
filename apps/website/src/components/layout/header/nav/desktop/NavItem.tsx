@@ -8,7 +8,12 @@ const NavItem: React.FC<NavItemProps> = ({ label, page, currentPath }) => {
   const handle = page.slug === "home" ? "/" : `/${page.slug}`;
 
   return (
-    <NavItemStyled href={handle} $active={currentPath === handle}>
+    <NavItemStyled
+      href={handle}
+      $active={currentPath === handle}
+      aria-label={label}
+      about={`Go to ${label}`}
+    >
       {label}
     </NavItemStyled>
   );

@@ -3,7 +3,12 @@ import Link from "next/link";
 
 const Logo: React.FC = () => {
   return (
-    <Link href="/" style={{ height: "fit-content", lineHeight: 1 }}>
+    <Link
+      href="/"
+      style={{ height: "fit-content", lineHeight: 1 }}
+      aria-label="Home"
+      about="Go to the homepage"
+    >
       <svg
         style={{ aspectRatio: 164 / 36, color: theme.colors.ink1 }}
         viewBox="0 0 164 36"
