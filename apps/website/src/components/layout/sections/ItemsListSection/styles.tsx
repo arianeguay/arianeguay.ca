@@ -6,7 +6,7 @@ import styled, { css } from "styled-components";
 const VerticalStyle = (theme: CustomTheme) => css`
   display: flex;
   flex-direction: column;
-  gap: ${theme.spacing.xxxl};
+  gap: ${theme.spacing.lg};
 `;
 
 const TwoColsStyle = (side: string, theme: CustomTheme) => css`

@@ -1,27 +1,26 @@
 "use client";
-import { css } from "styled-components";
-import styled from "styled-components";
 import { ListItemVariant } from "apps/website/src/types/shared";
+import styled, { css } from "styled-components";
 
 const RowStyling = css`
   flex-direction: row;
-    align-items: center;
-    text-align: left;
+  align-items: center;
+  text-align: left;
 `;
 const ColumnStyling = css`
   flex-direction: column;
-    align-items: center;
-    text-align: center;
+  align-items: center;
+  text-align: center;
 `;
 export const CardContainerStyled = styled.div<{ $variant?: ListItemVariant }>`
   display: flex;
   padding-block: 16px;
   padding-inline: 20px;
-  ${({ $variant }) => $variant === "row" ? RowStyling : ColumnStyling}
+  ${({ $variant }) => ($variant === "row" ? RowStyling : ColumnStyling)}
 
   gap: 10px;
   border-radius: 8px;
-  border: 1px solid var(--colors-border, #827b7f);
+  border: ${({ theme }) => theme.colors.border};
   background: rgba(255, 255, 255, 0.8);
 
   /* core/shadow/sm */

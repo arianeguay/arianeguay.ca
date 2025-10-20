@@ -1,6 +1,6 @@
+import Typography from "apps/website/src/components/common/typography";
 import { ListItem } from "apps/website/src/types/shared";
 import { CardContainerStyled } from "./styles";
-import Typography from "apps/website/src/components/common/typography";
 
 interface DefaultCardProps extends ListItem {
   text: string;
@@ -18,7 +18,12 @@ const DefaultCard: React.FC<DefaultCardProps> = ({
       {!!icon && <img src={icon.url} alt={icon.title ?? ""} />}
       <div>
         {!!title && (
-          <Typography element="p" variant="h5" noWrap={noWrap}>
+          <Typography
+            element="p"
+            variant="h5"
+            noWrap={noWrap}
+            style={{ marginBlockEnd: "0.8rem" }}
+          >
             {title}
           </Typography>
         )}

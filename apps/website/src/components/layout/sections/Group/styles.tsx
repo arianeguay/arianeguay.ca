@@ -20,4 +20,5 @@ export const GroupStyled = styled.div<{
       flex-direction: column;
     `};
   width: 100%;
+  position: relative;
 `;
