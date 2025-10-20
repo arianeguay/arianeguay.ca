@@ -165,6 +165,7 @@ export type Form = {
 export interface Group {
   background?: CFMaybe<Background>;
   isScreen?: CFMaybe<boolean>;
+  splashesCollection?: CFMaybe<{ items: BackgroundSplash[] }>;
   elementsCollection?: CFMaybe<{ items: SectionBlock[] }>;
 }
 

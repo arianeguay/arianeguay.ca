@@ -1,4 +1,5 @@
 import { Group } from "apps/website/src/types/shared";
+import BackgroundSplashesComponent from "../../splashes";
 import CTASection from "../CTASection";
 import ItemsListSection from "../ItemsListSection";
 import { GroupStyled } from "./styles";
@@ -7,7 +8,7 @@ interface GroupSectionProps {
   isHero?: boolean;
 }
 const GroupSection: React.FC<GroupSectionProps> = ({ data }) => {
-  const { elementsCollection, background, isScreen } = data;
+  const { elementsCollection, background, isScreen, splashesCollection } = data;
   // Determine if this group should use snap scrolling (customize based on your needs)
   // For this example, we'll use a naming convention to identify snap sections
 
@@ -17,6 +18,10 @@ const GroupSection: React.FC<GroupSectionProps> = ({ data }) => {
       $isScreen={isScreen}
       data-screen-section={isScreen ? "snap" : undefined}
     >
+      {splashesCollection?.items && (
+        <BackgroundSplashesComponent data={splashesCollection.items} />
+      )}
+
       {elementsCollection?.items.map((item, index) => {
         if (!item) return null;
         switch (item.__typename) {

@@ -19,13 +19,17 @@ async function fetchGraphQL<T>(
     throw new Error("Missing CONTENTFUL_SPACE_ID or CONTENTFUL_CDA_TOKEN");
   }
 
+  // Minify GraphQL query to avoid Contentful QUERY_TOO_BIG (8192 bytes) errors
+  // Collapses all whitespace (including newlines) to single spaces and trims ends.
+  const minifiedQuery = query.replace(/\s+/g, " ").trim();
+
   const res = await fetch(ENDPOINT, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${CDA_TOKEN}`,
     },
-    body: JSON.stringify({ query, variables }),
+    body: JSON.stringify({ query: minifiedQuery, variables }),
     // Ensure static during build
     next: { revalidate: false },
     cache: "force-cache",
@@ -172,6 +176,7 @@ export async function getPageBySlug(
       }
       enterpriseTitle
       background
+
       enterpriseCollection(limit: 3) {
         items {
           companyName
@@ -283,6 +288,17 @@ export async function getPageBySlug(
               ... on Group {
                 background
                 isScreen
+                splashesCollection(limit: 2, locale: $locale) {
+                  items {
+                    asset {
+                      url
+                      title
+                    }
+                    margin
+                    top
+                    side
+                  }
+                }
                 elementsCollection(limit: 2, locale: $locale) {
                   items {
                     __typename
