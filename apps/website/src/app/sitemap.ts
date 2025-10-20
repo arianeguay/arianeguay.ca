@@ -31,3 +31,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   return entries;
 }
+
+// Ensure static generation for static HTML export builds
+export const dynamic = "force-static";
+export const revalidate = 86400; // 24 hours
