@@ -37,11 +37,7 @@ const Sections: React.FC<SectionsProps> = ({ sections }) => {
         );
       case "ExperienceSection":
         return (
-          <ExperienceSectionComponent
-            key={s.__typename + index}
-            data={s}
-            isHero={index === 0}
-          />
+          <ExperienceSectionComponent key={s.__typename + index} data={s} />
         );
     }
   });

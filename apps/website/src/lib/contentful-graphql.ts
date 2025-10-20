@@ -171,6 +171,7 @@ export async function getPageBySlug(
         json
       }
       enterpriseTitle
+      background
       enterpriseCollection(limit: 3) {
         items {
           companyName

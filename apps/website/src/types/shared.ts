@@ -235,4 +235,5 @@ export type ExperienceSection = {
   cvFileTitle?: CFMaybe<string>;
   cvFileCta?: CFMaybe<string>;
   cvFileDescription?: CFMaybe<string>;
+  background?: CFMaybe<Background>;
 };

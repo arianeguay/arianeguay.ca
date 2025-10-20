@@ -1,83 +1,84 @@
-import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import { ExperienceSection } from "apps/website/src/types/shared";
+import Button from "../../../common/button";
+import Tag from "../../../common/tag";
+import TagGroup from "../../../common/tag/TagGroup";
 import Typography from "../../../common/typography";
 import Container from "../../container";
-
+import FormationCard from "./FormationCard";
+import JobExperienceCard from "./JobExperienceCard";
+import { CompetencesGridStyled } from "./styles";
 interface ExperienceSectionProps {
   data: ExperienceSection;
-  isHero?: boolean;
 }
 const ExperienceSectionComponent: React.FC<ExperienceSectionProps> = ({
   data,
-  isHero,
 }) => {
   return (
-    <Container>
+    <Container background={data.background || undefined}>
       <div>
-        <Typography variant="h2" element="h2">
+        <Typography variant="h2" element="h2" style={{ textAlign: "center" }}>
           {data.title}
         </Typography>
         <div>
-          <Typography variant="h3" element="h3">
+          <Typography
+            variant="h3"
+            element="h3"
+            style={{ marginBlockEnd: "1rem" }}
+          >
             {data.enterpriseTitle}
           </Typography>
           {data.enterpriseCollection?.items.map((enterprise, index) => (
-            <div key={index}>
-              <Typography variant="h4" element="h4">
-                {enterprise.companyName}
-              </Typography>
-              {enterprise.description && (
-                <Typography variant="body1" element="p">
-                  {documentToReactComponents(enterprise.description.json)}
-                </Typography>
-              )}
-            </div>
+            <JobExperienceCard key={index} data={enterprise} />
           ))}
         </div>
         <div>
-          <Typography variant="h3" element="h3">
+          <Typography
+            variant="h3"
+            element="h3"
+            style={{ marginBlockEnd: "1rem" }}
+          >
             {data.formationsTitle}
           </Typography>
           {data.formationsCollection?.items.map((formation, index) => (
-            <div key={index}>
-              <Typography variant="h4" element="h4">
-                {formation.school}
-              </Typography>
-              {formation.description && (
-                <Typography variant="body1" element="p">
-                  {documentToReactComponents(formation.description.json)}
-                </Typography>
-              )}
-            </div>
+            <FormationCard key={index} data={formation} />
           ))}
         </div>
         <div>
-          <Typography variant="h3" element="h3">
+          <Typography
+            variant="h3"
+            element="h3"
+            style={{ marginBlockEnd: "1rem" }}
+          >
             {data.competencesTitle}
           </Typography>
-          {data.competencesCollection?.items.map((competence, index) => (
-            <div key={index}>
-              <Typography variant="h4" element="h4">
-                {competence.title}
-              </Typography>
-              {competence.tagsCollection?.items.map((tag, index) => (
-                <Typography variant="body1" element="p" key={index}>
-                  {tag.name}
-                </Typography>
-              ))}
-            </div>
-          ))}
+          <CompetencesGridStyled>
+            {data.competencesCollection?.items.map((competence, index) => (
+              <TagGroup title={competence.title} key={index}>
+                {competence.tagsCollection?.items.map((tag, index) => (
+                  <Tag key={index}>{tag.name}</Tag>
+                ))}
+              </TagGroup>
+            ))}
+          </CompetencesGridStyled>
         </div>
         <div>
-          <Typography variant="h3" element="h3">
+          <Typography
+            variant="h3"
+            element="h3"
+            style={{ marginBlockEnd: "1rem" }}
+          >
             {data.cvFileTitle}
           </Typography>
-          <a href={data.cvFile?.url} download target="_blank">
-            {data.cvFileCta}
-          </a>
-          <Typography variant="body1" element="p">
+          <Typography
+            variant="body1"
+            element="p"
+            style={{ marginBlockEnd: "1rem", marginBlockStart: "0.5rem" }}
+          >
             {data.cvFileDescription}
           </Typography>
+          <a href={data.cvFile?.url} download target="_blank">
+            <Button variant="primary">{data.cvFileCta}</Button>
+          </a>
         </div>
       </div>
     </Container>
