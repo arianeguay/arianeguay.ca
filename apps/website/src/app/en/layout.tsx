@@ -2,10 +2,7 @@ import { Metadata } from "next";
 import Script from "next/script";
 import LocaleProvider from "../../context/locale-provider";
 import StylingProvider from "../../context/theme-provider";
-import {
-  getSimplePageBySlug,
-  getSiteSettings,
-} from "../../lib/contentful-graphql";
+import { getSimplePageBySlug } from "../../lib/contentful-graphql";
 import "../globals.css";
 
 // Layout components would be imported here
@@ -13,29 +10,17 @@ import "../globals.css";
 
 interface LayoutConfig {
   children: React.ReactNode;
-  params: {
-    slug: string;
-  };
 }
 
-export async function generateMetadata(
-  _props: LayoutConfig,
-): Promise<Metadata> {
-  const siteSettings = await getSiteSettings();
-  const siteName = siteSettings?.siteName || "Ariane Guay";
-  const defaultSeo = siteSettings?.defaultSeo as
-    | { title?: string; description?: string; keywords?: string[] }
-    | undefined;
-
+export async function generateMetadata(): Promise<Metadata> {
+  const siteName = "Ariane Guay";
   return {
     title: {
-      default: defaultSeo?.title || siteName,
+      default: siteName,
       template: `${siteName} | %s`,
     },
-    description:
-      defaultSeo?.description ||
-      "Personal website and portfolio of Ariane Guay",
-    keywords: defaultSeo?.keywords || ["design", "development", "portfolio"],
+    description: "Personal website and portfolio of Ariane Guay",
+    keywords: ["design", "development", "portfolio"],
     metadataBase: new URL(
       process.env.NEXT_PUBLIC_SITE_URL ||
         process.env.SITE_URL ||
@@ -56,12 +41,9 @@ export async function generateMetadata(
   };
 }
 
-export default async function SiteLayout(props: LayoutConfig) {
-  const { children, params } = props;
-  const slug = params.slug || "home";
-
+export default async function SiteLayout({ children }: LayoutConfig) {
   const { page: currentPage, otherLocalePage } = await getSimplePageBySlug(
-    slug,
+    "home",
     {
       locale: "en",
     },
@@ -79,7 +61,7 @@ export default async function SiteLayout(props: LayoutConfig) {
             <Script id="ga-setup" strategy="afterInteractive">
               {`
                 window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
+                function gtag(){dataLayer.push(arguments);} 
                 gtag('js', new Date());
                 gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}', { anonymize_ip: true });
               `}

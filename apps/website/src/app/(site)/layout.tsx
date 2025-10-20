@@ -1,12 +1,9 @@
 import { Metadata } from "next";
 import Script from "next/script";
-import StylingProvider from "../../context/theme-provider";
-import {
-  getSimplePageBySlug,
-  getSiteSettings,
-} from "../../lib/contentful-graphql";
-import "../globals.css";
 import LocaleProvider from "../../context/locale-provider";
+import StylingProvider from "../../context/theme-provider";
+import { getSimplePageBySlug } from "../../lib/contentful-graphql";
+import "../globals.css";
 
 // Layout components would be imported here
 // import { Header, Footer } from '@/components/layout';
@@ -47,7 +44,6 @@ export async function generateMetadata(
 
 export default async function SiteLayout(props: LayoutConfig) {
   const { children } = props;
-  const siteSettings = await getSiteSettings();
 
   const { page: currentPage, otherLocalePage } = await getSimplePageBySlug(
     "home",

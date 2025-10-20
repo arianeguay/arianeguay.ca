@@ -6,6 +6,7 @@ export const mockData: { siteSettings: SiteSettings } = {
   siteSettings: {
     sys: { id: 'mock-site-settings' },
     __typename: 'SiteSettings',
+    siteName: 'Ariane Guay',
     navCollection: {
       items: [
         {
