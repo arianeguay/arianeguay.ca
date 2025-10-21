@@ -15,14 +15,18 @@ export async function generateStaticParams() {
   const entries = await getAllPageSlugsWithParents("en");
   return entries
     .filter((e) => e.parentSlug)
-    .map((e) => ({ slug: [e.parentSlug as string, e.slug] }));
+    .map((e) => ({
+      slug: [e.parentSlug, e.slug].filter(Boolean),
+    }));
 }
 
 interface PageProps {
   params: Promise<{ slug: string[] }>;
 }
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
   const parts = (await params).slug;
   const slug = parts?.[parts.length - 1];
   const { page, otherLocalePage } = await getSimplePageBySlug(slug, {
@@ -34,7 +38,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const description = seo?.seoDescription || undefined;
   const canonicalUrl = seo?.canonicalUrl || undefined;
   const baseUrl =
-    process.env.NEXT_PUBLIC_SITE_URL || process.env.SITE_URL || "https://arianeguay.ca";
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    process.env.SITE_URL ||
+    "https://arianeguay.ca";
 
   const otherLocaleUrl = otherLocalePage?.slug
     ? `${baseUrl}/${otherLocalePage.slug}`
@@ -44,7 +50,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title,
     description,
-    robots: seo?.noindex ? { index: false, follow: false } : { index: true, follow: true },
+    robots: seo?.noindex
+      ? { index: false, follow: false }
+      : { index: true, follow: true },
     alternates: {
       canonical: canonicalUrl || currentLocaleUrl,
       languages: {

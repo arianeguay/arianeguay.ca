@@ -108,7 +108,8 @@ const FormViewer: React.FC<FormModel> = (props) => {
           const next: Record<string, string | undefined> = { ...errors };
           for (const issue of data.details) {
             const field = Array.isArray(issue.path) ? issue.path[0] : undefined;
-            const message = typeof issue.message === "string" ? issue.message : "Invalid";
+            const message =
+              typeof issue.message === "string" ? issue.message : "Invalid";
             if (typeof field === "string") next[field] = message;
           }
           setErrors(next);
@@ -246,6 +247,7 @@ const FormViewer: React.FC<FormModel> = (props) => {
           </Button>
           {!!resetButtonLabel && (
             <Button
+              variant="outline"
               type="button"
               onClick={() => {
                 setValues(

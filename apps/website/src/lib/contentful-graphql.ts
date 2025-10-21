@@ -79,8 +79,8 @@ export async function getAllPageSlugsWithParents(
   locale: string = DEFAULT_LOCALE,
 ): Promise<PageSlugWithParent[]> {
   const query = /* GraphQL */ `
-    query AllPageSlugsWithParents($limit: Int = 200, $locale: String = "${DEFAULT_LOCALE}") {
-      pageCollection(limit: $limit, locale: $locale) {
+    query AllPageSlugsWithParents( $locale: String = "${DEFAULT_LOCALE}") {
+      pageCollection( locale: $locale) {
         items {
           slug
           parentPage { slug }
@@ -102,6 +102,8 @@ export async function getAllPageSlugsWithParents(
     slug: i?.slug || "",
     parentSlug: i?.parentPage?.slug || null,
   }));
+
+  console.log(entries);
   return entries.filter((e) => Boolean(e.slug)) as PageSlugWithParent[];
 }
 
