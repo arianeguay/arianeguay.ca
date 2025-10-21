@@ -1,6 +1,6 @@
 // Adapter to the exact interface shape you asked for (“fields” wrapper)
 
-import { CFItem } from "apps/website/src/cms/cf-graphql";
+import { CFItem, CFSys } from "apps/website/src/cms/cf-graphql";
 import { Page } from "./page";
 
 export interface SiteSocial {
@@ -22,6 +22,7 @@ export interface NavItem {
   label: string;
   page: Page;
   subitemsCollection: { items: NavItem[] };
+  sys: CFSys;
 }
 
 export type SiteSettingsFields = {
