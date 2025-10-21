@@ -30,7 +30,6 @@ export type ListItem = {
   text: string;
   title?: string;
   icon?: CFRef<CfAsset>;
-  variant?: CFMaybe<ListItemVariant>;
 };
 
 export type HighlightItem = {
@@ -112,7 +111,7 @@ export type ItemsListVariant =
   | "verticalScroll"
   | "verticalGrid";
 
-export type ItemsListCardVariant = "cards" | "rows" | "faq";
+export type ItemsListCardVariant = "cards" | "rows" | "faq" | "citation";
 
 export type ItemsList = {
   title: string;

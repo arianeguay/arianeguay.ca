@@ -1,12 +1,18 @@
 import { ItemsList } from "apps/website/src/types/shared";
-import DefaultCard from "./Card/Default";
+import Card from "./Card";
 import { GridStyled } from "./styles";
 
-const Grid: React.FC<ItemsList> = ({ itemsCollection }) => {
+const Grid: React.FC<ItemsList> = ({ itemsCollection, cardVariant }) => {
   return (
     <GridStyled>
       {itemsCollection?.items.map((item, index) => {
-        return <DefaultCard key={item?.text + index} {...item} />;
+        return (
+          <Card
+            key={item?.text + index}
+            {...item}
+            variant={cardVariant ?? "rows"}
+          />
+        );
       })}
     </GridStyled>
   );

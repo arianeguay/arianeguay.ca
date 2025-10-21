@@ -1,25 +1,15 @@
 import Typography from "apps/website/src/components/common/typography";
-import { ListItem } from "apps/website/src/types/shared";
+import { CardProps } from ".";
 import { CardContainerStyled } from "./styles";
 
-interface DefaultCardProps extends ListItem {
-  text: string;
-  noWrap?: boolean;
-}
-const DefaultCard: React.FC<DefaultCardProps> = ({
-  text,
-  noWrap,
-  title,
-  icon,
-  variant,
-}) => {
+const CardTile: React.FC<CardProps> = ({ text, noWrap, title, icon }) => {
   return (
-    <CardContainerStyled $variant={variant ?? "row"}>
+    <CardContainerStyled>
       {!!icon && <img src={icon.url} alt={icon.title ?? ""} />}
       <div>
         {!!title && (
           <Typography
-            element="p"
+            element="h3"
             variant="h5"
             noWrap={noWrap}
             style={{ marginBlockEnd: "0.8rem" }}
@@ -35,4 +25,4 @@ const DefaultCard: React.FC<DefaultCardProps> = ({
   );
 };
 
-export default DefaultCard;
+export default CardTile;

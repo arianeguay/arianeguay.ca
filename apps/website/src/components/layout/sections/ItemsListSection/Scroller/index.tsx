@@ -2,15 +2,16 @@
 import { ItemsList } from "apps/website/src/types/shared";
 
 import React from "react";
+import Card from "../Card";
 import { ScrollerContainer, ScrollerRow } from "./styles";
-import { DefaultCard } from "../Card";
 
 const Scroller: React.FC<ItemsList> = ({ itemsCollection }) => {
   const baseItems = itemsCollection?.items ?? [];
 
   const containerRef = React.useRef<HTMLDivElement | null>(null);
   const baseMeasureRef = React.useRef<HTMLDivElement | null>(null);
-  const [groupItems, setGroupItems] = React.useState<typeof baseItems>(baseItems);
+  const [groupItems, setGroupItems] =
+    React.useState<typeof baseItems>(baseItems);
 
   React.useEffect(() => {
     const containerEl = containerRef.current;
@@ -23,8 +24,9 @@ const Scroller: React.FC<ItemsList> = ({ itemsCollection }) => {
     if (baseWidth === 0) return;
 
     const repeats = Math.max(1, Math.ceil(containerWidth / baseWidth));
-    const filledGroup: typeof baseItems = Array.from({ length: repeats })
-      .flatMap(() => baseItems);
+    const filledGroup: typeof baseItems = Array.from({
+      length: repeats,
+    }).flatMap(() => baseItems);
     setGroupItems(filledGroup);
   }, [baseItems]);
 
@@ -36,10 +38,21 @@ const Scroller: React.FC<ItemsList> = ({ itemsCollection }) => {
   return (
     <div style={{ position: "relative" }} ref={containerRef}>
       {/* hidden measurer for a single pass of base items */}
-      <div style={{ position: "absolute", visibility: "hidden", pointerEvents: "none", whiteSpace: "nowrap" }} ref={baseMeasureRef}>
+      <div
+        style={{
+          position: "absolute",
+          visibility: "hidden",
+          pointerEvents: "none",
+          whiteSpace: "nowrap",
+        }}
+        ref={baseMeasureRef}
+      >
         {baseItems.map((item, index) => (
-          <span key={`measure-${index}`} style={{ display: "inline-block", marginRight: 16 }}>
-            <DefaultCard text={item.text} noWrap />
+          <span
+            key={`measure-${index}`}
+            style={{ display: "inline-block", marginRight: 16 }}
+          >
+            <Card text={item.text} noWrap />
           </span>
         ))}
       </div>
@@ -47,7 +60,7 @@ const Scroller: React.FC<ItemsList> = ({ itemsCollection }) => {
       <ScrollerContainer>
         <ScrollerRow $size={displayItems.length}>
           {displayItems.map((item, index) => (
-           <DefaultCard key={index} text={item.text} noWrap />
+            <Card key={index} text={item.text} noWrap />
           ))}
         </ScrollerRow>
       </ScrollerContainer>

@@ -253,6 +253,7 @@ export async function getPageBySlug(
                 description {
                   json
                 }
+                  cardVariant
                 background
                 isScreen
                 variant
@@ -262,6 +263,7 @@ export async function getPageBySlug(
                 url
                 variant
                 openInNewTab
+                
                 actionForm {
                   title
                   description
@@ -449,6 +451,7 @@ export async function getPageBySlug(
                       description {
                         json
                       }
+                        cardVariant
                       variant
                       itemsCollection(locale: $locale) {
                         items {

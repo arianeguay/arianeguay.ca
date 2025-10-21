@@ -1,4 +1,4 @@
-const { composePlugins, withNx } = require('@nx/next');
+const { composePlugins, withNx } = require("@nx/next");
 
 /**
  * @type {import('next').NextConfig}
@@ -11,17 +11,20 @@ const nextConfig = {
   },
   reactStrictMode: true,
   images: {
-    domains: ['images.ctfassets.net'],
-    formats: ['image/avif', 'image/webp'],
+    domains: ["images.ctfassets.net"],
+    formats: ["image/avif", "image/webp"],
   },
   styledComponents: {
     displayName: true,
     ssr: true,
     minify: true,
-    fileName:false,
+    fileName: false,
+  },
+  env: {
+    RESEND_API_KEY: process.env.RESEND_API_KEY,
   },
   // Ensure all pages are static by default
-  output: 'export',
+  output: "export",
 };
 
 const plugins = [

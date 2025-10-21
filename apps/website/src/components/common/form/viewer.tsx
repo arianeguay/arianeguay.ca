@@ -1,4 +1,3 @@
-import { sendEmailFromForm } from "apps/website/src/app/api/contact/route";
 import { Form as FormModel } from "apps/website/src/types/shared";
 import React from "react";
 import { Form as FormEl, FormItem, Input, TextArea } from ".";
@@ -94,13 +93,21 @@ const FormViewer: React.FC<FormModel> = (props) => {
       for (const [key, value] of Object.entries(values)) {
         formData.append(key, value);
       }
-      const res = await sendEmailFromForm(formData, "Contact form");
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "x-subject": "Contact form",
+        },
+        body: formData,
+      });
 
-      console.log(res);
-
+      const json = await res.json().catch(() => null);
       if (!res.ok) {
-        throw new Error("Failed to send email");
+        const msg = (json && (json.error || json.message)) || "Failed to send email";
+        throw new Error(String(msg));
       }
+      console.log(json);
+
       setValues(
         items.reduce(
           (acc, it) => ({ ...acc, [it.fieldName]: it.defaultValue ?? "" }),
