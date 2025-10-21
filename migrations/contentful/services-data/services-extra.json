@@ -1,0 +1,128 @@
+{
+  "services": [
+    {
+      "id": "service_audit",
+      "page": {
+        "id": "page_service_audit",
+        "type": "service",
+        "title": {
+          "fr": "Audit & Optimisation (UX · Performance · SEO)",
+          "en": "Audit & Optimization (UX · Performance · SEO)"
+        },
+        "slug": { "fr": "audit-optimisation", "en": "audit-optimization" }
+      },
+      "seo": {
+        "id": "seo_svc_audit",
+        "title": {
+          "fr": "Audit UX, Performance & SEO – Montréal – Ariane Guay",
+          "en": "UX, Performance & SEO Audit – Montréal – Ariane Guay"
+        },
+        "description": {
+          "fr": "Audit complet de votre site : UX, vitesse (Core Web Vitals) et SEO technique. Recommandations concrètes et priorisées.",
+          "en": "Comprehensive website audit: UX, speed (Core Web Vitals) and technical SEO. Concrete, prioritized recommendations."
+        },
+        "canonical": {
+          "fr": "https://www.arianeguay.ca/audit-optimisation",
+          "en": "https://www.arianeguay.ca/audit-optimization"
+        }
+      },
+      "list": {
+        "title": { "fr": "Audit & Optimisation", "en": "Audit & Optimization" },
+        "bullets": [
+          {
+            "fr": "Analyse UX & parcours utilisateurs",
+            "en": "UX analysis & user journeys"
+          },
+          {
+            "fr": "Core Web Vitals & vitesse mobile/desktop",
+            "en": "Core Web Vitals & mobile/desktop speed"
+          },
+          {
+            "fr": "SEO technique (balises, structure, données)",
+            "en": "Technical SEO (tags, structure, data)"
+          },
+          {
+            "fr": "Rapport priorisé + quick wins",
+            "en": "Prioritized report + quick wins"
+          },
+          {
+            "fr": "Plan d’action et accompagnement de mise en œuvre",
+            "en": "Action plan and implementation support"
+          }
+        ]
+      },
+      "ctaSection": {
+        "title": {
+          "fr": "Obtenez votre audit priorisé",
+          "en": "Get your prioritized audit"
+        },
+        "description": {
+          "fr": "Je vous livre un rapport clair et actionnable pour améliorer visibilité, conversions et performance.",
+          "en": "I deliver a clear, actionable report to improve visibility, conversions, and performance."
+        }
+      }
+    },
+    {
+      "id": "service_design_system",
+      "page": {
+        "id": "page_service_design_system",
+        "type": "service",
+        "title": { "fr": "Design System Sprint", "en": "Design System Sprint" },
+        "slug": { "fr": "design-system-sprint", "en": "design-system-sprint" }
+      },
+      "seo": {
+        "id": "seo_svc_design_system",
+        "title": {
+          "fr": "Design System Sprint – Figma & Front-End – Ariane Guay",
+          "en": "Design System Sprint – Figma & Front-End – Ariane Guay"
+        },
+        "description": {
+          "fr": "Créez un système de design cohérent : tokens, composants Figma, documentation et intégration front-end.",
+          "en": "Build a cohesive design system: tokens, Figma components, documentation and front-end integration."
+        },
+        "canonical": {
+          "fr": "https://www.arianeguay.ca/design-system-sprint",
+          "en": "https://www.arianeguay.ca/design-system-sprint"
+        }
+      },
+      "list": {
+        "title": {
+          "fr": "Un système robuste, prêt pour le code",
+          "en": "A robust system, ready for code"
+        },
+        "bullets": [
+          {
+            "fr": "Tokens (couleurs, typo, espacements, radius)",
+            "en": "Tokens (colors, typography, spacing, radius)"
+          },
+          {
+            "fr": "Composants Figma documentés",
+            "en": "Documented Figma components"
+          },
+          {
+            "fr": "Guidelines d’usage & accessibilité",
+            "en": "Usage guidelines & accessibility"
+          },
+          {
+            "fr": "Handoff & kit front-end (React/Next.js)",
+            "en": "Handoff & front-end starter (React/Next.js)"
+          },
+          {
+            "fr": "Scalabilité et cohérence multi-produits",
+            "en": "Scalability and multi-product consistency"
+          }
+        ]
+      },
+      "ctaSection": {
+        "title": {
+          "fr": "Démarrer un Design System Sprint",
+          "en": "Start a Design System Sprint"
+        },
+        "description": {
+          "fr": "En 1–2 semaines, posez des bases solides et utilisables immédiatement par le design et le développement.",
+          "en": "In 1–2 weeks, lay solid foundations that designers and developers can use immediately."
+        }
+      }
+    }
+  ]
+}

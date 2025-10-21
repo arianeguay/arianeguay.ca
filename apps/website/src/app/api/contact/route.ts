@@ -1,87 +1,43 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { z } from 'zod';
-import { Resend } from 'resend';
-
-// Input validation schema
-const contactSchema = z.object({
-  name: z.string().min(2).max(100),
-  email: z.string().email(),
-  message: z.string().min(10).max(5000),
-});
-
-// Simple rate limiting 
-const rateLimits = new Map<string, { count: number, timestamp: number }>();
-
 // Initialize Resend client
-const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
+import { NextResponse } from "next/server";
+import { Resend } from "resend";
+import { EmailTemplate } from "./email-template";
 
-export async function POST(req: NextRequest) {
+export const runtime = "nodejs";
+
+export async function POST(req: Request) {
   try {
-    // Basic rate limiting
-    const forwardedFor = req.headers.get('x-forwarded-for');
-    const realIp = req.headers.get('x-real-ip');
-    const ip = (forwardedFor?.split(',')[0]?.trim() || realIp || 'unknown');
-    const now = Date.now();
-    const rateLimit = rateLimits.get(ip);
-
-    if (rateLimit) {
-      // Reset rate limit after 1 hour
-      if (now - rateLimit.timestamp > 3600000) {
-        rateLimits.set(ip, { count: 1, timestamp: now });
-      } else if (rateLimit.count >= 5) {
-        return NextResponse.json(
-          { error: 'Too many requests. Please try again later.' },
-          { status: 429 }
-        );
-      } else {
-        rateLimits.set(ip, { count: rateLimit.count + 1, timestamp: rateLimit.timestamp });
-      }
-    } else {
-      rateLimits.set(ip, { count: 1, timestamp: now });
-    }
-
-    // Parse request body
-    const body = await req.json();
-
-    // Validate input
-    const result = contactSchema.safeParse(body);
-    if (!result.success) {
+    const API_KEY = process.env.RESEND_API_KEY;
+    if (!API_KEY) {
       return NextResponse.json(
-        { error: 'Invalid input', details: result.error.issues },
-        { status: 400 }
+        { error: "Missing RESEND_API_KEY on server" },
+        { status: 500 },
+      );
+    }
+    const resend = new Resend(API_KEY);
+
+    const subjectHeader = req.headers.get("x-subject");
+    const subject = subjectHeader || "Contact form";
+
+    const formData = await req.formData();
+
+    const { data, error } = await resend.emails.send({
+      from: "Acme <onboarding@resend.dev>",
+      to: ["ariane.dguay@gmail.com"],
+      subject,
+      react: EmailTemplate({ formData }),
+    });
+
+    if (error) {
+      return NextResponse.json(
+        { error: (error as any)?.message || String(error) },
+        { status: 500 },
       );
     }
 
-    const { name, email, message } = result.data;
-
-    // Send email via Resend
-    if (resend) {
-      const { data, error } = await resend.emails.send({
-        from: 'Contact Form <noreply@arianeguay.ca>',
-        to: 'your-email@example.com', // Replace with your email
-        subject: `New contact form submission from ${name}`,
-        text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
-      });
-
-      if (error) {
-        console.error('Error sending email:', error);
-        return NextResponse.json(
-          { error: 'Failed to send email' },
-          { status: 500 }
-        );
-      }
-
-      return NextResponse.json({ success: true, id: data?.id });
-    } else {
-      // Mock successful response when Resend API key is not configured
-      console.log('RESEND_API_KEY not configured, would send:', { name, email, message });
-      return NextResponse.json({ success: true, id: 'mock-email-id' });
-    }
+    return NextResponse.json(data, { status: 200 });
   } catch (error) {
-    console.error('Unexpected error:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    const message = (error as any)?.message || String(error);
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

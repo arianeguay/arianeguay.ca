@@ -14,10 +14,19 @@ export const HeaderStyled = styled.header`
   padding-block: ${({ theme }) => theme.spacing.xs};
   justify-content: center;
   align-items: center;
-  background: rgba(255, 255, 255, 0.6);
   box-shadow: ${({ theme }) => theme.shadows.md};
 
-  backdrop-filter: blur(6px);
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(6px);
+    z-index: -1;
+  }
   position: fixed;
   top: 0;
   left: 0;

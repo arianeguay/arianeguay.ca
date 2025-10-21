@@ -30,7 +30,6 @@ export type ListItem = {
   text: string;
   title?: string;
   icon?: CFRef<CfAsset>;
-  variant?: CFMaybe<ListItemVariant>;
 };
 
 export type HighlightItem = {
@@ -112,6 +111,8 @@ export type ItemsListVariant =
   | "verticalScroll"
   | "verticalGrid";
 
+export type ItemsListCardVariant = "cards" | "rows" | "faq" | "citation";
+
 export type ItemsList = {
   title: string;
   description?: CFMaybe<{ json: Document }>;
@@ -120,6 +121,7 @@ export type ItemsList = {
   background?: CFMaybe<Background>;
   isScreen?: CFMaybe<boolean>;
   primaryCta: CFMaybe<LinkItem>;
+  cardVariant?: CFMaybe<ItemsListCardVariant>;
 };
 
 /** Form model (Contentful) */
@@ -174,6 +176,7 @@ export interface Group {
 export type Page = WithSys<{
   title: string;
   slug: string;
+  parentPage?: CFRef<Page>;
   seo?: CFRef<SEO>;
   sections?: CFMaybe<SectionBlock[]>; // or use SectionBlock[]
 }>;

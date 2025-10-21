@@ -4,7 +4,6 @@ import ScrollHijacker from "apps/website/src/components/scroll/ScrollHijacker";
 import LocaleProvider from "apps/website/src/context/locale-provider";
 import StylingProvider from "apps/website/src/context/theme-provider";
 import {
-  getAllPageSlugs,
   getSimplePageBySlug,
   getSiteSettings,
 } from "apps/website/src/lib/contentful-graphql";
@@ -12,20 +11,19 @@ import { ReactNode } from "react";
 
 interface LayoutProps {
   children: ReactNode;
-  params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string[] }>;
 }
 
-export async function generateStaticParams() {
-  const slugs = await getAllPageSlugs("en");
-  return slugs.filter(Boolean).map((slug) => ({ slug }));
-}
-
-export default async function SlugLayoutEn({ children, params }: LayoutProps) {
-  const slug = (await params).slug || "home";
+export default async function SlugLayout({ children, params }: LayoutProps) {
+  const resParams = await params;
+  const parts = resParams.slug || [];
+  const slug = parts.length > 0 ? parts[parts.length - 1] : "home";
   const siteSettings = await getSiteSettings("en");
   const { page: currentPage, otherLocalePage } = await getSimplePageBySlug(
     slug,
-    { locale: "en" },
+    {
+      locale: "en",
+    },
   );
 
   return (

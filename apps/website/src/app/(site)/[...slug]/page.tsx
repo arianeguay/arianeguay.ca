@@ -1,31 +1,39 @@
-import LocaleProvider from "apps/website/src/context/locale-provider";
-import type { Metadata } from "next";
-import Sections from "../../../../components/layout/sections";
+import Sections from "apps/website/src/components/layout/sections";
 import {
-  getAllPageSlugs,
+  getAllPageSlugsWithParents,
   getPageBySlug,
   getSimplePageBySlug,
-} from "../../../../lib/contentful-graphql";
+} from "apps/website/src/lib/contentful-graphql";
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 
 export const dynamic = "error";
 export const dynamicParams = false;
 export const revalidate = false;
 
 export async function generateStaticParams() {
-  const slugs = await getAllPageSlugs("en");
-  return slugs.filter(Boolean).map((slug) => ({ slug }));
+  const entries = await getAllPageSlugsWithParents("fr");
+
+  const entriesSlugs = entries.map((e) => ({
+    slug: [e.parentSlug, e.slug].filter(Boolean),
+  }));
+
+  console.log(entriesSlugs);
+
+  return entriesSlugs;
 }
 
 interface PageProps {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string[] }>;
 }
 
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
-  const slug = (await params).slug;
+  const parts = (await params).slug;
+  const slug = parts?.[parts.length - 1];
   const { page, otherLocalePage } = await getSimplePageBySlug(slug, {
-    locale: "en",
+    locale: "fr",
   });
   const seo = page?.seo;
 
@@ -38,10 +46,10 @@ export async function generateMetadata({
     "https://arianeguay.ca";
 
   const otherLocaleUrl = otherLocalePage?.slug
-    ? `${baseUrl}/${otherLocalePage.slug}`
+    ? `${baseUrl}/en/${otherLocalePage.slug}`
     : undefined;
 
-  const currentLocaleUrl = `${baseUrl}/en/${slug}`;
+  const currentLocaleUrl = `${baseUrl}/${parts.join("/")}`;
   return {
     title,
     description,
@@ -51,8 +59,8 @@ export async function generateMetadata({
     alternates: {
       canonical: canonicalUrl || currentLocaleUrl,
       languages: {
-        "fr-CA": otherLocaleUrl,
-        "en-CA": currentLocaleUrl,
+        "fr-CA": currentLocaleUrl,
+        "en-CA": otherLocaleUrl,
       },
     },
     openGraph: {
@@ -66,30 +74,13 @@ export async function generateMetadata({
   };
 }
 
-export default async function PageEn({ params }: PageProps) {
-  const slug = (await params).slug;
-  const page = await getPageBySlug(slug, { locale: "en" });
+export default async function Page({ params }: PageProps) {
+  const parts = (await params).slug;
+  const slug = parts?.[parts.length - 1];
+  if (!slug) return notFound();
+  const page = await getPageBySlug(slug);
 
-  const { page: currentPage, otherLocalePage } = await getSimplePageBySlug(
-    slug,
-    {
-      locale: "en",
-    },
-  );
-
-  if (!page || !page.sectionsCollection?.items) {
-    return (
-      <LocaleProvider
-        locale="en"
-        currentPage={currentPage}
-        otherLocalePage={otherLocalePage}
-      >
-        <div className="container mx-auto px-4 py-12">
-          <h1 className="text-3xl font-bold">Page not found</h1>
-        </div>
-      </LocaleProvider>
-    );
-  }
+  if (!page || !page.sectionsCollection?.items) return notFound();
 
   return <Sections sections={page.sectionsCollection?.items} />;
 }

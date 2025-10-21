@@ -2,9 +2,10 @@ import Typography from "apps/website/src/components/common/typography";
 import { CardProps } from ".";
 import { RowContainerStyled } from "./styles";
 
-const CitationTile: React.FC<CardProps> = ({ text, noWrap, title }) => {
+const RowTile: React.FC<CardProps> = ({ text, noWrap, title, icon }) => {
   return (
     <RowContainerStyled>
+      {!!icon && <img src={icon.url} alt={icon.title ?? ""} />}
       <div>
         {!!title && (
           <Typography
@@ -24,4 +25,4 @@ const CitationTile: React.FC<CardProps> = ({ text, noWrap, title }) => {
   );
 };
 
-export default CitationTile;
+export default RowTile;

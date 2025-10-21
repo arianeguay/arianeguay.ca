@@ -89,32 +89,35 @@ const FormViewer: React.FC<FormModel> = (props) => {
     if (!validate()) return;
     setSubmitting(true);
     try {
-      const payload = {
-        name: values["name"],
-        email: values["email"],
-        message: values["message"],
-      };
-
+      const formData = new FormData();
+      for (const [key, value] of Object.entries(values)) {
+        formData.append(key, value);
+      }
       const res = await fetch("/api/contact", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        headers: {
+          "x-subject": "Contact form",
+        },
+        body: formData,
+      }).catch((e) => {
+        console.error(e);
+        return null;
       });
 
-      const data = await res.json().catch(() => null as any);
-
-      if (!res.ok) {
-        if (data?.details && Array.isArray(data.details)) {
-          const next: Record<string, string | undefined> = { ...errors };
-          for (const issue of data.details) {
-            const field = Array.isArray(issue.path) ? issue.path[0] : undefined;
-            const message = typeof issue.message === "string" ? issue.message : "Invalid";
-            if (typeof field === "string") next[field] = message;
-          }
-          setErrors(next);
-        }
-        throw new Error(data?.error || "Submission failed");
+      if (!res) {
+        throw new Error("Network error calling /api/contact");
       }
+      let json: any = null;
+      try {
+        json = await res.json();
+      } catch (e) {
+        console.error(e);
+      }
+      if (!res.ok) {
+        const msg = (json && (json.error || json.message)) || "Failed to send email";
+        throw new Error(String(msg));
+      }
+      console.log(json);
 
       setValues(
         items.reduce(
@@ -122,6 +125,8 @@ const FormViewer: React.FC<FormModel> = (props) => {
           {},
         ),
       );
+    } catch (e) {
+      console.error(e);
     } finally {
       setSubmitting(false);
     }
@@ -246,6 +251,7 @@ const FormViewer: React.FC<FormModel> = (props) => {
           </Button>
           {!!resetButtonLabel && (
             <Button
+              variant="outline"
               type="button"
               onClick={() => {
                 setValues(

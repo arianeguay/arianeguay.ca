@@ -50,6 +50,7 @@ async function fetchGraphQL<T>(
 }
 
 export type PageSlug = { slug: string };
+export type PageSlugWithParent = { slug: string; parentSlug?: string | null };
 
 export async function getAllPageSlugs(
   locale: string = DEFAULT_LOCALE,
@@ -74,6 +75,37 @@ export async function getAllPageSlugs(
   return Array.from(new Set(slugs));
 }
 
+export async function getAllPageSlugsWithParents(
+  locale: string = DEFAULT_LOCALE,
+): Promise<PageSlugWithParent[]> {
+  const query = /* GraphQL */ `
+    query AllPageSlugsWithParents( $locale: String = "${DEFAULT_LOCALE}") {
+      pageCollection( locale: $locale) {
+        items {
+          slug
+          parentPage { slug }
+        }
+      }
+    }
+  `;
+
+  const data = await fetchGraphQL<{
+    pageCollection: {
+      items: Array<{
+        slug?: string | null;
+        parentPage?: { slug?: string | null } | null;
+      }>;
+    };
+  }>(query, { locale });
+
+  const entries = (data.pageCollection?.items || []).map((i) => ({
+    slug: i?.slug || "",
+    parentSlug: i?.parentPage?.slug || null,
+  }));
+
+  return entries.filter((e) => Boolean(e.slug)) as PageSlugWithParent[];
+}
+
 export type SeoFields = {
   seoTitle?: string | null;
   seoDescription?: string | null;
@@ -83,11 +115,15 @@ export type SeoFields = {
   ogImage?: { url: string; title?: string | null } | null;
 };
 
+export type PageType = "service" | "project" | "default";
+
 export type PageEntry = {
   title?: string | null;
   slug?: string | null;
   sectionsCollection: { items: SectionBlock[] | null } | null;
   seo?: SeoFields | null;
+  pageType?: PageType | null;
+  parentPage?: PageEntry | null;
   sys?: { id: string } | null;
 };
 
@@ -114,6 +150,14 @@ export async function getSimplePageBySlug(
         id
       }
           slug
+          pageType
+          parentPage {
+            slug
+            title
+            sys {
+              id
+            }
+          }
           sectionsCollection(limit: $sectionLimit, locale: $locale) {
             items {
               __typename
@@ -146,6 +190,14 @@ export async function getSimplePageBySlug(
           sys {
         id
       }
+          pageType
+          parentPage {
+            slug
+            title
+            sys {
+              id
+            }
+          }
           sectionsCollection(limit: $sectionLimit, locale: $locale) {
             items {
               __typename
@@ -184,6 +236,14 @@ export async function getPageBySlug(
         items {
           title
           slug
+          pageType
+          parentPage {
+            slug
+            title
+            sys {
+              id
+            }
+          }
           sectionsCollection(limit: $sectionLimit, locale: $locale) {
             items {
               __typename
@@ -193,6 +253,7 @@ export async function getPageBySlug(
                 description {
                   json
                 }
+                  cardVariant
                 background
                 isScreen
                 variant
@@ -202,6 +263,7 @@ export async function getPageBySlug(
                 url
                 variant
                 openInNewTab
+                
                 actionForm {
                   title
                   description
@@ -229,6 +291,9 @@ export async function getPageBySlug(
                 }
                 page {
                   slug
+                  parentPage {
+                    slug
+                  }
                 }
                 }
                 itemsCollection(limit: $listItemLimit, locale: $locale) {
@@ -318,6 +383,9 @@ export async function getPageBySlug(
                   url
                   page {
                     slug
+                    parentPage {
+                      slug
+                    }
                   }
                   variant
                   actionForm {
@@ -383,6 +451,7 @@ export async function getPageBySlug(
                       description {
                         json
                       }
+                        cardVariant
                       variant
                       itemsCollection(locale: $locale) {
                         items {
@@ -410,6 +479,9 @@ export async function getPageBySlug(
                         url
                         page {
                           slug
+                          parentPage {
+                            slug
+                          }
                         }
                         variant
                         actionForm {
@@ -485,7 +557,7 @@ export { fetchGraphQL };
 export async function getSiteSettings(
   locale: string = DEFAULT_LOCALE,
 ): Promise<SiteSettings> {
-  const query = `
+  const query = /* GraphQL */ `
     query SiteSettings($locale: String = "${DEFAULT_LOCALE}") {
       siteSettingsCollection(limit: 1, locale: $locale) {
           items {
@@ -500,7 +572,25 @@ export async function getSiteSettings(
                   label
                   page {
                       slug
+                      parentPage {
+                        slug
+                      }
                   }
+                      subitemsCollection(limit: 5, locale: $locale) {
+                        items {
+                         
+                          label
+                           sys {
+                              id
+                          }
+                          page {
+                              slug
+                              parentPage {
+                                slug
+                              }
+                          }
+                      }
+                      }
                   }
               }
               footer 

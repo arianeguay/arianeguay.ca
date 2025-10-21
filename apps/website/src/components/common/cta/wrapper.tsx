@@ -14,10 +14,12 @@ const CTAWrapper: React.FC<CTAWrapperProps> = ({ children, data }) => {
     case "Internal":
       const slug = page?.slug;
       if (!slug) return children;
-
-      const handle = slug === "home" ? "/" : `/${slug}`;
+      const parentSlug: string | undefined = (page as any)?.parentPage?.slug;
+      const basePath =
+        slug === "home" ? "/" : parentSlug ? `/${parentSlug}/${slug}` : `/${slug}`;
+      const href = locale === "fr" ? basePath : `/${locale}${basePath}`;
       return (
-        <Link href={locale === "fr" ? handle : `/${locale}${handle}`}>
+        <Link href={href}>
           {children}
         </Link>
       );

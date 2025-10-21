@@ -1,0 +1,219 @@
+{
+  "globals": {
+    "form": {
+      "id": "form_quote_request",
+      "title": { "fr": "Demande de soumission", "en": "Request a Quote" },
+      "description": {
+        "fr": "Parlez-moi de votre projet : objectifs, délais, budget indicatif.",
+        "en": "Tell me about your project: goals, timeline, indicative budget."
+      },
+      "successTitle": { "fr": "Merci !", "en": "Thank you!" },
+      "successMessage": {
+        "fr": "Votre demande a bien été envoyée. Je vous réponds rapidement.",
+        "en": "Your request has been sent. I will reply shortly."
+      },
+      "submitButtonLabel": { "fr": "Envoyer", "en": "Submit" },
+      "resetButtonLabel": { "fr": "Réinitialiser", "en": "Reset" },
+      "emailRecipient": "hello@arianeguay.ca",
+      "honeypotEnabled": true
+    },
+    "ctaLabel": { "fr": "Demander une soumission", "en": "Request a quote" },
+    "og": {
+      "assetId": "",
+      "imageUrl": ""
+    }
+  },
+  "services": [
+    {
+      "id": "service_web",
+      "page": {
+        "id": "page_service_web",
+        "type": "service",
+        "title": {
+          "fr": "Développement web sur mesure",
+          "en": "Custom Web Development"
+        },
+        "slug": { "fr": "developpement-web", "en": "web-development" }
+      },
+      "seo": {
+        "id": "seo_svc_web",
+        "title": {
+          "fr": "Développement web sur mesure à Montréal – Ariane Guay",
+          "en": "Custom Web Development in Montréal – Ariane Guay"
+        },
+        "description": {
+          "fr": "Développeuse web & designer à Montréal. Sites performants, élégants et durables (Next.js/React). Soumission rapide.",
+          "en": "Web developer & designer in Montréal. Fast, elegant, durable websites (Next.js/React). Quick quote."
+        },
+        "canonical": {
+          "fr": "https://www.arianeguay.ca/developpement-web",
+          "en": "https://www.arianeguay.ca/web-development"
+        }
+      },
+      "list": {
+        "title": {
+          "fr": "Développement web sur mesure",
+          "en": "Custom Web Development"
+        },
+        "bullets": [
+          {
+            "fr": "Architecture claire et intuitive",
+            "en": "Clear, intuitive IA"
+          },
+          {
+            "fr": "Design harmonieux et accessible",
+            "en": "Accessible, cohesive design"
+          },
+          {
+            "fr": "Développement Next.js / React",
+            "en": "Next.js / React development"
+          },
+          {
+            "fr": "SEO technique & performance",
+            "en": "Technical SEO & performance"
+          },
+          {
+            "fr": "Hébergement + transfert + support",
+            "en": "Hosting + handover + support"
+          }
+        ]
+      },
+      "ctaSection": {
+        "title": {
+          "fr": "Parlons de votre site web",
+          "en": "Let’s talk about your website"
+        },
+        "description": {
+          "fr": "Chaque projet est unique. Décrivez vos objectifs — je reviens avec une soumission claire et transparente.",
+          "en": "Every project is unique. Share your goals — I’ll follow up with a clear, transparent quote."
+        }
+      }
+    },
+    {
+      "id": "service_ux",
+      "page": {
+        "id": "page_service_ux",
+        "type": "service",
+        "title": {
+          "fr": "Design UX/UI & Design System",
+          "en": "UX/UI Design & Design System"
+        },
+        "slug": { "fr": "design-ux-ui", "en": "ux-ui-design" }
+      },
+      "seo": {
+        "id": "seo_svc_ux",
+        "title": {
+          "fr": "Design UX/UI & Design System – Montréal – Ariane Guay",
+          "en": "UX/UI Design & Design System – Montréal – Ariane Guay"
+        },
+        "description": {
+          "fr": "Design UX/UI, audits, maquettes Figma et Design System pour interfaces cohérentes et accessibles.",
+          "en": "UX/UI design, audits, Figma mockups and Design Systems for cohesive, accessible interfaces."
+        },
+        "canonical": {
+          "fr": "https://www.arianeguay.ca/design-ux-ui",
+          "en": "https://www.arianeguay.ca/ux-ui-design"
+        }
+      },
+      "list": {
+        "title": {
+          "fr": "Design UX/UI & Design System",
+          "en": "UX/UI Design & Design System"
+        },
+        "bullets": [
+          {
+            "fr": "Audit UX & analyse des parcours",
+            "en": "UX audit & journey analysis"
+          },
+          {
+            "fr": "Wireframes → maquettes Figma",
+            "en": "Wireframes → Figma mockups"
+          },
+          {
+            "fr": "Design System (tokens & composants)",
+            "en": "Design System (tokens & components)"
+          },
+          {
+            "fr": "Handoff développeur documenté",
+            "en": "Documented developer handoff"
+          }
+        ]
+      },
+      "ctaSection": {
+        "title": {
+          "fr": "Parlons de votre interface",
+          "en": "Let’s talk about your interface"
+        },
+        "description": {
+          "fr": "Chaque projet est unique. Décrivez vos objectifs — je reviens avec une soumission claire et transparente.",
+          "en": "Every project is unique. Share your goals — I’ll follow up with a clear, transparent quote."
+        }
+      }
+    },
+    {
+      "id": "service_fe",
+      "page": {
+        "id": "page_service_fe",
+        "type": "service",
+        "title": {
+          "fr": "Intégration & Développement Front-End",
+          "en": "Front-End Integration & Development"
+        },
+        "slug": {
+          "fr": "developpement-front-end",
+          "en": "front-end-development"
+        }
+      },
+      "seo": {
+        "id": "seo_svc_fe",
+        "title": {
+          "fr": "Développeuse Front-End React/Next.js – Montréal – Ariane Guay",
+          "en": "Front-End Developer React/Next.js – Montréal – Ariane Guay"
+        },
+        "description": {
+          "fr": "Intégration Figma→code, composants réutilisables, accessibilité & performance. Collaboration agile ou autonome.",
+          "en": "Figma-to-code integration, reusable components, accessibility & performance. Agile or autonomous collaboration."
+        },
+        "canonical": {
+          "fr": "https://www.arianeguay.ca/developpement-front-end",
+          "en": "https://www.arianeguay.ca/front-end-development"
+        }
+      },
+      "list": {
+        "title": {
+          "fr": "Intégration & Développement Front-End",
+          "en": "Front-End Integration & Development"
+        },
+        "bullets": [
+          {
+            "fr": "Intégration pixel-perfect (Figma → code)",
+            "en": "Pixel-perfect integration (Figma → code)"
+          },
+          {
+            "fr": "React / Next.js / TypeScript",
+            "en": "React / Next.js / TypeScript"
+          },
+          { "fr": "Composants réutilisables", "en": "Reusable components" },
+          {
+            "fr": "Accessibilité & performance",
+            "en": "Accessibility & performance"
+          },
+          {
+            "fr": "Collaboration agile ou autonome",
+            "en": "Agile or autonomous collaboration"
+          }
+        ]
+      },
+      "ctaSection": {
+        "title": {
+          "fr": "Parlons de votre front-end",
+          "en": "Let’s talk about your front-end"
+        },
+        "description": {
+          "fr": "Chaque projet est unique. Décrivez vos objectifs — je reviens avec une soumission claire et transparente.",
+          "en": "Every project is unique. Share your goals — I’ll follow up with a clear, transparent quote."
+        }
+      }
+    }
+  ]
+}

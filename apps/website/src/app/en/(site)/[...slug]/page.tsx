@@ -1,30 +1,39 @@
 import Sections from "apps/website/src/components/layout/sections";
 import {
-  getAllPageSlugs,
+  getAllPageSlugsWithParents,
   getPageBySlug,
   getSimplePageBySlug,
 } from "apps/website/src/lib/contentful-graphql";
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 
 export const dynamic = "error";
 export const dynamicParams = false;
 export const revalidate = false;
 
 export async function generateStaticParams() {
-  const slugs = await getAllPageSlugs("fr");
-  return slugs.filter(Boolean).map((slug) => ({ slug }));
+  const entries = await getAllPageSlugsWithParents("en");
+
+  const entriesSlugs = entries.map((e) => ({
+    slug: [e.parentSlug, e.slug].filter(Boolean),
+  }));
+
+  console.log(entriesSlugs);
+
+  return entriesSlugs;
 }
 
 interface PageProps {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string[] }>;
 }
 
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
-  const slug = (await params).slug;
+  const parts = (await params).slug;
+  const slug = parts?.[parts.length - 1];
   const { page, otherLocalePage } = await getSimplePageBySlug(slug, {
-    locale: "fr",
+    locale: "en",
   });
   const seo = page?.seo;
 
@@ -37,10 +46,10 @@ export async function generateMetadata({
     "https://arianeguay.ca";
 
   const otherLocaleUrl = otherLocalePage?.slug
-    ? `${baseUrl}/en/${otherLocalePage.slug}`
+    ? `${baseUrl}/${otherLocalePage.slug}`
     : undefined;
 
-  const currentLocaleUrl = `${baseUrl}/${slug}`;
+  const currentLocaleUrl = `${baseUrl}/en/${parts.join("/")}`;
   return {
     title,
     description,
@@ -50,8 +59,8 @@ export async function generateMetadata({
     alternates: {
       canonical: canonicalUrl || currentLocaleUrl,
       languages: {
-        "fr-CA": currentLocaleUrl,
-        "en-CA": otherLocaleUrl,
+        "fr-CA": otherLocaleUrl,
+        "en-CA": currentLocaleUrl,
       },
     },
     openGraph: {
@@ -66,18 +75,11 @@ export async function generateMetadata({
 }
 
 export default async function Page({ params }: PageProps) {
-  const slug = (await params).slug;
-  const page = await getPageBySlug(slug);
-
-  if (!page || !page.sectionsCollection?.items) {
-    // In static export, missing pages should be excluded by generateStaticParams.
-    // This is a safeguard during dev.
-    return (
-      <div className="container mx-auto px-4 py-12">
-        <h1 className="text-3xl font-bold">Page not found</h1>
-      </div>
-    );
-  }
+  const parts = (await params).slug;
+  const slug = parts?.[parts.length - 1];
+  if (!slug) return notFound();
+  const page = await getPageBySlug(slug, { locale: "en" });
+  if (!page || !page.sectionsCollection?.items) return notFound();
 
   return <Sections sections={page.sectionsCollection?.items} />;
 }

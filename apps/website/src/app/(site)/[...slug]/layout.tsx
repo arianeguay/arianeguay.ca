@@ -3,38 +3,26 @@ import Header from "apps/website/src/components/layout/header";
 import ScrollHijacker from "apps/website/src/components/scroll/ScrollHijacker";
 import LocaleProvider from "apps/website/src/context/locale-provider";
 import StylingProvider from "apps/website/src/context/theme-provider";
-import {
-  getAllPageSlugs,
-  getSimplePageBySlug,
-  getSiteSettings,
-} from "apps/website/src/lib/contentful-graphql";
+import { getSimplePageBySlug, getSiteSettings } from "apps/website/src/lib/contentful-graphql";
 import { ReactNode } from "react";
 
 interface LayoutProps {
   children: ReactNode;
-  params: Promise<{ slug: string }>;
-}
-
-export async function generateStaticParams() {
-  const slugs = await getAllPageSlugs("fr");
-  return slugs.filter(Boolean).map((slug) => ({ slug }));
+  params: Promise<{ slug: string[] }>;
 }
 
 export default async function SlugLayout({ children, params }: LayoutProps) {
-  const slug = (await params).slug || "home";
+  const resParams = await params;
+  const parts = resParams.slug || [];
+  const slug = parts.length > 0 ? parts[parts.length - 1] : "home";
   const siteSettings = await getSiteSettings("fr");
-  const { page: currentPage, otherLocalePage } = await getSimplePageBySlug(
-    slug,
-    { locale: "fr" },
-  );
+  const { page: currentPage, otherLocalePage } = await getSimplePageBySlug(slug, {
+    locale: "fr",
+  });
 
   return (
     <StylingProvider>
-      <LocaleProvider
-        locale="fr"
-        currentPage={currentPage}
-        otherLocalePage={otherLocalePage}
-      >
+      <LocaleProvider locale="fr" currentPage={currentPage} otherLocalePage={otherLocalePage}>
         <Header nav={siteSettings?.navCollection?.items} />
         <ScrollHijacker />
         <main
