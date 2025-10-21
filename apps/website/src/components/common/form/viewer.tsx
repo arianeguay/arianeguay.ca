@@ -99,9 +99,20 @@ const FormViewer: React.FC<FormModel> = (props) => {
           "x-subject": "Contact form",
         },
         body: formData,
+      }).catch((e) => {
+        console.error(e);
+        return null;
       });
 
-      const json = await res.json().catch(() => null);
+      if (!res) {
+        throw new Error("Network error calling /api/contact");
+      }
+      let json: any = null;
+      try {
+        json = await res.json();
+      } catch (e) {
+        console.error(e);
+      }
       if (!res.ok) {
         const msg = (json && (json.error || json.message)) || "Failed to send email";
         throw new Error(String(msg));
@@ -114,6 +125,8 @@ const FormViewer: React.FC<FormModel> = (props) => {
           {},
         ),
       );
+    } catch (e) {
+      console.error(e);
     } finally {
       setSubmitting(false);
     }

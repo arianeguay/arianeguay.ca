@@ -1,11 +1,19 @@
 // Initialize Resend client
+import { NextResponse } from "next/server";
 import { Resend } from "resend";
 import { EmailTemplate } from "./email-template";
-import { NextResponse } from "next/server";
+
+export const runtime = "nodejs";
 
 export async function POST(req: Request) {
   try {
     const API_KEY = process.env.RESEND_API_KEY;
+    if (!API_KEY) {
+      return NextResponse.json(
+        { error: "Missing RESEND_API_KEY on server" },
+        { status: 500 },
+      );
+    }
     const resend = new Resend(API_KEY);
 
     const subjectHeader = req.headers.get("x-subject");
@@ -15,17 +23,21 @@ export async function POST(req: Request) {
 
     const { data, error } = await resend.emails.send({
       from: "Acme <onboarding@resend.dev>",
-      to: ["contact@arianeguay.ca"],
+      to: ["ariane.dguay@gmail.com"],
       subject,
       react: EmailTemplate({ formData }),
     });
 
     if (error) {
-      return NextResponse.json({ error }, { status: 500 });
+      return NextResponse.json(
+        { error: (error as any)?.message || String(error) },
+        { status: 500 },
+      );
     }
 
     return NextResponse.json(data, { status: 200 });
   } catch (error) {
-    return NextResponse.json({ error: String(error) }, { status: 500 });
+    const message = (error as any)?.message || String(error);
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
