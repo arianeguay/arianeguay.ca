@@ -1,3 +1,4 @@
+import { sendEmailFromForm } from "apps/website/src/app/api/contact/route";
 import { Form as FormModel } from "apps/website/src/types/shared";
 import React from "react";
 import { Form as FormEl, FormItem, Input, TextArea } from ".";
@@ -89,34 +90,17 @@ const FormViewer: React.FC<FormModel> = (props) => {
     if (!validate()) return;
     setSubmitting(true);
     try {
-      const payload = {
-        name: values["name"],
-        email: values["email"],
-        message: values["message"],
-      };
+      const formData = new FormData();
+      for (const [key, value] of Object.entries(values)) {
+        formData.append(key, value);
+      }
+      const res = await sendEmailFromForm(formData, "Contact form");
 
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      const data = await res.json().catch(() => null as any);
+      console.log(res);
 
       if (!res.ok) {
-        if (data?.details && Array.isArray(data.details)) {
-          const next: Record<string, string | undefined> = { ...errors };
-          for (const issue of data.details) {
-            const field = Array.isArray(issue.path) ? issue.path[0] : undefined;
-            const message =
-              typeof issue.message === "string" ? issue.message : "Invalid";
-            if (typeof field === "string") next[field] = message;
-          }
-          setErrors(next);
-        }
-        throw new Error(data?.error || "Submission failed");
+        throw new Error("Failed to send email");
       }
-
       setValues(
         items.reduce(
           (acc, it) => ({ ...acc, [it.fieldName]: it.defaultValue ?? "" }),
