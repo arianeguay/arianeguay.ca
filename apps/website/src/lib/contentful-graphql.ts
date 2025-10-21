@@ -103,7 +103,6 @@ export async function getAllPageSlugsWithParents(
     parentSlug: i?.parentPage?.slug || null,
   }));
 
-  console.log(entries);
   return entries.filter((e) => Boolean(e.slug)) as PageSlugWithParent[];
 }
 

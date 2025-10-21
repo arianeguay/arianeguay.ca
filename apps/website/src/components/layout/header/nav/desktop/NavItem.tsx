@@ -22,7 +22,6 @@ const getFullHandle = (page: Page, locale: string) => {
   const href = [locale !== "fr" && "en", parentSlug, page.slug]
     .filter(Boolean)
     .join("/");
-  console.log(href, parentSlug, page.slug, locale);
   return `/${href}`;
 };
 

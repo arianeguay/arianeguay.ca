@@ -13,11 +13,14 @@ export const revalidate = false;
 
 export async function generateStaticParams() {
   const entries = await getAllPageSlugsWithParents("en");
-  return entries
-    .filter((e) => e.parentSlug)
-    .map((e) => ({
-      slug: [e.parentSlug, e.slug].filter(Boolean),
-    }));
+
+  const entriesSlugs = entries.map((e) => ({
+    slug: [e.parentSlug, e.slug].filter(Boolean),
+  }));
+
+  console.log(entriesSlugs);
+
+  return entriesSlugs;
 }
 
 interface PageProps {
