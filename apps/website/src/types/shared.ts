@@ -112,6 +112,8 @@ export type ItemsListVariant =
   | "verticalScroll"
   | "verticalGrid";
 
+export type ItemsListCardVariant = "cards" | "rows" | "faq";
+
 export type ItemsList = {
   title: string;
   description?: CFMaybe<{ json: Document }>;
@@ -120,6 +122,7 @@ export type ItemsList = {
   background?: CFMaybe<Background>;
   isScreen?: CFMaybe<boolean>;
   primaryCta: CFMaybe<LinkItem>;
+  cardVariant?: CFMaybe<ItemsListCardVariant>;
 };
 
 /** Form model (Contentful) */
