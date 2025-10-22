@@ -1,0 +1,14 @@
+{
+  "sys": {
+    "id": "tag-figma"
+  },
+  "fields": {
+    "name": {
+      "fr-CA": "Figma",
+      "en-US": "Figma"
+    },
+    "kind": {
+      "en-US": "design"
+    }
+  }
+}

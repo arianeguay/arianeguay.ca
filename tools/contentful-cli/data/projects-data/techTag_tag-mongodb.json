@@ -1,0 +1,14 @@
+{
+  "sys": {
+    "id": "tag-mongodb"
+  },
+  "fields": {
+    "name": {
+      "fr-CA": "MongoDB",
+      "en-US": "MongoDB"
+    },
+    "kind": {
+      "en-US": "db"
+    }
+  }
+}

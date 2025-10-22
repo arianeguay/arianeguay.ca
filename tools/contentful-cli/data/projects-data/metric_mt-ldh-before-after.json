@@ -1,0 +1,16 @@
+{
+  "sys": {
+    "id": "mt-ldh-before-after"
+  },
+  "fields": {
+    "label": {
+      "en-US": "Lighthouse"
+    },
+    "value": {
+      "en-US": "60 → 75"
+    },
+    "context": {
+      "en-US": "Web & apps"
+    }
+  }
+}

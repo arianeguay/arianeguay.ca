@@ -1,0 +1,153 @@
+{
+  "sys": {
+    "id": "wi-proj-le-legs"
+  },
+  "fields": {
+    "type": {
+      "en-US": "project"
+    },
+    "title": {
+      "fr-CA": "Le Legs — Expérience web",
+      "en-US": "Le Legs — Web Experience"
+    },
+    "subtitle": {
+      "fr-CA": "Grotte virtuelle • Parcours interactif",
+      "en-US": "Virtual cave • Interactive path"
+    },
+    "summary": {
+      "fr-CA": {
+        "nodeType": "document",
+        "data": {},
+        "content": [
+          {
+            "nodeType": "paragraph",
+            "content": [
+              {
+                "nodeType": "text",
+                "value": "Parcours immersif façon « grotte » virtuelle (ambiance jeux 2000) pour découvrir des pièces littéraires et visuelles liées au futurisme autochtone. Front-End & UX immersive.",
+                "marks": [],
+                "data": {}
+              }
+            ],
+            "data": {}
+          }
+        ]
+      },
+      "en-US": {
+        "nodeType": "document",
+        "data": {},
+        "content": [
+          {
+            "nodeType": "paragraph",
+            "content": [
+              {
+                "nodeType": "text",
+                "value": "Immersive ‘virtual cave’ path (early-2000s vibe) to discover literary & visual works tied to Indigenous futurism. Front-End & immersive UX.",
+                "marks": [],
+                "data": {}
+              }
+            ],
+            "data": {}
+          }
+        ]
+      }
+    },
+    "slug": {
+      "fr-CA": "proj-le-legs",
+      "en-US": "proj-le-legs"
+    },
+    "badge": {
+      "fr-CA": "Culture • Exposition",
+      "en-US": "Culture • Exhibition"
+    },
+    "cover": {
+      "en-US": {
+        "sys": {
+          "type": "Link",
+          "linkType": "Asset",
+          "id": "asset-cover-lelegs"
+        }
+      }
+    },
+    "projectMeta": {
+      "en-US": {
+        "sys": {
+          "type": "Link",
+          "linkType": "Entry",
+          "id": "meta-lelegs"
+        }
+      }
+    },
+    "overview": {
+      "fr-CA": {
+        "nodeType": "document",
+        "data": {},
+        "content": []
+      },
+      "en-US": {
+        "nodeType": "document",
+        "data": {},
+        "content": []
+      }
+    },
+    "highlights": {
+      "en-US": [
+        {
+          "sys": {
+            "type": "Link",
+            "linkType": "Entry",
+            "id": "hl-lelegs-1"
+          }
+        },
+        {
+          "sys": {
+            "type": "Link",
+            "linkType": "Entry",
+            "id": "hl-lelegs-2"
+          }
+        }
+      ]
+    },
+    "metrics": {
+      "en-US": []
+    },
+    "techStack": {
+      "en-US": [
+        {
+          "sys": {
+            "type": "Link",
+            "linkType": "Entry",
+            "id": "tag-react"
+          }
+        },
+        {
+          "sys": {
+            "type": "Link",
+            "linkType": "Entry",
+            "id": "tag-webgl"
+          }
+        }
+      ]
+    },
+    "linksCta": {
+      "en-US": [
+        {
+          "sys": {
+            "type": "Link",
+            "linkType": "Entry",
+            "id": "cta-lelegs-site"
+          }
+        }
+      ]
+    },
+    "seo": {
+      "en-US": {
+        "sys": {
+          "type": "Link",
+          "linkType": "Entry",
+          "id": "seo-lelegs"
+        }
+      }
+    }
+  }
+}

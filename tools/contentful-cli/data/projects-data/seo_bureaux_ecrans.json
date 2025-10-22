@@ -1,0 +1,25 @@
+{
+  "sys": {
+    "id": "seo-bureaux"
+  },
+  "fields": {
+    "seoTitle": {
+      "en-US": "Bureaux-écrans — Online Exhibition"
+    },
+    "seoDescription": {
+      "en-US": "OS-inspired interface to browse writers’ digital backstages: icons, folders, tools."
+    },
+    "ogImage": {
+      "en-US": {
+        "sys": {
+          "type": "Link",
+          "linkType": "Asset",
+          "id": "asset-og-bureaux"
+        }
+      }
+    },
+    "canonicalUrl": {
+      "en-US": "https://bureaux-ecrans.com/"
+    }
+  }
+}

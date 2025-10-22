@@ -1,0 +1,59 @@
+{
+  "sys": {
+    "id": "meta-lelegs"
+  },
+  "fields": {
+    "internalTitle": {
+      "en-US": "Le Legs — meta"
+    },
+    "company": {
+      "fr-CA": "Kwahiatonhk!",
+      "en-US": "Kwahiatonhk!"
+    },
+    "role": {
+      "fr-CA": "Front-End, UX immersive",
+      "en-US": "Front-End, Immersive UX"
+    },
+    "period": {
+      "fr-CA": "2021–2022",
+      "en-US": "2021–2022"
+    },
+    "sector": {
+      "fr-CA": "Culture",
+      "en-US": "Culture"
+    },
+    "stack": {
+      "en-US": [
+        {
+          "sys": {
+            "type": "Link",
+            "linkType": "Entry",
+            "id": "tag-react"
+          }
+        },
+        {
+          "sys": {
+            "type": "Link",
+            "linkType": "Entry",
+            "id": "tag-webgl"
+          }
+        }
+      ]
+    },
+    "links": {
+      "en-US": [
+        {
+          "sys": {
+            "type": "Link",
+            "linkType": "Entry",
+            "id": "cta-lelegs-site"
+          }
+        }
+      ]
+    },
+    "location": {
+      "fr-CA": "Québec",
+      "en-US": "Quebec"
+    }
+  }
+}

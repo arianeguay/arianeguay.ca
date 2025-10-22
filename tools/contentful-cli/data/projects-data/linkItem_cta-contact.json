@@ -1,0 +1,26 @@
+{
+  "sys": {
+    "id": "cta-contact"
+  },
+  "fields": {
+    "internalTitle": {
+      "en-US": "Contact — Work CTA"
+    },
+    "label": {
+      "fr-CA": "Discutons de votre plateforme",
+      "en-US": "Let’s talk about your platform"
+    },
+    "variant": {
+      "en-US": "primary"
+    },
+    "kind": {
+      "en-US": "Action"
+    },
+    "openInNewTab": {
+      "en-US": false
+    },
+    "action": {
+      "en-US": "openContactForm"
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "sys": {
+    "id": "seo-lelegs"
+  },
+  "fields": {
+    "seoTitle": {
+      "en-US": "Le Legs — Immersive Web Experience"
+    },
+    "seoDescription": {
+      "en-US": "Interactive exploration in a ‘virtual cave’ for an Indigenous futurism exhibition. Front-End & immersive UX."
+    },
+    "ogImage": {
+      "en-US": {
+        "sys": {
+          "type": "Link",
+          "linkType": "Asset",
+          "id": "asset-og-lelegs"
+        }
+      }
+    },
+    "canonicalUrl": {
+      "en-US": "https://lelegs.kwahiatonhk.com/"
+    }
+  }
+}

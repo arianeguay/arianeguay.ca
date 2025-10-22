@@ -1,0 +1,138 @@
+{
+  "sys": {
+    "id": "wi-proj-bureaux-ecrans"
+  },
+  "fields": {
+    "type": {
+      "en-US": "project"
+    },
+    "title": {
+      "fr-CA": "Bureaux-écrans d’écrivain·e·s",
+      "en-US": "Writers’ Screen-Desktops"
+    },
+    "subtitle": {
+      "fr-CA": "Interface inspirée d’un OS",
+      "en-US": "OS-inspired interface"
+    },
+    "summary": {
+      "fr-CA": {
+        "nodeType": "document",
+        "data": {},
+        "content": [
+          {
+            "nodeType": "paragraph",
+            "content": [
+              {
+                "nodeType": "text",
+                "value": "Exposition en ligne qui montre les coulisses numériques de la création : captures, navigations filmées, textes. Interface de navigation inspirée d’un OS (icônes, dossiers, outils).",
+                "marks": [],
+                "data": {}
+              }
+            ],
+            "data": {}
+          }
+        ]
+      },
+      "en-US": {
+        "nodeType": "document",
+        "data": {},
+        "content": [
+          {
+            "nodeType": "paragraph",
+            "content": [
+              {
+                "nodeType": "text",
+                "value": "Online exhibition revealing the digital backstage of creation. OS-like navigation (icons, folders, tools) across screenshots, recorded navigations, and texts.",
+                "marks": [],
+                "data": {}
+              }
+            ],
+            "data": {}
+          }
+        ]
+      }
+    },
+    "slug": {
+      "fr-CA": "proj-bureaux-ecrans",
+      "en-US": "proj-bureaux-ecrans"
+    },
+    "badge": {
+      "fr-CA": "Culture • Recherche",
+      "en-US": "Culture • Research"
+    },
+    "cover": {
+      "en-US": {
+        "sys": {
+          "type": "Link",
+          "linkType": "Asset",
+          "id": "asset-cover-bureaux"
+        }
+      }
+    },
+    "projectMeta": {
+      "en-US": {
+        "sys": {
+          "type": "Link",
+          "linkType": "Entry",
+          "id": "meta-bureaux"
+        }
+      }
+    },
+    "highlights": {
+      "en-US": [
+        {
+          "sys": {
+            "type": "Link",
+            "linkType": "Entry",
+            "id": "hl-bureaux-1"
+          }
+        },
+        {
+          "sys": {
+            "type": "Link",
+            "linkType": "Entry",
+            "id": "hl-bureaux-2"
+          }
+        }
+      ]
+    },
+    "techStack": {
+      "en-US": [
+        {
+          "sys": {
+            "type": "Link",
+            "linkType": "Entry",
+            "id": "tag-react"
+          }
+        },
+        {
+          "sys": {
+            "type": "Link",
+            "linkType": "Entry",
+            "id": "tag-wordpress"
+          }
+        }
+      ]
+    },
+    "linksCta": {
+      "en-US": [
+        {
+          "sys": {
+            "type": "Link",
+            "linkType": "Entry",
+            "id": "cta-bureaux-site"
+          }
+        }
+      ]
+    },
+    "seo": {
+      "en-US": {
+        "sys": {
+          "type": "Link",
+          "linkType": "Entry",
+          "id": "seo-bureaux"
+        }
+      }
+    }
+  }
+}

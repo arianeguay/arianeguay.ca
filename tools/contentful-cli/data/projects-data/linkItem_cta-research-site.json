@@ -1,0 +1,30 @@
+{
+  "sys": {
+    "id": "cta-research-site"
+  },
+  "fields": {
+    "internalTitle": {
+      "en-US": "Re|Search — Site"
+    },
+    "label": {
+      "fr-CA": "Voir le site",
+      "en-US": "View site"
+    },
+    "variant": {
+      "en-US": "link"
+    },
+    "kind": {
+      "en-US": "External"
+    },
+    "url": {
+      "fr-CA": "https://researchexhibition.org/",
+      "en-US": "https://researchexhibition.org/"
+    },
+    "openInNewTab": {
+      "en-US": true
+    },
+    "action": {
+      "en-US": "none"
+    }
+  }
+}

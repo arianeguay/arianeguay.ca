@@ -1,0 +1,214 @@
+{
+  "sys": {
+    "id": "wi-proj-research-exhibition"
+  },
+  "fields": {
+    "type": {
+      "en-US": "project"
+    },
+    "title": {
+      "fr-CA": "Re|Search — Exposition en ligne",
+      "en-US": "Re|Search — Online Exhibition"
+    },
+    "subtitle": {
+      "fr-CA": "Moteur par verbes • CMS sur mesure (MongoDB)",
+      "en-US": "Verb-driven engine • Custom CMS (MongoDB)"
+    },
+    "summary": {
+      "fr-CA": {
+        "nodeType": "document",
+        "data": {},
+        "content": [
+          {
+            "nodeType": "paragraph",
+            "content": [
+              {
+                "nodeType": "text",
+                "value": "Exposition en ligne sur la « pulsion de recherche » : saisir un verbe à l’infinitif dévoile les œuvres reliées. Contribution Front-End & UX de navigation sur un CMS custom adossé à MongoDB.",
+                "marks": [],
+                "data": {}
+              }
+            ],
+            "data": {}
+          }
+        ]
+      },
+      "en-US": {
+        "nodeType": "document",
+        "data": {},
+        "content": [
+          {
+            "nodeType": "paragraph",
+            "content": [
+              {
+                "nodeType": "text",
+                "value": "Online exhibition about the ‘search impulse’. Typing an infinitive verb reveals associated works. Front-End & navigation UX on a custom CMS backed by MongoDB.",
+                "marks": [],
+                "data": {}
+              }
+            ],
+            "data": {}
+          }
+        ]
+      }
+    },
+    "slug": {
+      "fr-CA": "proj-research-exhibition",
+      "en-US": "proj-research-exhibition"
+    },
+    "badge": {
+      "fr-CA": "Culture • Recherche",
+      "en-US": "Culture • Research"
+    },
+    "cover": {
+      "en-US": {
+        "sys": {
+          "type": "Link",
+          "linkType": "Asset",
+          "id": "asset-cover-research"
+        }
+      }
+    },
+    "projectMeta": {
+      "en-US": {
+        "sys": {
+          "type": "Link",
+          "linkType": "Entry",
+          "id": "meta-research"
+        }
+      }
+    },
+    "overview": {
+      "fr-CA": {
+        "nodeType": "document",
+        "data": {},
+        "content": []
+      },
+      "en-US": {
+        "nodeType": "document",
+        "data": {},
+        "content": []
+      }
+    },
+    "problemStatement": {
+      "en-US": []
+    },
+    "roleScope": {
+      "en-US": []
+    },
+    "process": {
+      "en-US": []
+    },
+    "highlights": {
+      "en-US": [
+        {
+          "sys": {
+            "type": "Link",
+            "linkType": "Entry",
+            "id": "hl-research-1"
+          }
+        },
+        {
+          "sys": {
+            "type": "Link",
+            "linkType": "Entry",
+            "id": "hl-research-2"
+          }
+        }
+      ]
+    },
+    "metrics": {
+      "en-US": []
+    },
+    "gallery": {
+      "en-US": []
+    },
+    "techStack": {
+      "en-US": [
+        {
+          "sys": {
+            "type": "Link",
+            "linkType": "Entry",
+            "id": "tag-nodejs"
+          }
+        },
+        {
+          "sys": {
+            "type": "Link",
+            "linkType": "Entry",
+            "id": "tag-react"
+          }
+        },
+        {
+          "sys": {
+            "type": "Link",
+            "linkType": "Entry",
+            "id": "tag-mongodb"
+          }
+        },
+        {
+          "sys": {
+            "type": "Link",
+            "linkType": "Entry",
+            "id": "tag-custom-cms"
+          }
+        }
+      ]
+    },
+    "linksCta": {
+      "en-US": [
+        {
+          "sys": {
+            "type": "Link",
+            "linkType": "Entry",
+            "id": "cta-research-site"
+          }
+        }
+      ]
+    },
+    "testimonial": {
+      "en-US": null
+    },
+    "ctaSection": {
+      "en-US": null
+    },
+    "nextProjectCta": {
+      "en-US": null
+    },
+    "seo": {
+      "en-US": {
+        "sys": {
+          "type": "Link",
+          "linkType": "Entry",
+          "id": "seo-research"
+        }
+      }
+    },
+    "breadcrumbs": {
+      "fr-CA": {
+        "items": [
+          {
+            "label": "Projets",
+            "href": "/projets"
+          },
+          {
+            "label": "Re|Search",
+            "href": "/projets/proj-research-exhibition"
+          }
+        ]
+      },
+      "en-US": {
+        "items": [
+          {
+            "label": "Work",
+            "href": "/en/work"
+          },
+          {
+            "label": "Re|Search",
+            "href": "/en/work/proj-research-exhibition"
+          }
+        ]
+      }
+    }
+  }
+}

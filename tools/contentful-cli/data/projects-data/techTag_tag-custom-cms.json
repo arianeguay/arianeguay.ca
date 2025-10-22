@@ -1,0 +1,14 @@
+{
+  "sys": {
+    "id": "tag-custom-cms"
+  },
+  "fields": {
+    "name": {
+      "fr-CA": "CMS sur mesure",
+      "en-US": "Custom CMS"
+    },
+    "kind": {
+      "en-US": "tool"
+    }
+  }
+}

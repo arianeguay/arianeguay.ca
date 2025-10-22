@@ -1,0 +1,31 @@
+{
+  "sys": {
+    "id": "seo-hellodarwin"
+  },
+  "fields": {
+    "seoTitle": {
+      "en-US": "Refonte & design system — helloDarwin"
+    },
+    "seoDescription": {
+      "en-US": "Case study: site + apps redesign, modular design system, performance (Lighthouse 60→75), stable 2.6 MB build."
+    },
+    "ogImage": {
+      "en-US": {
+        "sys": {
+          "type": "Link",
+          "linkType": "Asset",
+          "id": "asset-og-hellodarwin"
+        }
+      }
+    },
+    "canonicalUrl": {
+      "en-US": ""
+    },
+    "noindex": {
+      "en-US": false
+    },
+    "structuredData": {
+      "en-US": {}
+    }
+  }
+}

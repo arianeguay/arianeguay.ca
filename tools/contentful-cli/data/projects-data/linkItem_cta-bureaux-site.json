@@ -1,0 +1,27 @@
+{
+  "sys": {
+    "id": "cta-bureaux-site"
+  },
+  "fields": {
+    "internalTitle": {
+      "en-US": "Bureaux-écrans — Site"
+    },
+    "label": {
+      "fr-CA": "Voir le site",
+      "en-US": "View site"
+    },
+    "variant": {
+      "en-US": "link"
+    },
+    "kind": {
+      "en-US": "External"
+    },
+    "url": {
+      "fr-CA": "https://bureaux-ecrans.com/",
+      "en-US": "https://bureaux-ecrans.com/"
+    },
+    "openInNewTab": {
+      "en-US": true
+    }
+  }
+}

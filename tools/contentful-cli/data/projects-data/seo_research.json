@@ -1,0 +1,31 @@
+{
+  "sys": {
+    "id": "seo-research"
+  },
+  "fields": {
+    "seoTitle": {
+      "en-US": "Re|Search — Online Exhibition"
+    },
+    "seoDescription": {
+      "en-US": "Keyword-driven discovery (verbs) on a custom CMS with MongoDB. Front-End & navigation UX."
+    },
+    "ogImage": {
+      "en-US": {
+        "sys": {
+          "type": "Link",
+          "linkType": "Asset",
+          "id": "asset-og-research"
+        }
+      }
+    },
+    "canonicalUrl": {
+      "en-US": "https://researchexhibition.org/"
+    },
+    "noindex": {
+      "en-US": false
+    },
+    "structuredData": {
+      "en-US": {}
+    }
+  }
+}

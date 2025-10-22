@@ -1,0 +1,14 @@
+{
+  "sys": {
+    "id": "tag-typescript"
+  },
+  "fields": {
+    "name": {
+      "fr-CA": "TypeScript",
+      "en-US": "TypeScript"
+    },
+    "kind": {
+      "en-US": "lang"
+    }
+  }
+}

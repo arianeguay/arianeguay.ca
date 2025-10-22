@@ -1,0 +1,27 @@
+{
+  "sys": {
+    "id": "cta-hellodarwin-site"
+  },
+  "fields": {
+    "internalTitle": {
+      "en-US": "helloDarwin — Site"
+    },
+    "label": {
+      "fr-CA": "Voir le site",
+      "en-US": "View site"
+    },
+    "variant": {
+      "en-US": "link"
+    },
+    "kind": {
+      "en-US": "External"
+    },
+    "url": {
+      "fr-CA": "https://hellodarwin.com/",
+      "en-US": "https://hellodarwin.com/"
+    },
+    "openInNewTab": {
+      "en-US": true
+    }
+  }
+}

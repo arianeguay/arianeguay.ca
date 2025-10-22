@@ -53,3 +53,6 @@ yarn-error.log*
 
 # pnpm
 .pnpm-debug.log*
+
+# contentful-cli
+tools/contentful-cli/data/cpt

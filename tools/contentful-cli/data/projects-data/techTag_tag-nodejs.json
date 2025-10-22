@@ -1,0 +1,14 @@
+{
+  "sys": {
+    "id": "tag-nodejs"
+  },
+  "fields": {
+    "name": {
+      "fr-CA": "Node.js",
+      "en-US": "Node.js"
+    },
+    "kind": {
+      "en-US": "framework"
+    }
+  }
+}
