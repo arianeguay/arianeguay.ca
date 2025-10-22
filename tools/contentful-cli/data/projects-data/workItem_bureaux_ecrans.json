@@ -4,18 +4,18 @@
   },
   "fields": {
     "type": {
-      "en-US": "project"
+      "fr": "project"
     },
     "title": {
-      "fr-CA": "Bureaux-écrans d’écrivain·e·s",
-      "en-US": "Writers’ Screen-Desktops"
+      "fr": "Bureaux-écrans d’écrivain·e·s",
+      "en": "Writers’ Screen-Desktops"
     },
     "subtitle": {
-      "fr-CA": "Interface inspirée d’un OS",
-      "en-US": "OS-inspired interface"
+      "fr": "Interface inspirée d’un OS",
+      "en": "OS-inspired interface"
     },
     "summary": {
-      "fr-CA": {
+      "fr": {
         "nodeType": "document",
         "data": {},
         "content": [
@@ -33,7 +33,7 @@
           }
         ]
       },
-      "en-US": {
+      "en": {
         "nodeType": "document",
         "data": {},
         "content": [
@@ -53,24 +53,16 @@
       }
     },
     "slug": {
-      "fr-CA": "proj-bureaux-ecrans",
-      "en-US": "proj-bureaux-ecrans"
+      "fr": "proj-bureaux-ecrans",
+      "en": "proj-bureaux-ecrans"
     },
     "badge": {
-      "fr-CA": "Culture • Recherche",
-      "en-US": "Culture • Research"
+      "fr": "Culture • Recherche",
+      "en": "Culture • Research"
     },
-    "cover": {
-      "en-US": {
-        "sys": {
-          "type": "Link",
-          "linkType": "Asset",
-          "id": "asset-cover-bureaux"
-        }
-      }
-    },
+
     "projectMeta": {
-      "en-US": {
+      "fr": {
         "sys": {
           "type": "Link",
           "linkType": "Entry",
@@ -79,7 +71,7 @@
       }
     },
     "highlights": {
-      "en-US": [
+      "fr": [
         {
           "sys": {
             "type": "Link",
@@ -97,7 +89,7 @@
       ]
     },
     "techStack": {
-      "en-US": [
+      "fr": [
         {
           "sys": {
             "type": "Link",
@@ -115,7 +107,7 @@
       ]
     },
     "linksCta": {
-      "en-US": [
+      "fr": [
         {
           "sys": {
             "type": "Link",
@@ -126,7 +118,7 @@
       ]
     },
     "seo": {
-      "en-US": {
+      "fr": {
         "sys": {
           "type": "Link",
           "linkType": "Entry",

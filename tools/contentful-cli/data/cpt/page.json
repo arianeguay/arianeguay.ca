@@ -1,0 +1,174 @@
+{
+  "sys": {
+    "space": {
+      "sys": {
+        "type": "Link",
+        "linkType": "Space",
+        "id": "omwxuxoanfvq"
+      }
+    },
+    "id": "page",
+    "type": "ContentType",
+    "createdAt": "2025-10-14T14:50:32.416Z",
+    "updatedAt": "2025-10-21T21:12:05.686Z",
+    "environment": {
+      "sys": {
+        "id": "release-projects",
+        "type": "Link",
+        "linkType": "Environment"
+      }
+    },
+    "publishedVersion": 23,
+    "publishedAt": "2025-10-21T21:12:05.686Z",
+    "firstPublishedAt": "2025-10-14T14:50:32.608Z",
+    "createdBy": {
+      "sys": {
+        "type": "Link",
+        "linkType": "User",
+        "id": "6mHAQajZw9r6s16MM8hgQ6"
+      }
+    },
+    "updatedBy": {
+      "sys": {
+        "type": "Link",
+        "linkType": "User",
+        "id": "6mHAQajZw9r6s16MM8hgQ6"
+      }
+    },
+    "publishedCounter": 12,
+    "version": 24,
+    "publishedBy": {
+      "sys": {
+        "type": "Link",
+        "linkType": "User",
+        "id": "6mHAQajZw9r6s16MM8hgQ6"
+      }
+    },
+    "urn": "crn:contentful:::content:spaces/omwxuxoanfvq/environments/release-projects/content_types/page"
+  },
+  "displayField": "internalTitle",
+  "name": "Page",
+  "description": "Pages CMS (Accueil, Services, Projets, …)",
+  "fields": [
+    {
+      "id": "internalTitle",
+      "name": "Titre Interne",
+      "type": "Symbol",
+      "localized": false,
+      "required": true,
+      "validations": [],
+      "disabled": false,
+      "omitted": false
+    },
+    {
+      "id": "pageType",
+      "name": "Page Type",
+      "type": "Symbol",
+      "localized": false,
+      "required": true,
+      "validations": [
+        {
+          "in": [
+            "default",
+            "project",
+            "service",
+            "article"
+          ]
+        }
+      ],
+      "defaultValue": {
+        "fr": "default"
+      },
+      "disabled": false,
+      "omitted": false
+    },
+    {
+      "id": "title",
+      "name": "Titre",
+      "type": "Symbol",
+      "localized": true,
+      "required": true,
+      "validations": [],
+      "disabled": false,
+      "omitted": false
+    },
+    {
+      "id": "slug",
+      "name": "Slug",
+      "type": "Symbol",
+      "localized": true,
+      "required": true,
+      "validations": [
+        {
+          "unique": true
+        },
+        {
+          "regexp": {
+            "pattern": "^[a-z0-9-]+$"
+          }
+        }
+      ],
+      "disabled": false,
+      "omitted": false
+    },
+    {
+      "id": "sections",
+      "name": "Sections",
+      "type": "Array",
+      "localized": false,
+      "required": false,
+      "validations": [],
+      "disabled": false,
+      "omitted": false,
+      "items": {
+        "type": "Link",
+        "validations": [
+          {
+            "linkContentType": [
+              "ctaSection",
+              "itemsList",
+              "group",
+              "experienceSection",
+              "project"
+            ]
+          }
+        ],
+        "linkType": "Entry"
+      }
+    },
+    {
+      "id": "seo",
+      "name": "SEO",
+      "type": "Link",
+      "localized": false,
+      "required": true,
+      "validations": [
+        {
+          "linkContentType": [
+            "seo"
+          ]
+        }
+      ],
+      "disabled": false,
+      "omitted": false,
+      "linkType": "Entry"
+    },
+    {
+      "id": "parentPage",
+      "name": "Parent Page",
+      "type": "Link",
+      "localized": false,
+      "required": false,
+      "validations": [
+        {
+          "linkContentType": [
+            "page"
+          ]
+        }
+      ],
+      "disabled": false,
+      "omitted": false,
+      "linkType": "Entry"
+    }
+  ]
+}

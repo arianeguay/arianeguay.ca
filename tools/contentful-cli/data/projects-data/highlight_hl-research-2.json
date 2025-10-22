@@ -4,7 +4,8 @@
   },
   "fields": {
     "text": {
-      "en-US": "Custom CMS • MongoDB"
+      "fr": "CMS sur mesure • MongoDB",
+      "en": "Custom CMS • MongoDB"
     }
   }
 }

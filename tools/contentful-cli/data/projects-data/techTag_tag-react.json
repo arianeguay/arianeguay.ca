@@ -4,11 +4,11 @@
   },
   "fields": {
     "name": {
-      "fr-CA": "React",
-      "en-US": "React"
+      "fr": "React",
+      "en": "React"
     },
     "kind": {
-      "en-US": "framework"
+      "fr": "framework"
     }
   }
 }

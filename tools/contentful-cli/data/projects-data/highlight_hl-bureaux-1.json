@@ -4,7 +4,8 @@
   },
   "fields": {
     "text": {
-      "en-US": "OS-like navigation (icons, folders)"
+      "fr": "Navigation type OS (icônes, dossiers)",
+      "en": "OS-like navigation (icons, folders)"
     }
   }
 }

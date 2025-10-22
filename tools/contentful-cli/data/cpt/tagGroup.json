@@ -1,0 +1,95 @@
+{
+  "sys": {
+    "space": {
+      "sys": {
+        "type": "Link",
+        "linkType": "Space",
+        "id": "omwxuxoanfvq"
+      }
+    },
+    "id": "tagGroup",
+    "type": "ContentType",
+    "createdAt": "2025-10-19T21:30:28.370Z",
+    "updatedAt": "2025-10-19T21:30:28.613Z",
+    "environment": {
+      "sys": {
+        "id": "release-projects",
+        "type": "Link",
+        "linkType": "Environment"
+      }
+    },
+    "publishedVersion": 1,
+    "publishedAt": "2025-10-19T21:30:28.613Z",
+    "firstPublishedAt": "2025-10-19T21:30:28.613Z",
+    "createdBy": {
+      "sys": {
+        "type": "Link",
+        "linkType": "User",
+        "id": "6mHAQajZw9r6s16MM8hgQ6"
+      }
+    },
+    "updatedBy": {
+      "sys": {
+        "type": "Link",
+        "linkType": "User",
+        "id": "6mHAQajZw9r6s16MM8hgQ6"
+      }
+    },
+    "publishedCounter": 1,
+    "version": 2,
+    "publishedBy": {
+      "sys": {
+        "type": "Link",
+        "linkType": "User",
+        "id": "6mHAQajZw9r6s16MM8hgQ6"
+      }
+    },
+    "urn": "crn:contentful:::content:spaces/omwxuxoanfvq/environments/release-projects/content_types/tagGroup"
+  },
+  "displayField": "internalTitle",
+  "name": "Tag Group",
+  "description": "",
+  "fields": [
+    {
+      "id": "internalTitle",
+      "name": "Internal Title",
+      "type": "Symbol",
+      "localized": false,
+      "required": true,
+      "validations": [],
+      "disabled": false,
+      "omitted": false
+    },
+    {
+      "id": "title",
+      "name": "Title",
+      "type": "Symbol",
+      "localized": true,
+      "required": true,
+      "validations": [],
+      "disabled": false,
+      "omitted": false
+    },
+    {
+      "id": "tags",
+      "name": "Tags",
+      "type": "Array",
+      "localized": false,
+      "required": false,
+      "validations": [],
+      "disabled": false,
+      "omitted": false,
+      "items": {
+        "type": "Link",
+        "validations": [
+          {
+            "linkContentType": [
+              "techTag"
+            ]
+          }
+        ],
+        "linkType": "Entry"
+      }
+    }
+  ]
+}

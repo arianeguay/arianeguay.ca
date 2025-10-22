@@ -4,28 +4,28 @@
   },
   "fields": {
     "seoTitle": {
-      "en-US": "Refonte & design system — helloDarwin"
+      "fr": "Refonte & design system — helloDarwin"
     },
     "seoDescription": {
-      "en-US": "Case study: site + apps redesign, modular design system, performance (Lighthouse 60→75), stable 2.6 MB build."
+      "fr": "Étude de cas : refonte site + apps, design system modulaire, performance (Lighthouse 60→75), build 2,6 MB stable."
     },
     "ogImage": {
-      "en-US": {
+      "fr": {
         "sys": {
           "type": "Link",
           "linkType": "Asset",
-          "id": "asset-og-hellodarwin"
+          "id": "2FHnhz7lWu5YMwW6ehgwc9"
         }
       }
     },
     "canonicalUrl": {
-      "en-US": ""
+      "fr": ""
     },
     "noindex": {
-      "en-US": false
+      "fr": false
     },
     "structuredData": {
-      "en-US": {}
+      "fr": {}
     }
   }
 }

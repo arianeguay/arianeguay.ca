@@ -1,0 +1,130 @@
+{
+  "sys": {
+    "space": {
+      "sys": {
+        "type": "Link",
+        "linkType": "Space",
+        "id": "omwxuxoanfvq"
+      }
+    },
+    "id": "education",
+    "type": "ContentType",
+    "createdAt": "2025-10-19T20:54:51.760Z",
+    "updatedAt": "2025-10-19T20:55:31.109Z",
+    "environment": {
+      "sys": {
+        "id": "release-projects",
+        "type": "Link",
+        "linkType": "Environment"
+      }
+    },
+    "publishedVersion": 5,
+    "publishedAt": "2025-10-19T20:55:31.109Z",
+    "firstPublishedAt": "2025-10-19T20:54:52.001Z",
+    "createdBy": {
+      "sys": {
+        "type": "Link",
+        "linkType": "User",
+        "id": "6mHAQajZw9r6s16MM8hgQ6"
+      }
+    },
+    "updatedBy": {
+      "sys": {
+        "type": "Link",
+        "linkType": "User",
+        "id": "6mHAQajZw9r6s16MM8hgQ6"
+      }
+    },
+    "publishedCounter": 3,
+    "version": 6,
+    "publishedBy": {
+      "sys": {
+        "type": "Link",
+        "linkType": "User",
+        "id": "6mHAQajZw9r6s16MM8hgQ6"
+      }
+    },
+    "urn": "crn:contentful:::content:spaces/omwxuxoanfvq/environments/release-projects/content_types/education"
+  },
+  "displayField": "school",
+  "name": "Education",
+  "description": "",
+  "fields": [
+    {
+      "id": "school",
+      "name": "School",
+      "type": "Symbol",
+      "localized": true,
+      "required": true,
+      "validations": [],
+      "disabled": false,
+      "omitted": false
+    },
+    {
+      "id": "program",
+      "name": "Program",
+      "type": "Symbol",
+      "localized": true,
+      "required": true,
+      "validations": [],
+      "disabled": false,
+      "omitted": false
+    },
+    {
+      "id": "years",
+      "name": "Years",
+      "type": "Symbol",
+      "localized": true,
+      "required": false,
+      "validations": [],
+      "disabled": false,
+      "omitted": false
+    },
+    {
+      "id": "description",
+      "name": "Description",
+      "type": "RichText",
+      "localized": true,
+      "required": false,
+      "validations": [
+        {
+          "enabledMarks": [
+            "bold",
+            "italic",
+            "underline",
+            "code",
+            "superscript",
+            "subscript",
+            "strikethrough"
+          ],
+          "message": "Only bold, italic, underline, code, superscript, subscript, and strikethrough marks are allowed"
+        },
+        {
+          "enabledNodeTypes": [
+            "heading-3",
+            "heading-4",
+            "heading-5",
+            "heading-6",
+            "ordered-list",
+            "unordered-list",
+            "hr",
+            "blockquote",
+            "embedded-entry-block",
+            "embedded-asset-block",
+            "table",
+            "asset-hyperlink",
+            "embedded-entry-inline",
+            "entry-hyperlink",
+            "hyperlink"
+          ],
+          "message": "Only heading 3, heading 4, heading 5, heading 6, ordered list, unordered list, horizontal rule, quote, block entry, asset, table, link to asset, inline entry, link to entry, and link to Url nodes are allowed"
+        },
+        {
+          "nodes": {}
+        }
+      ],
+      "disabled": false,
+      "omitted": false
+    }
+  ]
+}

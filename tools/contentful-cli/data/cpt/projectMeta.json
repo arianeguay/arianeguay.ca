@@ -1,0 +1,156 @@
+{
+  "sys": {
+    "space": {
+      "sys": {
+        "type": "Link",
+        "linkType": "Space",
+        "id": "omwxuxoanfvq"
+      }
+    },
+    "id": "projectMeta",
+    "type": "ContentType",
+    "createdAt": "2025-10-14T14:50:27.739Z",
+    "updatedAt": "2025-10-22T14:27:00.231Z",
+    "environment": {
+      "sys": {
+        "id": "release-projects",
+        "type": "Link",
+        "linkType": "Environment"
+      }
+    },
+    "publishedVersion": 3,
+    "publishedAt": "2025-10-22T14:27:00.231Z",
+    "firstPublishedAt": "2025-10-14T14:50:27.926Z",
+    "createdBy": {
+      "sys": {
+        "type": "Link",
+        "linkType": "User",
+        "id": "6mHAQajZw9r6s16MM8hgQ6"
+      }
+    },
+    "updatedBy": {
+      "sys": {
+        "type": "Link",
+        "linkType": "User",
+        "id": "6mHAQajZw9r6s16MM8hgQ6"
+      }
+    },
+    "publishedCounter": 2,
+    "version": 4,
+    "publishedBy": {
+      "sys": {
+        "type": "Link",
+        "linkType": "User",
+        "id": "6mHAQajZw9r6s16MM8hgQ6"
+      }
+    },
+    "urn": "crn:contentful:::content:spaces/omwxuxoanfvq/environments/release-projects/content_types/projectMeta"
+  },
+  "displayField": "internalTitle",
+  "name": "Project Meta",
+  "description": null,
+  "fields": [
+    {
+      "id": "internalTitle",
+      "name": "Internal Title",
+      "type": "Symbol",
+      "localized": false,
+      "required": true,
+      "validations": [],
+      "disabled": false,
+      "omitted": false
+    },
+    {
+      "id": "company",
+      "name": "Compagnie",
+      "type": "Symbol",
+      "localized": true,
+      "required": true,
+      "validations": [],
+      "disabled": false,
+      "omitted": false
+    },
+    {
+      "id": "role",
+      "name": "Rôle",
+      "type": "Symbol",
+      "localized": true,
+      "required": true,
+      "validations": [],
+      "disabled": false,
+      "omitted": false
+    },
+    {
+      "id": "period",
+      "name": "Période",
+      "type": "Symbol",
+      "localized": true,
+      "required": true,
+      "validations": [],
+      "disabled": false,
+      "omitted": false
+    },
+    {
+      "id": "sector",
+      "name": "Secteur",
+      "type": "Symbol",
+      "localized": true,
+      "required": false,
+      "validations": [],
+      "disabled": false,
+      "omitted": false
+    },
+    {
+      "id": "stack",
+      "name": "Stack (tags)",
+      "type": "Array",
+      "localized": false,
+      "required": false,
+      "validations": [],
+      "disabled": false,
+      "omitted": false,
+      "items": {
+        "type": "Link",
+        "validations": [
+          {
+            "linkContentType": [
+              "techTag"
+            ]
+          }
+        ],
+        "linkType": "Entry"
+      }
+    },
+    {
+      "id": "links",
+      "name": "Liens",
+      "type": "Array",
+      "localized": false,
+      "required": false,
+      "validations": [],
+      "disabled": false,
+      "omitted": false,
+      "items": {
+        "type": "Link",
+        "validations": [
+          {
+            "linkContentType": [
+              "linkItem"
+            ]
+          }
+        ],
+        "linkType": "Entry"
+      }
+    },
+    {
+      "id": "location",
+      "name": "Lieu",
+      "type": "Symbol",
+      "localized": true,
+      "required": false,
+      "validations": [],
+      "disabled": false,
+      "omitted": false
+    }
+  ]
+}

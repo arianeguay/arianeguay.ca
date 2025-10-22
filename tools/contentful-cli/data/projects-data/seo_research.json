@@ -4,28 +4,28 @@
   },
   "fields": {
     "seoTitle": {
-      "en-US": "Re|Search — Online Exhibition"
+      "fr": "Re|Search — Exposition en ligne"
     },
     "seoDescription": {
-      "en-US": "Keyword-driven discovery (verbs) on a custom CMS with MongoDB. Front-End & navigation UX."
+      "fr": "Découverte par mots-clés (verbes) sur un CMS sur mesure avec MongoDB. Front-End & UX de navigation."
     },
     "ogImage": {
-      "en-US": {
+      "fr": {
         "sys": {
           "type": "Link",
           "linkType": "Asset",
-          "id": "asset-og-research"
+          "id": "2FHnhz7lWu5YMwW6ehgwc9"
         }
       }
     },
     "canonicalUrl": {
-      "en-US": "https://researchexhibition.org/"
+      "fr": "https://researchexhibition.org/"
     },
     "noindex": {
-      "en-US": false
+      "fr": false
     },
     "structuredData": {
-      "en-US": {}
+      "fr": {}
     }
   }
 }

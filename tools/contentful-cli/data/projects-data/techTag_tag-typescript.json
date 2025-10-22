@@ -4,11 +4,11 @@
   },
   "fields": {
     "name": {
-      "fr-CA": "TypeScript",
-      "en-US": "TypeScript"
+      "fr": "TypeScript",
+      "en": "TypeScript"
     },
     "kind": {
-      "en-US": "lang"
+      "fr": "lang"
     }
   }
 }

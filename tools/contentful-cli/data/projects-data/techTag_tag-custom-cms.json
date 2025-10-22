@@ -4,11 +4,11 @@
   },
   "fields": {
     "name": {
-      "fr-CA": "CMS sur mesure",
-      "en-US": "Custom CMS"
+      "fr": "CMS sur mesure",
+      "en": "Custom CMS"
     },
     "kind": {
-      "en-US": "tool"
+      "fr": "tool"
     }
   }
 }

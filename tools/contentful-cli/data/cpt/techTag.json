@@ -1,0 +1,114 @@
+{
+  "sys": {
+    "space": {
+      "sys": {
+        "type": "Link",
+        "linkType": "Space",
+        "id": "omwxuxoanfvq"
+      }
+    },
+    "id": "techTag",
+    "type": "ContentType",
+    "createdAt": "2025-10-14T14:50:24.790Z",
+    "updatedAt": "2025-10-19T20:46:25.616Z",
+    "environment": {
+      "sys": {
+        "id": "release-projects",
+        "type": "Link",
+        "linkType": "Environment"
+      }
+    },
+    "publishedVersion": 5,
+    "publishedAt": "2025-10-19T20:46:25.616Z",
+    "firstPublishedAt": "2025-10-14T14:50:24.984Z",
+    "createdBy": {
+      "sys": {
+        "type": "Link",
+        "linkType": "User",
+        "id": "6mHAQajZw9r6s16MM8hgQ6"
+      }
+    },
+    "updatedBy": {
+      "sys": {
+        "type": "Link",
+        "linkType": "User",
+        "id": "6mHAQajZw9r6s16MM8hgQ6"
+      }
+    },
+    "publishedCounter": 3,
+    "version": 6,
+    "publishedBy": {
+      "sys": {
+        "type": "Link",
+        "linkType": "User",
+        "id": "6mHAQajZw9r6s16MM8hgQ6"
+      }
+    },
+    "urn": "crn:contentful:::content:spaces/omwxuxoanfvq/environments/release-projects/content_types/techTag"
+  },
+  "displayField": "name",
+  "name": "Tag",
+  "description": "",
+  "fields": [
+    {
+      "id": "name",
+      "name": "Nom",
+      "type": "Symbol",
+      "localized": true,
+      "required": true,
+      "validations": [],
+      "disabled": false,
+      "omitted": false
+    },
+    {
+      "id": "kind",
+      "name": "Catégorie",
+      "type": "Symbol",
+      "localized": false,
+      "required": false,
+      "validations": [
+        {
+          "in": [
+            "lang",
+            "framework",
+            "library",
+            "tool",
+            "cloud",
+            "design",
+            "db",
+            "infra"
+          ]
+        }
+      ],
+      "disabled": false,
+      "omitted": false
+    },
+    {
+      "id": "icon",
+      "name": "Icône",
+      "type": "Link",
+      "localized": false,
+      "required": false,
+      "validations": [],
+      "disabled": false,
+      "omitted": false,
+      "linkType": "Asset"
+    },
+    {
+      "id": "color",
+      "name": "Couleur HEX",
+      "type": "Symbol",
+      "localized": false,
+      "required": false,
+      "validations": [
+        {
+          "regexp": {
+            "pattern": "^#?[0-9a-fA-F]{6}$"
+          }
+        }
+      ],
+      "disabled": false,
+      "omitted": false
+    }
+  ]
+}

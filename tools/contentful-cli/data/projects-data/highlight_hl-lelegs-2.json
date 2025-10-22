@@ -4,7 +4,8 @@
   },
   "fields": {
     "text": {
-      "en-US": "Narrative-led discovery"
+      "fr": "Découverte narrative progressive",
+      "en": "Narrative-led discovery"
     }
   }
 }

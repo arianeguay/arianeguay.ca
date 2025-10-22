@@ -1,0 +1,144 @@
+{
+  "sys": {
+    "space": {
+      "sys": {
+        "type": "Link",
+        "linkType": "Space",
+        "id": "omwxuxoanfvq"
+      }
+    },
+    "id": "group",
+    "type": "ContentType",
+    "createdAt": "2025-10-17T01:52:44.091Z",
+    "updatedAt": "2025-10-19T01:53:09.384Z",
+    "environment": {
+      "sys": {
+        "id": "release-projects",
+        "type": "Link",
+        "linkType": "Environment"
+      }
+    },
+    "publishedVersion": 7,
+    "publishedAt": "2025-10-19T01:53:09.384Z",
+    "firstPublishedAt": "2025-10-17T01:52:44.554Z",
+    "createdBy": {
+      "sys": {
+        "type": "Link",
+        "linkType": "User",
+        "id": "6mHAQajZw9r6s16MM8hgQ6"
+      }
+    },
+    "updatedBy": {
+      "sys": {
+        "type": "Link",
+        "linkType": "User",
+        "id": "6mHAQajZw9r6s16MM8hgQ6"
+      }
+    },
+    "publishedCounter": 4,
+    "version": 8,
+    "publishedBy": {
+      "sys": {
+        "type": "Link",
+        "linkType": "User",
+        "id": "6mHAQajZw9r6s16MM8hgQ6"
+      }
+    },
+    "urn": "crn:contentful:::content:spaces/omwxuxoanfvq/environments/release-projects/content_types/group"
+  },
+  "displayField": "internalTitle",
+  "name": "Group",
+  "description": "",
+  "fields": [
+    {
+      "id": "internalTitle",
+      "name": "Internal Title",
+      "type": "Symbol",
+      "localized": false,
+      "required": true,
+      "validations": [],
+      "disabled": false,
+      "omitted": false
+    },
+    {
+      "id": "elements",
+      "name": "Elements",
+      "type": "Array",
+      "localized": false,
+      "required": false,
+      "validations": [],
+      "disabled": false,
+      "omitted": false,
+      "items": {
+        "type": "Link",
+        "validations": [
+          {
+            "linkContentType": [
+              "itemsList",
+              "ctaSection"
+            ]
+          }
+        ],
+        "linkType": "Entry"
+      }
+    },
+    {
+      "id": "background",
+      "name": "Background",
+      "type": "Symbol",
+      "localized": false,
+      "required": true,
+      "validations": [
+        {
+          "in": [
+            "gradient1",
+            "gradient2",
+            "gradient3",
+            "gradient4",
+            "gradient5",
+            "none"
+          ]
+        }
+      ],
+      "defaultValue": {
+        "fr": "none"
+      },
+      "disabled": false,
+      "omitted": false
+    },
+    {
+      "id": "isScreen",
+      "name": "Is Screen",
+      "type": "Boolean",
+      "localized": false,
+      "required": true,
+      "validations": [],
+      "defaultValue": {
+        "fr": false
+      },
+      "disabled": false,
+      "omitted": false
+    },
+    {
+      "id": "splashes",
+      "name": "Splashes",
+      "type": "Array",
+      "localized": false,
+      "required": false,
+      "validations": [],
+      "disabled": false,
+      "omitted": false,
+      "items": {
+        "type": "Link",
+        "validations": [
+          {
+            "linkContentType": [
+              "backgroundSplash"
+            ]
+          }
+        ],
+        "linkType": "Entry"
+      }
+    }
+  ]
+}

@@ -1,0 +1,198 @@
+{
+  "sys": {
+    "space": {
+      "sys": {
+        "type": "Link",
+        "linkType": "Space",
+        "id": "omwxuxoanfvq"
+      }
+    },
+    "id": "linkItem",
+    "type": "ContentType",
+    "createdAt": "2025-10-14T14:50:25.882Z",
+    "updatedAt": "2025-10-18T22:15:09.303Z",
+    "environment": {
+      "sys": {
+        "id": "release-projects",
+        "type": "Link",
+        "linkType": "Environment"
+      }
+    },
+    "publishedVersion": 17,
+    "publishedAt": "2025-10-18T22:15:09.303Z",
+    "firstPublishedAt": "2025-10-14T14:50:26.064Z",
+    "createdBy": {
+      "sys": {
+        "type": "Link",
+        "linkType": "User",
+        "id": "6mHAQajZw9r6s16MM8hgQ6"
+      }
+    },
+    "updatedBy": {
+      "sys": {
+        "type": "Link",
+        "linkType": "User",
+        "id": "6mHAQajZw9r6s16MM8hgQ6"
+      }
+    },
+    "publishedCounter": 9,
+    "version": 18,
+    "publishedBy": {
+      "sys": {
+        "type": "Link",
+        "linkType": "User",
+        "id": "6mHAQajZw9r6s16MM8hgQ6"
+      }
+    },
+    "urn": "crn:contentful:::content:spaces/omwxuxoanfvq/environments/release-projects/content_types/linkItem"
+  },
+  "displayField": "internalTitle",
+  "name": "Link Item",
+  "description": null,
+  "fields": [
+    {
+      "id": "internalTitle",
+      "name": "Titre Interne",
+      "type": "Symbol",
+      "localized": false,
+      "required": true,
+      "validations": [],
+      "disabled": false,
+      "omitted": false
+    },
+    {
+      "id": "label",
+      "name": "Label",
+      "type": "Symbol",
+      "localized": true,
+      "required": true,
+      "validations": [],
+      "disabled": false,
+      "omitted": false
+    },
+    {
+      "id": "variant",
+      "name": "Variant",
+      "type": "Symbol",
+      "localized": false,
+      "required": true,
+      "validations": [
+        {
+          "in": [
+            "primary",
+            "secondary",
+            "tertiary",
+            "link",
+            "ghost"
+          ]
+        }
+      ],
+      "defaultValue": {
+        "fr": "primary"
+      },
+      "disabled": false,
+      "omitted": false
+    },
+    {
+      "id": "kind",
+      "name": "Type",
+      "type": "Symbol",
+      "localized": false,
+      "required": false,
+      "validations": [
+        {
+          "in": [
+            "Internal",
+            "External",
+            "Action"
+          ]
+        }
+      ],
+      "disabled": false,
+      "omitted": false
+    },
+    {
+      "id": "page",
+      "name": "Page",
+      "type": "Link",
+      "localized": false,
+      "required": false,
+      "validations": [
+        {
+          "linkContentType": [
+            "page"
+          ]
+        }
+      ],
+      "disabled": false,
+      "omitted": false,
+      "linkType": "Entry"
+    },
+    {
+      "id": "url",
+      "name": "URL Externe",
+      "type": "Symbol",
+      "localized": true,
+      "required": false,
+      "validations": [
+        {
+          "regexp": {
+            "pattern": "https?://.*"
+          }
+        }
+      ],
+      "disabled": false,
+      "omitted": false
+    },
+    {
+      "id": "openInNewTab",
+      "name": "Open In New Tab",
+      "type": "Boolean",
+      "localized": false,
+      "required": true,
+      "validations": [],
+      "defaultValue": {
+        "fr": false
+      },
+      "disabled": false,
+      "omitted": false
+    },
+    {
+      "id": "action",
+      "name": "Action",
+      "type": "Symbol",
+      "localized": false,
+      "required": true,
+      "validations": [
+        {
+          "in": [
+            "none",
+            "openContactForm"
+          ]
+        }
+      ],
+      "defaultValue": {
+        "fr": "none"
+      },
+      "disabled": false,
+      "omitted": true
+    },
+    {
+      "id": "actionForm",
+      "name": "Action Form",
+      "type": "Link",
+      "localized": false,
+      "required": false,
+      "validations": [
+        {
+          "linkContentType": [
+            "form"
+          ]
+        }
+      ],
+      "disabled": false,
+      "omitted": false,
+      "linkType": "Entry"
+    }
+  ]
+}

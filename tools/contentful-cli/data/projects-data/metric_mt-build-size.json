@@ -4,13 +4,13 @@
   },
   "fields": {
     "label": {
-      "en-US": "Build size"
+      "fr": "Build size"
     },
     "value": {
-      "en-US": "2.6 MB"
+      "fr": "2.6 MB"
     },
     "context": {
-      "en-US": "Stable during growth"
+      "fr": "Stable during growth"
     }
   }
 }

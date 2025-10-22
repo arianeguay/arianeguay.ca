@@ -4,13 +4,13 @@
   },
   "fields": {
     "label": {
-      "en-US": "Lighthouse"
+      "fr": "Lighthouse"
     },
     "value": {
-      "en-US": "60 → 75"
+      "fr": "60 → 75"
     },
     "context": {
-      "en-US": "Web & apps"
+      "fr": "Web & apps"
     }
   }
 }

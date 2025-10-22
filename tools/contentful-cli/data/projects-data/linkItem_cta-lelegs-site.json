@@ -4,24 +4,24 @@
   },
   "fields": {
     "internalTitle": {
-      "en-US": "Le Legs — Site"
+      "fr": "Le Legs — Site"
     },
     "label": {
-      "fr-CA": "Voir le site",
-      "en-US": "View site"
+      "fr": "Voir le site",
+      "en": "View site"
     },
     "variant": {
-      "en-US": "link"
+      "fr": "link"
     },
     "kind": {
-      "en-US": "External"
+      "fr": "External"
     },
     "url": {
-      "fr-CA": "https://lelegs.kwahiatonhk.com/",
-      "en-US": "https://lelegs.kwahiatonhk.com/"
+      "fr": "https://lelegs.kwahiatonhk.com/",
+      "en": "https://lelegs.kwahiatonhk.com/"
     },
     "openInNewTab": {
-      "en-US": true
+      "fr": true
     }
   }
 }

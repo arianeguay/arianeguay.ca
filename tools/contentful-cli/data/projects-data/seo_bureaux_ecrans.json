@@ -4,22 +4,22 @@
   },
   "fields": {
     "seoTitle": {
-      "en-US": "Bureaux-écrans — Online Exhibition"
+      "fr": "Bureaux-écrans — Exposition en ligne"
     },
     "seoDescription": {
-      "en-US": "OS-inspired interface to browse writers’ digital backstages: icons, folders, tools."
+      "fr": "Interface inspirée d’un OS pour explorer les coulisses numériques d’auteur·rice·s : icônes, dossiers, outils."
     },
     "ogImage": {
-      "en-US": {
+      "fr": {
         "sys": {
           "type": "Link",
           "linkType": "Asset",
-          "id": "asset-og-bureaux"
+          "id": "2FHnhz7lWu5YMwW6ehgwc9"
         }
       }
     },
     "canonicalUrl": {
-      "en-US": "https://bureaux-ecrans.com/"
+      "fr": "https://bureaux-ecrans.com/"
     }
   }
 }

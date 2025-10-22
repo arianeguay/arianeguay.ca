@@ -4,27 +4,27 @@
   },
   "fields": {
     "internalTitle": {
-      "en-US": "Re|Search — Site"
+      "fr": "Re|Search — Site"
     },
     "label": {
-      "fr-CA": "Voir le site",
-      "en-US": "View site"
+      "fr": "Voir le site",
+      "en": "View site"
     },
     "variant": {
-      "en-US": "link"
+      "fr": "link"
     },
     "kind": {
-      "en-US": "External"
+      "fr": "External"
     },
     "url": {
-      "fr-CA": "https://researchexhibition.org/",
-      "en-US": "https://researchexhibition.org/"
+      "fr": "https://researchexhibition.org/",
+      "en": "https://researchexhibition.org/"
     },
     "openInNewTab": {
-      "en-US": true
+      "fr": true
     },
     "action": {
-      "en-US": "none"
+      "fr": "none"
     }
   }
 }

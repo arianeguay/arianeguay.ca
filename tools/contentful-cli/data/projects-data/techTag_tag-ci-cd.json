@@ -4,11 +4,11 @@
   },
   "fields": {
     "name": {
-      "fr-CA": "CI/CD",
-      "en-US": "CI/CD"
+      "fr": "CI/CD",
+      "en": "CI/CD"
     },
     "kind": {
-      "en-US": "infra"
+      "fr": "infra"
     }
   }
 }

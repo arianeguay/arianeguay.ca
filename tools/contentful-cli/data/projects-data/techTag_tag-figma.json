@@ -4,11 +4,11 @@
   },
   "fields": {
     "name": {
-      "fr-CA": "Figma",
-      "en-US": "Figma"
+      "fr": "Figma",
+      "en": "Figma"
     },
     "kind": {
-      "en-US": "design"
+      "fr": "design"
     }
   }
 }

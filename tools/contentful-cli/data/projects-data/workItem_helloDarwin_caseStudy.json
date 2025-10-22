@@ -4,18 +4,18 @@
   },
   "fields": {
     "type": {
-      "en-US": "caseStudy"
+      "fr": "caseStudy"
     },
     "title": {
-      "fr-CA": "Refonte plateforme & design system — helloDarwin",
-      "en-US": "Platform redesign & design system — helloDarwin"
+      "fr": "Refonte plateforme & design system — helloDarwin",
+      "en": "Platform redesign & design system — helloDarwin"
     },
     "subtitle": {
-      "fr-CA": "Passage au SaaS, design system unifié, performance",
-      "en-US": "SaaS transition, unified design system, performance"
+      "fr": "Passage au SaaS, design system unifié, performance",
+      "en": "SaaS transition, unified design system, performance"
     },
     "summary": {
-      "fr-CA": {
+      "fr": {
         "nodeType": "document",
         "data": {},
         "content": [
@@ -117,7 +117,7 @@
           }
         ]
       },
-      "en-US": {
+      "en": {
         "nodeType": "document",
         "data": {},
         "content": [
@@ -221,24 +221,16 @@
       }
     },
     "slug": {
-      "fr-CA": "case-refonte-plateforme",
-      "en-US": "case-platform-redesign"
+      "fr": "case-refonte-plateforme",
+      "en": "case-platform-redesign"
     },
     "badge": {
-      "fr-CA": "SaaS • Design System",
-      "en-US": "SaaS • Design System"
+      "fr": "SaaS • Design System",
+      "en": "SaaS • Design System"
     },
-    "cover": {
-      "en-US": {
-        "sys": {
-          "type": "Link",
-          "linkType": "Asset",
-          "id": "asset-cover-hellodarwin"
-        }
-      }
-    },
+
     "projectMeta": {
-      "en-US": {
+      "fr": {
         "sys": {
           "type": "Link",
           "linkType": "Entry",
@@ -247,7 +239,7 @@
       }
     },
     "overview": {
-      "fr-CA": {
+      "fr": {
         "nodeType": "document",
         "data": {},
         "content": [
@@ -277,7 +269,7 @@
           }
         ]
       },
-      "en-US": {
+      "en": {
         "nodeType": "document",
         "data": {},
         "content": [
@@ -309,16 +301,16 @@
       }
     },
     "problemStatement": {
-      "en-US": []
+      "fr": []
     },
     "roleScope": {
-      "en-US": []
+      "fr": []
     },
     "process": {
-      "en-US": []
+      "fr": []
     },
     "highlights": {
-      "en-US": [
+      "fr": [
         {
           "sys": {
             "type": "Link",
@@ -343,7 +335,7 @@
       ]
     },
     "metrics": {
-      "en-US": [
+      "fr": [
         {
           "sys": {
             "type": "Link",
@@ -361,10 +353,10 @@
       ]
     },
     "gallery": {
-      "en-US": []
+      "fr": []
     },
     "techStack": {
-      "en-US": [
+      "fr": [
         {
           "sys": {
             "type": "Link",
@@ -410,7 +402,7 @@
       ]
     },
     "linksCta": {
-      "en-US": [
+      "fr": [
         {
           "sys": {
             "type": "Link",
@@ -421,16 +413,14 @@
       ]
     },
     "testimonial": {
-      "en-US": null
+      "fr": null
     },
     "ctaSection": {
-      "en-US": null
+      "fr": null
     },
-    "nextProjectCta": {
-      "en-US": null
-    },
+
     "seo": {
-      "en-US": {
+      "fr": {
         "sys": {
           "type": "Link",
           "linkType": "Entry",
@@ -439,7 +429,7 @@
       }
     },
     "breadcrumbs": {
-      "fr-CA": {
+      "fr": {
         "items": [
           {
             "label": "Projets",
@@ -451,7 +441,7 @@
           }
         ]
       },
-      "en-US": {
+      "en": {
         "items": [
           {
             "label": "Work",

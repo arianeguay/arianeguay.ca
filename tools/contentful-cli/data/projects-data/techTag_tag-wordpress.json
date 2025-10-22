@@ -4,11 +4,11 @@
   },
   "fields": {
     "name": {
-      "fr-CA": "WordPress",
-      "en-US": "WordPress"
+      "fr": "WordPress",
+      "en": "WordPress"
     },
     "kind": {
-      "en-US": "framework"
+      "fr": "framework"
     }
   }
 }

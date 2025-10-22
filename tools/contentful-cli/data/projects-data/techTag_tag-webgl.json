@@ -4,11 +4,11 @@
   },
   "fields": {
     "name": {
-      "fr-CA": "WebGL",
-      "en-US": "WebGL"
+      "fr": "WebGL",
+      "en": "WebGL"
     },
     "kind": {
-      "en-US": "library"
+      "fr": "library"
     }
   }
 }

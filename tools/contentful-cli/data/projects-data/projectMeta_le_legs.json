@@ -4,26 +4,26 @@
   },
   "fields": {
     "internalTitle": {
-      "en-US": "Le Legs — meta"
+      "fr": "Le Legs — meta"
     },
     "company": {
-      "fr-CA": "Kwahiatonhk!",
-      "en-US": "Kwahiatonhk!"
+      "fr": "Kwahiatonhk!",
+      "en": "Kwahiatonhk!"
     },
     "role": {
-      "fr-CA": "Front-End, UX immersive",
-      "en-US": "Front-End, Immersive UX"
+      "fr": "Front-End, UX immersive",
+      "en": "Front-End, Immersive UX"
     },
     "period": {
-      "fr-CA": "2021–2022",
-      "en-US": "2021–2022"
+      "fr": "2021–2022",
+      "en": "2021–2022"
     },
     "sector": {
-      "fr-CA": "Culture",
-      "en-US": "Culture"
+      "fr": "Culture",
+      "en": "Culture"
     },
     "stack": {
-      "en-US": [
+      "fr": [
         {
           "sys": {
             "type": "Link",
@@ -41,7 +41,7 @@
       ]
     },
     "links": {
-      "en-US": [
+      "fr": [
         {
           "sys": {
             "type": "Link",
@@ -52,8 +52,8 @@
       ]
     },
     "location": {
-      "fr-CA": "Québec",
-      "en-US": "Quebec"
+      "fr": "Québec",
+      "en": "Quebec"
     }
   }
 }

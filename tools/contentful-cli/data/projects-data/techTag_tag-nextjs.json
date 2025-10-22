@@ -4,11 +4,11 @@
   },
   "fields": {
     "name": {
-      "fr-CA": "Next.js",
-      "en-US": "Next.js"
+      "fr": "Next.js",
+      "en": "Next.js"
     },
     "kind": {
-      "en-US": "framework"
+      "fr": "framework"
     }
   }
 }

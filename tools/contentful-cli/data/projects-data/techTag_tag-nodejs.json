@@ -4,11 +4,11 @@
   },
   "fields": {
     "name": {
-      "fr-CA": "Node.js",
-      "en-US": "Node.js"
+      "fr": "Node.js",
+      "en": "Node.js"
     },
     "kind": {
-      "en-US": "framework"
+      "fr": "framework"
     }
   }
 }

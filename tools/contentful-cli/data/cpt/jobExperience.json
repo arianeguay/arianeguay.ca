@@ -1,0 +1,238 @@
+{
+  "sys": {
+    "space": {
+      "sys": {
+        "type": "Link",
+        "linkType": "Space",
+        "id": "omwxuxoanfvq"
+      }
+    },
+    "id": "jobExperience",
+    "type": "ContentType",
+    "createdAt": "2025-10-19T20:52:40.860Z",
+    "updatedAt": "2025-10-19T20:53:55.495Z",
+    "environment": {
+      "sys": {
+        "id": "release-projects",
+        "type": "Link",
+        "linkType": "Environment"
+      }
+    },
+    "publishedVersion": 5,
+    "publishedAt": "2025-10-19T20:53:55.495Z",
+    "firstPublishedAt": "2025-10-19T20:52:41.128Z",
+    "createdBy": {
+      "sys": {
+        "type": "Link",
+        "linkType": "User",
+        "id": "6mHAQajZw9r6s16MM8hgQ6"
+      }
+    },
+    "updatedBy": {
+      "sys": {
+        "type": "Link",
+        "linkType": "User",
+        "id": "6mHAQajZw9r6s16MM8hgQ6"
+      }
+    },
+    "publishedCounter": 3,
+    "version": 6,
+    "publishedBy": {
+      "sys": {
+        "type": "Link",
+        "linkType": "User",
+        "id": "6mHAQajZw9r6s16MM8hgQ6"
+      }
+    },
+    "urn": "crn:contentful:::content:spaces/omwxuxoanfvq/environments/release-projects/content_types/jobExperience"
+  },
+  "displayField": "companyName",
+  "name": "Job Experience",
+  "description": "",
+  "fields": [
+    {
+      "id": "companyName",
+      "name": "Company Name",
+      "type": "Symbol",
+      "localized": true,
+      "required": true,
+      "validations": [],
+      "disabled": false,
+      "omitted": false
+    },
+    {
+      "id": "category",
+      "name": "Category",
+      "type": "Symbol",
+      "localized": false,
+      "required": true,
+      "validations": [
+        {
+          "in": [
+            "internship",
+            "work",
+            "freelance"
+          ]
+        }
+      ],
+      "defaultValue": {
+        "fr": "work"
+      },
+      "disabled": false,
+      "omitted": false
+    },
+    {
+      "id": "roleTitle",
+      "name": "Role Title",
+      "type": "Symbol",
+      "localized": true,
+      "required": false,
+      "validations": [],
+      "disabled": false,
+      "omitted": false
+    },
+    {
+      "id": "location",
+      "name": "Location",
+      "type": "Symbol",
+      "localized": true,
+      "required": false,
+      "validations": [],
+      "disabled": false,
+      "omitted": false
+    },
+    {
+      "id": "dateStart",
+      "name": "Date Start",
+      "type": "Date",
+      "localized": false,
+      "required": true,
+      "validations": [],
+      "disabled": false,
+      "omitted": false
+    },
+    {
+      "id": "dateEnd",
+      "name": "Date End",
+      "type": "Date",
+      "localized": false,
+      "required": false,
+      "validations": [],
+      "disabled": false,
+      "omitted": false
+    },
+    {
+      "id": "description",
+      "name": "Description",
+      "type": "RichText",
+      "localized": false,
+      "required": false,
+      "validations": [
+        {
+          "enabledMarks": [
+            "bold",
+            "italic",
+            "underline",
+            "code",
+            "superscript",
+            "subscript",
+            "strikethrough"
+          ],
+          "message": "Only bold, italic, underline, code, superscript, subscript, and strikethrough marks are allowed"
+        },
+        {
+          "enabledNodeTypes": [
+            "heading-3",
+            "heading-4",
+            "heading-5",
+            "heading-6",
+            "ordered-list",
+            "unordered-list",
+            "hr",
+            "blockquote",
+            "embedded-entry-block",
+            "embedded-asset-block",
+            "table",
+            "asset-hyperlink",
+            "embedded-entry-inline",
+            "entry-hyperlink",
+            "hyperlink"
+          ],
+          "message": "Only heading 3, heading 4, heading 5, heading 6, ordered list, unordered list, horizontal rule, quote, block entry, asset, table, link to asset, inline entry, link to entry, and link to Url nodes are allowed"
+        },
+        {
+          "nodes": {}
+        }
+      ],
+      "disabled": false,
+      "omitted": false
+    },
+    {
+      "id": "highlights",
+      "name": "Highlights",
+      "type": "RichText",
+      "localized": false,
+      "required": false,
+      "validations": [
+        {
+          "enabledMarks": [
+            "bold",
+            "italic",
+            "underline",
+            "code",
+            "superscript",
+            "subscript",
+            "strikethrough"
+          ],
+          "message": "Only bold, italic, underline, code, superscript, subscript, and strikethrough marks are allowed"
+        },
+        {
+          "enabledNodeTypes": [
+            "heading-3",
+            "heading-4",
+            "heading-5",
+            "heading-6",
+            "ordered-list",
+            "unordered-list",
+            "hr",
+            "blockquote",
+            "embedded-entry-block",
+            "embedded-asset-block",
+            "table",
+            "asset-hyperlink",
+            "embedded-entry-inline",
+            "entry-hyperlink",
+            "hyperlink"
+          ],
+          "message": "Only heading 3, heading 4, heading 5, heading 6, ordered list, unordered list, horizontal rule, quote, block entry, asset, table, link to asset, inline entry, link to entry, and link to Url nodes are allowed"
+        },
+        {
+          "nodes": {}
+        }
+      ],
+      "disabled": false,
+      "omitted": false
+    },
+    {
+      "id": "tags",
+      "name": "Tags",
+      "type": "Array",
+      "localized": false,
+      "required": false,
+      "validations": [],
+      "disabled": false,
+      "omitted": false,
+      "items": {
+        "type": "Link",
+        "validations": [
+          {
+            "linkContentType": [
+              "techTag"
+            ]
+          }
+        ],
+        "linkType": "Entry"
+      }
+    }
+  ]
+}

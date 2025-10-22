@@ -4,26 +4,26 @@
   },
   "fields": {
     "internalTitle": {
-      "en-US": "helloDarwin — meta"
+      "fr": "helloDarwin — meta"
     },
     "company": {
-      "fr-CA": "helloDarwin",
-      "en-US": "helloDarwin"
+      "fr": "helloDarwin",
+      "en": "helloDarwin"
     },
     "role": {
-      "fr-CA": "Front-End, UX/UI, Design System",
-      "en-US": "Front-End, UX/UI, Design System"
+      "fr": "Front-End, UX/UI, Design System",
+      "en": "Front-End, UX/UI, Design System"
     },
     "period": {
-      "fr-CA": "2022–2025 (en cours)",
-      "en-US": "2022–2025 (ongoing)"
+      "fr": "2022–2025 (en cours)",
+      "en": "2022–2025 (ongoing)"
     },
     "sector": {
-      "fr-CA": "Entreprise / SaaS",
-      "en-US": "Enterprise / SaaS"
+      "fr": "Entreprise / SaaS",
+      "en": "Enterprise / SaaS"
     },
     "stack": {
-      "en-US": [
+      "fr": [
         {
           "sys": {
             "type": "Link",
@@ -69,7 +69,7 @@
       ]
     },
     "links": {
-      "en-US": [
+      "fr": [
         {
           "sys": {
             "type": "Link",
@@ -80,8 +80,8 @@
       ]
     },
     "location": {
-      "fr-CA": "Montréal, QC",
-      "en-US": "Montreal, QC"
+      "fr": "Montréal, QC",
+      "en": "Montreal, QC"
     }
   }
 }

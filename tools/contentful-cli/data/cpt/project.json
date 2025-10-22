@@ -1,0 +1,327 @@
+{
+  "sys": {
+    "space": {
+      "sys": {
+        "type": "Link",
+        "linkType": "Space",
+        "id": "omwxuxoanfvq"
+      }
+    },
+    "id": "project",
+    "type": "ContentType",
+    "createdAt": "2025-10-21T21:00:09.529Z",
+    "updatedAt": "2025-10-21T21:11:23.959Z",
+    "environment": {
+      "sys": {
+        "id": "release-projects",
+        "type": "Link",
+        "linkType": "Environment"
+      }
+    },
+    "publishedVersion": 11,
+    "publishedAt": "2025-10-21T21:11:23.959Z",
+    "firstPublishedAt": "2025-10-21T21:00:09.892Z",
+    "createdBy": {
+      "sys": {
+        "type": "Link",
+        "linkType": "User",
+        "id": "6mHAQajZw9r6s16MM8hgQ6"
+      }
+    },
+    "updatedBy": {
+      "sys": {
+        "type": "Link",
+        "linkType": "User",
+        "id": "6mHAQajZw9r6s16MM8hgQ6"
+      }
+    },
+    "publishedCounter": 6,
+    "version": 12,
+    "publishedBy": {
+      "sys": {
+        "type": "Link",
+        "linkType": "User",
+        "id": "6mHAQajZw9r6s16MM8hgQ6"
+      }
+    },
+    "urn": "crn:contentful:::content:spaces/omwxuxoanfvq/environments/release-projects/content_types/project"
+  },
+  "displayField": "internalTitle",
+  "name": "Project",
+  "description": "",
+  "fields": [
+    {
+      "id": "internalTitle",
+      "name": "Internal Title",
+      "type": "Symbol",
+      "localized": false,
+      "required": true,
+      "validations": [],
+      "disabled": false,
+      "omitted": false
+    },
+    {
+      "id": "title",
+      "name": "Title",
+      "type": "Symbol",
+      "localized": true,
+      "required": true,
+      "validations": [],
+      "disabled": false,
+      "omitted": false
+    },
+    {
+      "id": "kind",
+      "name": "Type",
+      "type": "Symbol",
+      "localized": false,
+      "required": true,
+      "validations": [
+        {
+          "in": [
+            "caseStudy",
+            "project"
+          ]
+        }
+      ],
+      "defaultValue": {
+        "fr": "project"
+      },
+      "disabled": false,
+      "omitted": false
+    },
+    {
+      "id": "company",
+      "name": "Company",
+      "type": "Symbol",
+      "localized": false,
+      "required": false,
+      "validations": [],
+      "disabled": false,
+      "omitted": false
+    },
+    {
+      "id": "category",
+      "name": "Category",
+      "type": "Symbol",
+      "localized": true,
+      "required": false,
+      "validations": [],
+      "disabled": false,
+      "omitted": false
+    },
+    {
+      "id": "status",
+      "name": "Status",
+      "type": "Symbol",
+      "localized": false,
+      "required": true,
+      "validations": [
+        {
+          "in": [
+            "online",
+            "finished",
+            "inprogress"
+          ]
+        }
+      ],
+      "defaultValue": {
+        "fr": "online"
+      },
+      "disabled": false,
+      "omitted": false
+    },
+    {
+      "id": "featured",
+      "name": "Featured",
+      "type": "Boolean",
+      "localized": false,
+      "required": true,
+      "validations": [],
+      "defaultValue": {
+        "fr": false
+      },
+      "disabled": false,
+      "omitted": false
+    },
+    {
+      "id": "tags",
+      "name": "Tags",
+      "type": "Array",
+      "localized": false,
+      "required": false,
+      "validations": [],
+      "disabled": false,
+      "omitted": false,
+      "items": {
+        "type": "Link",
+        "validations": [
+          {
+            "linkContentType": [
+              "tagGroup"
+            ]
+          }
+        ],
+        "linkType": "Entry"
+      }
+    },
+    {
+      "id": "caseBody",
+      "name": "Case Body",
+      "type": "RichText",
+      "localized": true,
+      "required": false,
+      "validations": [
+        {
+          "enabledMarks": [
+            "bold",
+            "italic",
+            "underline",
+            "code",
+            "superscript",
+            "subscript",
+            "strikethrough"
+          ],
+          "message": "Only bold, italic, underline, code, superscript, subscript, and strikethrough marks are allowed"
+        },
+        {
+          "enabledNodeTypes": [
+            "heading-4",
+            "heading-5",
+            "heading-6",
+            "ordered-list",
+            "unordered-list",
+            "hr",
+            "blockquote",
+            "embedded-entry-block",
+            "embedded-asset-block",
+            "table",
+            "asset-hyperlink",
+            "embedded-entry-inline",
+            "entry-hyperlink",
+            "hyperlink"
+          ],
+          "message": "Only heading 4, heading 5, heading 6, ordered list, unordered list, horizontal rule, quote, block entry, asset, table, link to asset, inline entry, link to entry, and link to Url nodes are allowed"
+        },
+        {
+          "nodes": {}
+        }
+      ],
+      "disabled": false,
+      "omitted": false
+    },
+    {
+      "id": "highlights",
+      "name": "Highlights",
+      "type": "Array",
+      "localized": true,
+      "required": false,
+      "validations": [],
+      "disabled": false,
+      "omitted": false,
+      "items": {
+        "type": "Symbol",
+        "validations": []
+      }
+    },
+    {
+      "id": "confidentialityNote",
+      "name": "Confidentiality Note",
+      "type": "Text",
+      "localized": true,
+      "required": false,
+      "validations": [],
+      "disabled": false,
+      "omitted": false
+    },
+    {
+      "id": "summary",
+      "name": "Summary",
+      "type": "Text",
+      "localized": true,
+      "required": false,
+      "validations": [],
+      "disabled": false,
+      "omitted": false
+    },
+    {
+      "id": "liveUrl",
+      "name": "Live Url",
+      "type": "Symbol",
+      "localized": false,
+      "required": false,
+      "validations": [],
+      "disabled": false,
+      "omitted": false
+    },
+    {
+      "id": "repoUrl",
+      "name": "Repo Url",
+      "type": "Symbol",
+      "localized": false,
+      "required": false,
+      "validations": [],
+      "disabled": false,
+      "omitted": false
+    },
+    {
+      "id": "cover",
+      "name": "Cover",
+      "type": "Link",
+      "localized": false,
+      "required": false,
+      "validations": [],
+      "disabled": false,
+      "omitted": false,
+      "linkType": "Asset"
+    },
+    {
+      "id": "gallery",
+      "name": "Gallery",
+      "type": "Array",
+      "localized": false,
+      "required": false,
+      "validations": [],
+      "disabled": false,
+      "omitted": false,
+      "items": {
+        "type": "Link",
+        "validations": [],
+        "linkType": "Asset"
+      }
+    },
+    {
+      "id": "startDate",
+      "name": "Start Date",
+      "type": "Date",
+      "localized": false,
+      "required": false,
+      "validations": [],
+      "disabled": false,
+      "omitted": false
+    },
+    {
+      "id": "endDate",
+      "name": "End Date",
+      "type": "Date",
+      "localized": false,
+      "required": false,
+      "validations": [],
+      "disabled": false,
+      "omitted": false
+    },
+    {
+      "id": "ongoing",
+      "name": "Ongoing",
+      "type": "Boolean",
+      "localized": false,
+      "required": true,
+      "validations": [],
+      "defaultValue": {
+        "fr": false
+      },
+      "disabled": false,
+      "omitted": false
+    }
+  ]
+}

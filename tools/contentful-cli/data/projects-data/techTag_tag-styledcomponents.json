@@ -4,11 +4,11 @@
   },
   "fields": {
     "name": {
-      "fr-CA": "Styled-components",
-      "en-US": "Styled-components"
+      "fr": "Styled-components",
+      "en": "Styled-components"
     },
     "kind": {
-      "en-US": "library"
+      "fr": "library"
     }
   }
 }

@@ -4,18 +4,18 @@
   },
   "fields": {
     "type": {
-      "en-US": "project"
+      "fr": "project"
     },
     "title": {
-      "fr-CA": "Re|Search — Exposition en ligne",
-      "en-US": "Re|Search — Online Exhibition"
+      "fr": "Re|Search — Exposition en ligne",
+      "en": "Re|Search — Online Exhibition"
     },
     "subtitle": {
-      "fr-CA": "Moteur par verbes • CMS sur mesure (MongoDB)",
-      "en-US": "Verb-driven engine • Custom CMS (MongoDB)"
+      "fr": "Moteur par verbes • CMS sur mesure (MongoDB)",
+      "en": "Verb-driven engine • Custom CMS (MongoDB)"
     },
     "summary": {
-      "fr-CA": {
+      "fr": {
         "nodeType": "document",
         "data": {},
         "content": [
@@ -33,7 +33,7 @@
           }
         ]
       },
-      "en-US": {
+      "en": {
         "nodeType": "document",
         "data": {},
         "content": [
@@ -53,24 +53,16 @@
       }
     },
     "slug": {
-      "fr-CA": "proj-research-exhibition",
-      "en-US": "proj-research-exhibition"
+      "fr": "proj-research-exhibition",
+      "en": "proj-research-exhibition"
     },
     "badge": {
-      "fr-CA": "Culture • Recherche",
-      "en-US": "Culture • Research"
+      "fr": "Culture • Recherche",
+      "en": "Culture • Research"
     },
-    "cover": {
-      "en-US": {
-        "sys": {
-          "type": "Link",
-          "linkType": "Asset",
-          "id": "asset-cover-research"
-        }
-      }
-    },
+
     "projectMeta": {
-      "en-US": {
+      "fr": {
         "sys": {
           "type": "Link",
           "linkType": "Entry",
@@ -79,28 +71,28 @@
       }
     },
     "overview": {
-      "fr-CA": {
+      "fr": {
         "nodeType": "document",
         "data": {},
         "content": []
       },
-      "en-US": {
+      "en": {
         "nodeType": "document",
         "data": {},
         "content": []
       }
     },
     "problemStatement": {
-      "en-US": []
+      "fr": []
     },
     "roleScope": {
-      "en-US": []
+      "fr": []
     },
     "process": {
-      "en-US": []
+      "fr": []
     },
     "highlights": {
-      "en-US": [
+      "fr": [
         {
           "sys": {
             "type": "Link",
@@ -118,13 +110,13 @@
       ]
     },
     "metrics": {
-      "en-US": []
+      "fr": []
     },
     "gallery": {
-      "en-US": []
+      "fr": []
     },
     "techStack": {
-      "en-US": [
+      "fr": [
         {
           "sys": {
             "type": "Link",
@@ -156,7 +148,7 @@
       ]
     },
     "linksCta": {
-      "en-US": [
+      "fr": [
         {
           "sys": {
             "type": "Link",
@@ -167,16 +159,14 @@
       ]
     },
     "testimonial": {
-      "en-US": null
+      "fr": null
     },
     "ctaSection": {
-      "en-US": null
+      "fr": null
     },
-    "nextProjectCta": {
-      "en-US": null
-    },
+
     "seo": {
-      "en-US": {
+      "fr": {
         "sys": {
           "type": "Link",
           "linkType": "Entry",
@@ -185,7 +175,7 @@
       }
     },
     "breadcrumbs": {
-      "fr-CA": {
+      "fr": {
         "items": [
           {
             "label": "Projets",
@@ -197,7 +187,7 @@
           }
         ]
       },
-      "en-US": {
+      "en": {
         "items": [
           {
             "label": "Work",

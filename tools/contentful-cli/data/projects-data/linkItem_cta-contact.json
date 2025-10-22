@@ -4,23 +4,23 @@
   },
   "fields": {
     "internalTitle": {
-      "en-US": "Contact — Work CTA"
+      "fr": "Contact — Work CTA"
     },
     "label": {
-      "fr-CA": "Discutons de votre plateforme",
-      "en-US": "Let’s talk about your platform"
+      "fr": "Discutons de votre plateforme",
+      "en": "Let’s talk about your platform"
     },
     "variant": {
-      "en-US": "primary"
+      "fr": "primary"
     },
     "kind": {
-      "en-US": "Action"
+      "fr": "Action"
     },
     "openInNewTab": {
-      "en-US": false
+      "fr": false
     },
     "action": {
-      "en-US": "openContactForm"
+      "fr": "openContactForm"
     }
   }
 }

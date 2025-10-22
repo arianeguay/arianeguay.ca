@@ -4,11 +4,11 @@
   },
   "fields": {
     "name": {
-      "fr-CA": "MongoDB",
-      "en-US": "MongoDB"
+      "fr": "MongoDB",
+      "en": "MongoDB"
     },
     "kind": {
-      "en-US": "db"
+      "fr": "db"
     }
   }
 }
