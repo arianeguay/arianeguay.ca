@@ -43,6 +43,7 @@ export type Background =
   | "gradient3"
   | "gradient4"
   | "gradient5"
+  | "gradient6"
   | "none";
 
 export type CtaVariation =
@@ -165,6 +166,65 @@ export type Form = {
   rateLimitTimeframe?: CFMaybe<number>; // ms
 };
 
+export interface Project {
+  /** Internal Title */
+  internalTitle: CFMaybe<string>;
+
+  /** Title (localized) */
+  title: CFMaybe<string>;
+
+  /** Type */
+  kind: "caseStudy" | "project";
+
+  /** Company */
+  company?: CFMaybe<string>;
+
+  /** Category (localized) */
+  category?: CFMaybe<string>;
+
+  /** Status */
+  status: "online" | "finished" | "inprogress";
+
+  /** Featured */
+  featured: boolean;
+
+  /** Tags (link to TagGroup entries) */
+  tagsCollection?: CFMaybe<{ items: TagGroup[] }>;
+
+  /** Case Body (localized Rich Text) */
+  caseBody?: { json: Document };
+
+  /** Highlights (localized array of strings) */
+  highlights?: CFMaybe<string[]>;
+
+  /** Confidentiality Note (localized text) */
+  confidentialityNote?: CFMaybe<string>;
+
+  /** Summary (localized text) */
+  summary?: CFMaybe<string>;
+
+  /** Live URL */
+  liveUrl?: CFMaybe<string>;
+
+  /** Repository URL */
+  repoUrl?: CFMaybe<string>;
+
+  /** Cover image */
+  cover?: CFRef<CfAsset>;
+
+  /** Gallery images */
+  gallery?: CFRef<CfAsset>[];
+
+  /** Start Date */
+  startDate?: CFMaybe<string>;
+
+  /** End Date */
+  endDate?: CFMaybe<string>;
+
+  /** Ongoing */
+  ongoing: CFMaybe<boolean>;
+}
+
 export interface Group {
   background?: CFMaybe<Background>;
   isScreen?: CFMaybe<boolean>;
@@ -200,6 +260,10 @@ export type Tag = {
   name: string;
 };
 
+export type TagGroup = {
+  title: string;
+  tagsCollection?: CFMaybe<{ items: Tag[] }>;
+};
 /** Enterprise/Company experience item */
 export type Enterprise = {
   companyName: string;

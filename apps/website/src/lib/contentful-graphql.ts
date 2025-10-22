@@ -103,6 +103,8 @@ export async function getAllPageSlugsWithParents(
     parentSlug: i?.parentPage?.slug || null,
   }));
 
+  console.log(entries);
+
   return entries.filter((e) => Boolean(e.slug)) as PageSlugWithParent[];
 }
 
@@ -224,13 +226,13 @@ export async function getPageBySlug(
 ): Promise<PageEntry | null> {
   const locale = options?.locale || DEFAULT_LOCALE;
   const preview = options?.preview ?? false;
-  const query = /* GraphQL */ `
-    query PageBySlug(
+
+  const shellQuery = /* GraphQL */ `
+    query PageShell(
       $slug: String!
       $preview: Boolean = false
       $locale: String = "${DEFAULT_LOCALE}"
       $sectionLimit: Int = 12
-      $listItemLimit: Int = 30
     ) {
       pageCollection(where: { slug: $slug }, limit: 1, preview: $preview, locale: $locale) {
         items {
@@ -240,295 +242,12 @@ export async function getPageBySlug(
           parentPage {
             slug
             title
-            sys {
-              id
-            }
+            sys { id }
           }
           sectionsCollection(limit: $sectionLimit, locale: $locale) {
             items {
               __typename
-
-              ... on ItemsList {
-                title
-                description {
-                  json
-                }
-                  cardVariant
-                background
-                isScreen
-                variant
-                primaryCta {
-                label
-                kind
-                url
-                variant
-                openInNewTab
-                
-                actionForm {
-                  title
-                  description
-                  formItemsCollection {
-                    items {
-                      fieldName
-                      fieldType
-                      label
-                      placeholder
-                      helperText
-                      required
-                      maxLength
-                      minLength
-                      pattern
-                      options
-                      defaultValue
-                      order
-                    }
-                  }
-                  honeypotEnabled
-                  rateLimitMax
-                  rateLimitTimeframe
-                  submitButtonLabel
-                  resetButtonLabel
-                }
-                page {
-                  slug
-                  parentPage {
-                    slug
-                  }
-                }
-                }
-                itemsCollection(limit: $listItemLimit, locale: $locale) {
-                  items {
-                    ... on ListItem {
-                      text
-                      title
-                      icon {
-                        url
-                        title
-                      }
-                      variant
-                    }
-                  }
-                }
-              }
-                ...  on ExperienceSection {
-                 title
-      description {
-        json
-      }
-      enterpriseTitle
-      background
-
-      enterpriseCollection(limit: 3) {
-        items {
-          companyName
-          dateEnd
-          dateStart
-          description {
-            json
-          }
-          highlights {
-            json
-          }
-          location
-          roleTitle
-          tagsCollection {
-            items {
-              name
-            }
-          }
-        }
-      }
-      formationsTitle
-      formationsCollection (limit: 3) {
-        items {
-          school
-          description {
-            json
-          }
-          program
-          years
-        }
-      }
-      competencesTitle
-      competencesCollection(limit: 6) {
-        items {
-          title
-          tagsCollection {
-            items {
-              name
-            }
-          }
-        }
-      }
-      cvFile {
-        url
-      }
-      cvFileTitle
-      cvFileCta
-      cvFileDescription 
-                }
-              ... on CtaSection {
-                variant
-                description {
-                  json
-                }
-                illustration {
-                  url
-                  title
-                }
-                primaryCta {
-                  kind
-                  label
-                  openInNewTab
-                  url
-                  page {
-                    slug
-                    parentPage {
-                      slug
-                    }
-                  }
-                  variant
-                  actionForm {
-                    title
-               description
-               formItemsCollection {
-                 items {
-                   fieldName
-                   fieldType
-                   label
-                   placeholder
-                   helperText
-                   required
-                   maxLength
-                   minLength
-                   pattern
-                   options
-                   defaultValue
-                   order
-                 }
-               }
-               honeypotEnabled
-               rateLimitMax
-               rateLimitTimeframe
-               submitButtonLabel
-               resetButtonLabel
-                  }
-                }
-                splashesCollection(limit: 2, locale: $locale) {
-                  items {
-                    asset {
-                      url
-                      title
-                    }
-                    margin
-                    top
-                    side
-                  }
-                }
-                background
-                isScreen
-                title
-              }
-              ... on Group {
-                background
-                isScreen
-                splashesCollection(limit: 2, locale: $locale) {
-                  items {
-                    asset {
-                      url
-                      title
-                    }
-                    margin
-                    top
-                    side
-                  }
-                }
-                elementsCollection(limit: 2, locale: $locale) {
-                  items {
-                    __typename
-                    ... on ItemsList {
-                      title
-                      description {
-                        json
-                      }
-                        cardVariant
-                      variant
-                      itemsCollection(locale: $locale) {
-                        items {
-                          ... on ListItem {
-                            text
-                          }
-                        }
-                      }
-                    }
-                    ... on CtaSection {
-                      title
-                      variant
-                      description {
-                        json
-                      }
-                      illustration {
-                        url
-                        title
-                      }
-
-                      primaryCta {
-                        kind
-                        label
-                        openInNewTab
-                        url
-                        page {
-                          slug
-                          parentPage {
-                            slug
-                          }
-                        }
-                        variant
-                        actionForm {
-                          title
-                        description
-                        formItemsCollection {
-                          items {
-                            fieldName
-                            fieldType
-                            label
-                            placeholder
-                            helperText
-                            required
-                            maxLength
-                            minLength
-                            pattern
-                            options
-                            defaultValue
-                            order
-                          }
-                        }
-                        honeypotEnabled
-                        rateLimitMax
-                        rateLimitTimeframe
-                        submitButtonLabel
-                        resetButtonLabel
-                        
-                        }
-                      }
-                      background
-                      isScreen
-                      splashesCollection(limit: 2, locale: $locale) {
-                        items {
-                          asset {
-                            url
-                            title
-                          }
-                          margin
-                          top
-                          side
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-          
+              ... on Entry { sys { id } }
             }
           }
           seo {
@@ -536,20 +255,273 @@ export async function getPageBySlug(
             seoDescription
             canonicalUrl
             noindex
-            ogImage {
-              url
-            }
+            ogImage { url }
           }
         }
       }
     }
   `;
 
-  const data = await fetchGraphQL<{ pageCollection: { items: PageEntry[] } }>(
-    query,
-    { slug, preview, locale },
-  );
-  return data.pageCollection?.items?.[0] ?? null;
+  const shellData = await fetchGraphQL<{
+    pageCollection: {
+      items: Array<
+        PageEntry & {
+          sectionsCollection?: {
+            items: Array<{
+              __typename: string;
+              sys: { id: string };
+            } | null> | null;
+          };
+        }
+      >;
+    };
+  }>(shellQuery, { slug, preview, locale });
+
+  const shell = shellData.pageCollection?.items?.[0];
+  if (!shell) return null;
+
+  const sectionRefs = shell.sectionsCollection?.items?.filter(Boolean) as
+    | Array<{ __typename: string; sys: { id: string } }>
+    | undefined;
+  if (!sectionRefs || sectionRefs.length === 0) {
+    return {
+      ...shell,
+      sectionsCollection: { items: [] as SectionBlock[] },
+    } as PageEntry;
+  }
+
+  const idsByType: Record<string, string[]> = {};
+  for (const s of sectionRefs) {
+    const t = s.__typename;
+    if (!idsByType[t]) idsByType[t] = [];
+    idsByType[t].push(s.sys.id);
+  }
+
+  const resultsById: Record<string, any> = {};
+
+  if (idsByType["ItemsList"]?.length) {
+    const q = /* GraphQL */ `
+      query ItemsLists($ids: [String!], $locale: String = "${DEFAULT_LOCALE}", $listItemLimit: Int = 12) {
+        itemsListCollection(where: { sys: { id_in: $ids } }, limit: 10, locale: $locale) {
+          items {
+            __typename
+            sys { id }
+            title
+            description { json }
+            cardVariant
+            background
+            isScreen
+            variant
+            primaryCta {
+              label
+              kind
+              url
+              variant
+              openInNewTab
+              actionForm {
+                title
+                description
+                formItemsCollection(limit: 20) { items { fieldName fieldType label placeholder helperText required maxLength minLength pattern options defaultValue order } }
+                honeypotEnabled
+                rateLimitMax
+                rateLimitTimeframe
+                submitButtonLabel
+                resetButtonLabel
+              }
+              page { slug parentPage { slug } }
+            }
+            itemsCollection(limit: $listItemLimit, locale: $locale) {
+              items { ... on ListItem { text title icon { url title } variant } }
+            }
+          }
+        }
+      }
+    `;
+    const r = await fetchGraphQL<{ itemsListCollection: { items: any[] } }>(q, {
+      ids: idsByType["ItemsList"],
+      locale,
+    });
+    for (const it of r.itemsListCollection?.items || [])
+      resultsById[it.sys.id] = it;
+  }
+
+  if (idsByType["CtaSection"]?.length) {
+    const q = /* GraphQL */ `
+      query Ctas($ids: [String!], $locale: String = "${DEFAULT_LOCALE}") {
+        ctaSectionCollection(where: { sys: { id_in: $ids } }, limit: 10, locale: $locale) {
+          items {
+            __typename
+            sys { id }
+            title
+            variant
+            description { json }
+            illustration { url title }
+            primaryCta {
+              kind
+              label
+              openInNewTab
+              url
+              page { slug parentPage { slug } }
+              variant
+              actionForm {
+                title
+                description
+                formItemsCollection(limit: 20) { items { fieldName fieldType label placeholder helperText required maxLength minLength pattern options defaultValue order } }
+                honeypotEnabled
+                rateLimitMax
+                rateLimitTimeframe
+                submitButtonLabel
+                resetButtonLabel
+              }
+            }
+            splashesCollection(limit: 2, locale: $locale) { items { asset { url title } margin top side } }
+            background
+            isScreen
+          }
+        }
+      }
+    `;
+    const r = await fetchGraphQL<{ ctaSectionCollection: { items: any[] } }>(
+      q,
+      { ids: idsByType["CtaSection"], locale },
+    );
+    for (const it of r.ctaSectionCollection?.items || [])
+      resultsById[it.sys.id] = it;
+  }
+
+  if (idsByType["ExperienceSection"]?.length) {
+    const q = /* GraphQL */ `
+      query Experiences($ids: [String!], $locale: String = "${DEFAULT_LOCALE}") {
+        experienceSectionCollection(where: { sys: { id_in: $ids } }, limit: 10, locale: $locale) {
+          items {
+            __typename
+            sys { id }
+            title
+            description { json }
+            enterpriseTitle
+            background
+            enterpriseCollection(limit: 3) { items { companyName dateEnd dateStart description { json } highlights { json } location roleTitle tagsCollection { items { name } } } }
+            formationsTitle
+            formationsCollection(limit: 3) { items { school description { json } program years } }
+            competencesTitle
+            competencesCollection(limit: 6) { items { title tagsCollection { items { name } } } }
+            cvFile { url }
+            cvFileTitle
+            cvFileCta
+            cvFileDescription
+          }
+        }
+      }
+    `;
+    const r = await fetchGraphQL<{
+      experienceSectionCollection: { items: any[] };
+    }>(q, { ids: idsByType["ExperienceSection"], locale });
+    for (const it of r.experienceSectionCollection?.items || [])
+      resultsById[it.sys.id] = it;
+  }
+
+  if (idsByType["Project"]?.length) {
+    const q = /* GraphQL */ `
+      query Projects($ids: [String!], $locale: String = "${DEFAULT_LOCALE}") {
+        projectCollection(where: { sys: { id_in: $ids } }, limit: 1, locale: $locale) {
+          items {
+            __typename
+            sys { id }
+            internalTitle
+            title
+            kind
+            company
+            category
+            status
+            featured
+            tagsCollection { items { title tagsCollection { items { name }} } }
+            caseBody { json }
+            highlights
+            confidentialityNote
+            summary
+            liveUrl
+            repoUrl
+            cover { url }
+            galleryCollection(limit: 12) { items { url } }
+            startDate
+            endDate
+            ongoing
+          }
+        }
+      }
+    `;
+    const r = await fetchGraphQL<{ projectCollection: { items: any[] } }>(q, {
+      ids: idsByType["Project"],
+      locale,
+    });
+    for (const it of r.projectCollection?.items || [])
+      resultsById[it.sys.id] = it;
+  }
+
+  if (idsByType["Group"]?.length) {
+    const q = /* GraphQL */ `
+      query Groups($ids: [String!], $locale: String = "${DEFAULT_LOCALE}") {
+        groupCollection(where: { sys: { id_in: $ids } }, limit: 10, locale: $locale) {
+          items {
+            __typename
+            sys { id }
+            background
+            isScreen
+            splashesCollection(limit: 2, locale: $locale) { items { asset { url title } margin top side } }
+            elementsCollection(limit: 2, locale: $locale) {
+              items {
+                __typename
+                ... on ItemsList {
+                  sys { id }
+                  title
+                  description { json }
+                  cardVariant
+                  variant
+                  itemsCollection(limit: 8, locale: $locale) { items { ... on ListItem { text } } }
+                }
+                ... on CtaSection {
+                  sys { id }
+                  title
+                  variant
+                  description { json }
+                  illustration { url title }
+                  primaryCta {
+                    kind
+                    label
+                    openInNewTab
+                    url
+                    page { slug parentPage { slug } }
+                    variant
+                  }
+                  splashesCollection(limit: 2, locale: $locale) { items { asset { url title } margin top side } }
+                }
+              }
+            }
+          }
+        }
+      }
+    `;
+    const r = await fetchGraphQL<{ groupCollection: { items: any[] } }>(q, {
+      ids: idsByType["Group"],
+      locale,
+    });
+    for (const it of r.groupCollection?.items || [])
+      resultsById[it.sys.id] = it;
+  }
+
+  const orderedItems: any[] = [];
+  for (const ref of sectionRefs) {
+    const node = resultsById[ref.sys.id];
+    if (node) {
+      if (!node.__typename) (node as any).__typename = ref.__typename;
+      orderedItems.push(node);
+    }
+  }
+
+  return {
+    ...shell,
+    sectionsCollection: { items: orderedItems as SectionBlock[] },
+  } as PageEntry;
 }
 
 export { fetchGraphQL };

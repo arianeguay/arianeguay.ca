@@ -18,8 +18,6 @@ export async function generateStaticParams() {
     slug: [e.parentSlug, e.slug].filter(Boolean),
   }));
 
-  console.log(entriesSlugs);
-
   return entriesSlugs;
 }
 

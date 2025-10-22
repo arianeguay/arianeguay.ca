@@ -114,10 +114,10 @@ const FormViewer: React.FC<FormModel> = (props) => {
         console.error(e);
       }
       if (!res.ok) {
-        const msg = (json && (json.error || json.message)) || "Failed to send email";
+        const msg =
+          (json && (json.error || json.message)) || "Failed to send email";
         throw new Error(String(msg));
       }
-      console.log(json);
 
       setValues(
         items.reduce(

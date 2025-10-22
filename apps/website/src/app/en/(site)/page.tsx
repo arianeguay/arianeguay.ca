@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
+import { Footer } from "../../../components/layout";
+import Header from "../../../components/layout/header";
 import Sections from "../../../components/layout/sections";
+import ScrollHijacker from "../../../components/scroll/ScrollHijacker";
 import {
   getPageBySlug,
   getSimplePageBySlug,
+  getSiteSettings,
 } from "../../../lib/contentful-graphql";
-import { getSiteSettings } from "../../../lib/contentful-graphql";
-import Header from "../../../components/layout/header";
-import { Footer } from "../../../components/layout";
-import ScrollHijacker from "../../../components/scroll/ScrollHijacker";
 
 export const dynamic = "error";
 export const dynamicParams = false;
@@ -52,6 +52,7 @@ export default async function HomeEn() {
   const page = await getPageBySlug("home", { locale: "en" });
   const siteSettings = await getSiteSettings("en");
 
+  console.log(page);
   if (!page || !page.sectionsCollection?.items) {
     return <h1 className="text-3xl font-bold">Home page not found</h1>;
   }
