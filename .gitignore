@@ -55,4 +55,5 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # contentful-cli
-tools/contentful-cli/data/cpt
+# tools/contentful-cli/data/cpt
+prompts/admin-app/Freelance
