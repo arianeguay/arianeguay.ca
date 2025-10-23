@@ -1,6 +1,18 @@
 import "server-only";
 import { SectionBlock } from "../types/blocks";
 import { SiteSettings } from "../types/settings";
+import { WorkItem } from "../types/work";
+import {
+  CtaSectionFields,
+  ExperienceSectionFields,
+  GroupFields,
+  ItemsListFields,
+  PageFieldsSlugs,
+  PageShellFields,
+  ProjectFields,
+  WorkItemFieldsCompact,
+  WorkItemFieldsFull,
+} from "./fragments";
 
 const SPACE_ID = process.env.CONTENTFUL_SPACE_ID;
 const ENV_ID = process.env.CONTENTFUL_ENV_ID || "master";
@@ -42,9 +54,18 @@ async function fetchGraphQL<T>(
 
   const json = await res.json();
   if (json.errors) {
-    throw new Error(
-      `Contentful GraphQL errors: ${JSON.stringify(json.errors)}`,
-    );
+    const errors = json.errors as any[];
+    const allUnresolvable =
+      Array.isArray(errors) &&
+      errors.length > 0 &&
+      errors.every(
+        (e) => e?.extensions?.contentful?.code === "UNRESOLVABLE_LINK",
+      );
+    if (!allUnresolvable) {
+      throw new Error(
+        `Contentful GraphQL errors: ${JSON.stringify(json.errors)}`,
+      );
+    }
   }
   return json.data as T;
 }
@@ -59,7 +80,7 @@ export async function getAllPageSlugs(
     query AllPageSlugs($limit: Int = 200, $locale: String = "${DEFAULT_LOCALE}") {
       pageCollection(limit: $limit, locale: $locale) {
         items {
-          slug
+          ${PageFieldsSlugs}
         }
       }
     }
@@ -82,7 +103,7 @@ export async function getAllPageSlugsWithParents(
     query AllPageSlugsWithParents( $locale: String = "${DEFAULT_LOCALE}") {
       pageCollection( locale: $locale) {
         items {
-          slug
+          ${PageFieldsSlugs}
           parentPage { slug }
         }
       }
@@ -102,8 +123,32 @@ export async function getAllPageSlugsWithParents(
     slug: i?.slug || "",
     parentSlug: i?.parentPage?.slug || null,
   }));
+  return entries.filter((e) => Boolean(e.slug)) as PageSlugWithParent[];
+}
+export async function getAllWorkSlugsWithParents(
+  locale: string = DEFAULT_LOCALE,
+): Promise<PageSlugWithParent[]> {
+  const query = /* GraphQL */ `
+    query AllWorkSlugsWithParents( $locale: String = "${DEFAULT_LOCALE}") {
+      workItemCollection( locale: $locale) {
+        items {
+          slug
+        }
+      }
+    }
+  `;
 
-  console.log(entries);
+  const data = await fetchGraphQL<{
+    workItemCollection: {
+      items: Array<{
+        slug?: string | null;
+      }>;
+    };
+  }>(query, { locale });
+
+  const entries = (data.workItemCollection?.items || []).map((i) => ({
+    slug: i?.slug || "",
+  }));
 
   return entries.filter((e) => Boolean(e.slug)) as PageSlugWithParent[];
 }
@@ -120,6 +165,7 @@ export type SeoFields = {
 export type PageType = "service" | "project" | "default";
 
 export type PageEntry = {
+  __typename: "Page";
   title?: string | null;
   slug?: string | null;
   sectionsCollection: { items: SectionBlock[] | null } | null;
@@ -177,6 +223,13 @@ export async function getSimplePageBySlug(
 
   const id = data.pageCollection?.items?.[0]?.sys?.id;
 
+  if (!id) {
+    return {
+      page: data.pageCollection?.items?.[0] ?? null,
+      otherLocalePage: null,
+    };
+  }
+
   const queryOtherLocale = /* GraphQL */ `
     query PageBySlug(
       $id: String!
@@ -186,25 +239,7 @@ export async function getSimplePageBySlug(
     ) {
       pageCollection(where: { sys: { id: $id } }, limit: 1, preview: $preview, locale: $locale) {
         items {
-    
-          title
-          slug  
-          sys {
-        id
-      }
-          pageType
-          parentPage {
-            slug
-            title
-            sys {
-              id
-            }
-          }
-          sectionsCollection(limit: $sectionLimit, locale: $locale) {
-            items {
-              __typename
-            }
-          }
+          ${PageShellFields}
         }
       }
     }
@@ -236,27 +271,7 @@ export async function getPageBySlug(
     ) {
       pageCollection(where: { slug: $slug }, limit: 1, preview: $preview, locale: $locale) {
         items {
-          title
-          slug
-          pageType
-          parentPage {
-            slug
-            title
-            sys { id }
-          }
-          sectionsCollection(limit: $sectionLimit, locale: $locale) {
-            items {
-              __typename
-              ... on Entry { sys { id } }
-            }
-          }
-          seo {
-            seoTitle
-            seoDescription
-            canonicalUrl
-            noindex
-            ogImage { url }
-          }
+          ${PageShellFields}
         }
       }
     }
@@ -301,38 +316,10 @@ export async function getPageBySlug(
 
   if (idsByType["ItemsList"]?.length) {
     const q = /* GraphQL */ `
-      query ItemsLists($ids: [String!], $locale: String = "${DEFAULT_LOCALE}", $listItemLimit: Int = 12) {
+      query ItemsLists($ids: [String!], $locale: String = "${DEFAULT_LOCALE}") {
         itemsListCollection(where: { sys: { id_in: $ids } }, limit: 10, locale: $locale) {
           items {
-            __typename
-            sys { id }
-            title
-            description { json }
-            cardVariant
-            background
-            isScreen
-            variant
-            primaryCta {
-              label
-              kind
-              url
-              variant
-              openInNewTab
-              actionForm {
-                title
-                description
-                formItemsCollection(limit: 20) { items { fieldName fieldType label placeholder helperText required maxLength minLength pattern options defaultValue order } }
-                honeypotEnabled
-                rateLimitMax
-                rateLimitTimeframe
-                submitButtonLabel
-                resetButtonLabel
-              }
-              page { slug parentPage { slug } }
-            }
-            itemsCollection(limit: $listItemLimit, locale: $locale) {
-              items { ... on ListItem { text title icon { url title } variant } }
-            }
+           ${ItemsListFields}
           }
         }
       }
@@ -350,33 +337,7 @@ export async function getPageBySlug(
       query Ctas($ids: [String!], $locale: String = "${DEFAULT_LOCALE}") {
         ctaSectionCollection(where: { sys: { id_in: $ids } }, limit: 10, locale: $locale) {
           items {
-            __typename
-            sys { id }
-            title
-            variant
-            description { json }
-            illustration { url title }
-            primaryCta {
-              kind
-              label
-              openInNewTab
-              url
-              page { slug parentPage { slug } }
-              variant
-              actionForm {
-                title
-                description
-                formItemsCollection(limit: 20) { items { fieldName fieldType label placeholder helperText required maxLength minLength pattern options defaultValue order } }
-                honeypotEnabled
-                rateLimitMax
-                rateLimitTimeframe
-                submitButtonLabel
-                resetButtonLabel
-              }
-            }
-            splashesCollection(limit: 2, locale: $locale) { items { asset { url title } margin top side } }
-            background
-            isScreen
+           ${CtaSectionFields}
           }
         }
       }
@@ -394,21 +355,7 @@ export async function getPageBySlug(
       query Experiences($ids: [String!], $locale: String = "${DEFAULT_LOCALE}") {
         experienceSectionCollection(where: { sys: { id_in: $ids } }, limit: 10, locale: $locale) {
           items {
-            __typename
-            sys { id }
-            title
-            description { json }
-            enterpriseTitle
-            background
-            enterpriseCollection(limit: 3) { items { companyName dateEnd dateStart description { json } highlights { json } location roleTitle tagsCollection { items { name } } } }
-            formationsTitle
-            formationsCollection(limit: 3) { items { school description { json } program years } }
-            competencesTitle
-            competencesCollection(limit: 6) { items { title tagsCollection { items { name } } } }
-            cvFile { url }
-            cvFileTitle
-            cvFileCta
-            cvFileDescription
+            ${ExperienceSectionFields}
           }
         }
       }
@@ -425,27 +372,7 @@ export async function getPageBySlug(
       query Projects($ids: [String!], $locale: String = "${DEFAULT_LOCALE}") {
         projectCollection(where: { sys: { id_in: $ids } }, limit: 1, locale: $locale) {
           items {
-            __typename
-            sys { id }
-            internalTitle
-            title
-            kind
-            company
-            category
-            status
-            featured
-            tagsCollection { items { title tagsCollection { items { name }} } }
-            caseBody { json }
-            highlights
-            confidentialityNote
-            summary
-            liveUrl
-            repoUrl
-            cover { url }
-            galleryCollection(limit: 12) { items { url } }
-            startDate
-            endDate
-            ongoing
+            ${ProjectFields}
           }
         }
       }
@@ -463,40 +390,7 @@ export async function getPageBySlug(
       query Groups($ids: [String!], $locale: String = "${DEFAULT_LOCALE}") {
         groupCollection(where: { sys: { id_in: $ids } }, limit: 10, locale: $locale) {
           items {
-            __typename
-            sys { id }
-            background
-            isScreen
-            splashesCollection(limit: 2, locale: $locale) { items { asset { url title } margin top side } }
-            elementsCollection(limit: 2, locale: $locale) {
-              items {
-                __typename
-                ... on ItemsList {
-                  sys { id }
-                  title
-                  description { json }
-                  cardVariant
-                  variant
-                  itemsCollection(limit: 8, locale: $locale) { items { ... on ListItem { text } } }
-                }
-                ... on CtaSection {
-                  sys { id }
-                  title
-                  variant
-                  description { json }
-                  illustration { url title }
-                  primaryCta {
-                    kind
-                    label
-                    openInNewTab
-                    url
-                    page { slug parentPage { slug } }
-                    variant
-                  }
-                  splashesCollection(limit: 2, locale: $locale) { items { asset { url title } margin top side } }
-                }
-              }
-            }
+            ${GroupFields}
           }
         }
       }
@@ -576,4 +470,98 @@ export async function getSiteSettings(
     siteSettingsCollection: { items: SiteSettings[] };
   }>(query, { locale });
   return data.siteSettingsCollection?.items?.[0] ?? null;
+}
+
+export async function getAllWorkItems(
+  locale: string = DEFAULT_LOCALE,
+): Promise<WorkItem[]> {
+  const query = /* GraphQL */ `
+    query WorkItems($locale: String = "${DEFAULT_LOCALE}") {
+      workItemCollection(limit: 50, locale: $locale) {
+        items {
+          ${WorkItemFieldsCompact}
+        }
+      }
+    }
+  `;
+
+  const data = await fetchGraphQL<{
+    workItemCollection: { items: WorkItem[] };
+  }>(query, { locale });
+  return data.workItemCollection?.items ?? [];
+}
+
+export async function getWorkItems(options?: {
+  locale?: string;
+  kind?: "all" | "projects" | "caseStudy";
+}): Promise<WorkItem[]> {
+  const locale = options?.locale || DEFAULT_LOCALE;
+  const kind = options?.kind || "all";
+  const isAll = kind === "all";
+  const typeVar = !isAll
+    ? kind === "projects"
+      ? "project"
+      : "caseStudy"
+    : undefined;
+
+  const query = /* GraphQL */ `
+    query WorkItems($locale: String = "${DEFAULT_LOCALE}"${isAll ? "" : ", $type: String"}) {
+      workItemCollection(${isAll ? "" : "where: { type: $type }, "}limit: 9, locale: $locale) {
+        items {
+          ${WorkItemFieldsCompact}
+        }
+      }
+    }
+  `;
+
+  const data = await fetchGraphQL<{
+    workItemCollection: { items: WorkItem[] };
+  }>(query, { locale, type: typeVar });
+  return data.workItemCollection?.items ?? [];
+}
+export async function getWorkBySlug(
+  slug: string,
+  options?: {
+    locale?: string;
+  },
+): Promise<WorkItem | null> {
+  const locale = options?.locale || DEFAULT_LOCALE;
+
+  const query = /* GraphQL */ `
+    query WorkItems($slug: String!, $locale: String = "${DEFAULT_LOCALE}") {
+      workItemCollection(limit: 1, where: { slug: $slug } , locale: $locale) {
+        items {
+          ${WorkItemFieldsFull}
+        }
+      }
+    }
+  `;
+
+  const data = await fetchGraphQL<{
+    workItemCollection: { items: WorkItem[] };
+  }>(query, { locale, slug });
+  return data.workItemCollection?.items?.[0] ?? null;
+}
+
+export async function getServicePages(
+  locale: string = DEFAULT_LOCALE,
+): Promise<PageEntry[]> {
+  const query = /* GraphQL */ `
+    query ServicePages($locale: String = "${DEFAULT_LOCALE}") {
+      pageCollection(where: { pageType: "service" }, limit: 50, locale: $locale) {
+        items {
+          title
+          slug
+          sys { id }
+          pageType
+          parentPage { slug sys { id } }
+        }
+      }
+    }
+  `;
+
+  const data = await fetchGraphQL<{
+    pageCollection: { items: PageEntry[] };
+  }>(query, { locale });
+  return data.pageCollection?.items ?? [];
 }

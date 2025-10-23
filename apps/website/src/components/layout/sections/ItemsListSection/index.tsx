@@ -1,5 +1,12 @@
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
-import { ItemsList } from "apps/website/src/types/shared";
+import {
+  getServicePages,
+  getWorkItems,
+} from "apps/website/src/lib/contentful-graphql";
+import {
+  ItemsList,
+  ItemsListIncludeAllType,
+} from "apps/website/src/types/shared";
 import CTA from "../../../common/cta";
 import Typography from "../../../common/typography";
 import Container from "../../container";
@@ -27,13 +34,52 @@ const ItemsListSectionContent: React.FC<ItemsListSectionProps> = ({ data }) => {
   }
 };
 
-const ItemsListSection: React.FC<ItemsListSectionProps> = ({
+const fetchAdditionalItems = async (
+  locale: string,
+  type: ItemsListIncludeAllType,
+) => {
+  if (!type || type === "disabled") return [];
+
+  if (type === "projects") {
+    const res = await getWorkItems({ locale, kind: "projects" });
+    return res;
+  }
+
+  if (type === "workItems") {
+    const res = await getWorkItems({ locale, kind: "all" });
+    return res;
+  }
+
+  if (type === "caseStudy") {
+    const res = await getWorkItems({ locale, kind: "caseStudy" });
+    return res;
+  }
+
+  if (type === "services") {
+    const res = await getServicePages(locale);
+    return res;
+  }
+
+  return [];
+};
+
+const ItemsListSection: React.FC<ItemsListSectionProps> = async ({
   data,
   isHero,
 }) => {
-  const { title, description, variant, isScreen, background, primaryCta } =
-    data;
-
+  const {
+    title,
+    description,
+    variant,
+    isScreen,
+    background,
+    primaryCta,
+    includeAll,
+  } = data;
+  const additionalItems = await fetchAdditionalItems(
+    "fr",
+    includeAll ?? "disabled",
+  );
   const textAlign = ["verticalScroll", "verticalGrid"].includes(
     variant ?? "column",
   )
@@ -60,7 +106,17 @@ const ItemsListSection: React.FC<ItemsListSectionProps> = ({
           )}
           {!!primaryCta && <CTA data={primaryCta} />}
         </div>
-        <ItemsListSectionContent data={data} />
+        <ItemsListSectionContent
+          data={{
+            ...data,
+            itemsCollection: {
+              items: [
+                ...(data.itemsCollection?.items ?? []),
+                ...additionalItems,
+              ],
+            },
+          }}
+        />
       </ItemsListSectionStyled>
     </Container>
   );
