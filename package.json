@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "dev": "nx run-many --target=serve --projects=website,admin --parallel",
+    "dev": "nx run-many --target=serve --projects=website,admin-app --parallel",
     "build": "nx affected --target=build",
     "lint": "nx affected --target=lint",
     "format": "nx format:write",
@@ -11,9 +11,9 @@
     "dev:website": "nx serve website",
     "build:website": "nx build website",
     "start:website": "nx serve website --prod",
-    "dev:admin": "nx serve admin",
-    "build:admin": "nx build admin",
-    "start:admin": "nx serve admin --prod",
+    "dev:admin": "nx serve admin-app",
+    "build:admin": "nx build admin-app",
+    "start:admin": "nx serve admin-app --prod",
     "codegen:contentful": "echo \"TODO: Implement contentful codegen\""
   },
   "private": true,
@@ -84,6 +84,16 @@
     "tailwindcss": "^4.1.14",
     "tslib": "^2.8.1",
     "zod": "^4.1.12",
-    "zone.js": "~0.15.1"
+    "zone.js": "~0.15.1",
+    "next-auth": "^4.24.11",
+    "@supabase/supabase-js": "^2.48.1",
+    "@aws-sdk/client-s3": "^3.714.0",
+    "@aws-sdk/s3-request-presigner": "^3.714.0",
+    "@react-pdf/renderer": "^4.2.0",
+    "openai": "^4.81.0",
+    "@notionhq/client": "^2.2.16",
+    "react-hook-form": "^7.54.2",
+    "react-hot-toast": "^2.4.1",
+    "lucide-react": "^0.469.0"
   }
 }

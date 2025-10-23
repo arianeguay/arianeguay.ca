@@ -1,0 +1,57 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/admin-app/src",
+  "targets": {
+    "build": {
+      "executor": "@nx/next:build",
+      "outputs": ["{workspaceRoot}/dist/apps/admin-app"],
+      "options": {
+        "root": "apps/admin-app",
+        "outputPath": "dist/apps/admin-app",
+        "nextConfig": "apps/admin-app/next.config.js",
+        "tsConfig": "apps/admin-app/tsconfig.json"
+      },
+      "configurations": {
+        "development": {},
+        "production": {
+          "prod": true
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "serve": {
+      "executor": "@nx/next:server",
+      "options": {
+        "buildTarget": "admin-app:build",
+        "dev": true,
+        "port": 3001
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "admin-app:build:development"
+        },
+        "production": {
+          "buildTarget": "admin-app:build:production",
+          "dev": false
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "lintFilePatterns": [
+          "apps/admin-app/**/*.{ts,tsx,js,jsx}"
+        ]
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc --noEmit -p apps/admin-app/tsconfig.json"
+      }
+    }
+  },
+  "tags": ["type:app", "scope:admin"]
+}
