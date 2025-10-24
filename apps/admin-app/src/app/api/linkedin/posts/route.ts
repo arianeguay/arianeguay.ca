@@ -4,7 +4,8 @@ import type { LinkedInPost } from '../../../../types/database';
 export const runtime = 'nodejs';
 
 export async function GET() {
-  return Response.json(memDb.linkedin_posts);
+  const list = [...memDb.linkedin_posts].sort((a, b) => (b.created_at || '').localeCompare(a.created_at || ''));
+  return Response.json(list);
 }
 
 export async function POST(req: Request) {
@@ -22,6 +23,8 @@ export async function POST(req: Request) {
       like_count: typeof body.like_count === 'number' ? body.like_count : 0,
       comment_count: typeof body.comment_count === 'number' ? body.comment_count : 0,
       engagement_score: typeof body.engagement_score === 'number' ? body.engagement_score : 0,
+      status: (body.status as LinkedInPost['status']) || 'new',
+      source: body.source ? String(body.source) : 'manual',
       created_at: now,
       updated_at: now,
     };

@@ -49,6 +49,8 @@ export interface LinkedInPost {
   like_count?: number;
   comment_count?: number;
   engagement_score?: number;
+  status?: 'new' | 'queued' | 'commented' | 'skipped';
+  source?: string;
   created_at: string;
   updated_at: string;
 }

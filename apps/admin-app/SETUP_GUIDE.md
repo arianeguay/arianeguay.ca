@@ -169,31 +169,42 @@ import { getServiceSupabase } from '../../../lib/db/supabase';
 
 export async function GET() {
   const supabase = getServiceSupabase();
-  const { data, error } = await supabase
-    .from('clients')
-    .select('*')
-    .order('created_at', { ascending: false });
-  
-  if (error) return Response.json({ error }, { status: 500 });
-  return Response.json(data);
+  if (supabase) {
+    const { data, error } = await supabase
+      .from('clients')
+      .select('*')
+      .order('created_at', { ascending: false });
+    if (error) return Response.json({ error }, { status: 500 });
+    return Response.json(data);
+  }
+  // Fallback to in-memory store when Supabase is not configured
+  return Response.json(memDb.clients);
 }
 
 export async function POST(req: Request) {
   const supabase = getServiceSupabase();
   const body = await req.json();
-  
-  const { data, error } = await supabase
-    .from('clients')
-    .insert(body)
-    .select()
-    .single();
-  
-  if (error) return Response.json({ error }, { status: 500 });
-  return Response.json(data);
+  if (supabase) {
+    const { data, error } = await supabase
+      .from('clients')
+      .insert(body)
+      .select()
+      .single();
+    if (error) return Response.json({ error }, { status: 500 });
+    return Response.json(data);
+  }
+  // Fallback to in-memory
+  const now = new Date().toISOString();
+  const id = crypto.randomUUID?.() ?? Math.random().toString(36).slice(2);
+  const client = { id, ...body, created_at: now, updated_at: now };
+  memDb.clients.unshift(client);
+  return Response.json(client, { status: 201 });
 }
 ```
 
-### Phase 5: PDF Generation (Priority: MEDIUM)
+Other entities (projects, invoices) follow the same pattern: try Supabase first, fallback to `memDb`.
+
+### Phase 5: PDF Generation & Email (Priority: MEDIUM)
 
 1. **Setup AWS S3**
    ```bash
@@ -212,6 +223,26 @@ export async function POST(req: Request) {
    // Return signed URL
    ```
 
+3. **Send Invoice via Email (Resend)**
+
+Endpoint: `POST /api/invoices/[id]/send`
+
+Env:
+
+```
+RESEND_API_KEY=...
+RESEND_FROM_EMAIL=hello@arianeguay.ca
+AWS_ACCESS_KEY_ID=...
+AWS_SECRET_ACCESS_KEY=...
+AWS_REGION=us-east-1
+AWS_S3_BUCKET=ag-admin-app-prod
+```
+
+Behavior:
+- Generates a PDF in-memory and attaches it to the email.
+- Optionally uploads to S3 and includes a link.
+- Updates invoice status to `sent` and stores `pdf_url` when available.
+
 ### Phase 6: Vercel Cron Jobs (Priority: LOW)
 
 Create `vercel.json`:
@@ -225,9 +256,22 @@ Create `vercel.json`:
     {
       "path": "/api/cron/invoice-reminders",
       "schedule": "0 9 * * 1"
+    },
+    {
+      "path": "/api/cron/linkedin-discover",
+      "schedule": "0 * * * *"
     }
   ]
 }
+```
+
+Set additional env variables for discovery:
+
+```
+LINKEDIN_DISCOVERY_SOURCES=https://example.com/blog, https://another.com/news
+LINKEDIN_KEYWORDS=linkedin,post,activity
+LINKEDIN_PER_SOURCE_CAP=10
+CRON_SECRET=some-long-random-secret
 ```
 
 ### Phase 7: Contentful Integration (Priority: LOW)
@@ -266,6 +310,22 @@ pnpm build:admin
 ```
 
 The app will run at http://localhost:3001
+
+## 🧱 Component Structure Convention
+
+Use one folder per component with `index.tsx` and `styles.tsx`:
+
+```
+apps/admin-app/src/app/(dashboard)/clients/[id]/ClientDetail/
+  ├─ index.tsx
+  └─ styles.tsx
+
+apps/admin-app/src/app/(dashboard)/projects/[id]/ProjectDetail/
+  ├─ index.tsx
+  └─ styles.tsx
+```
+
+Pages should import these components and stay minimal (data wiring/UI shell only).
 
 ## 🔐 Security Checklist
 

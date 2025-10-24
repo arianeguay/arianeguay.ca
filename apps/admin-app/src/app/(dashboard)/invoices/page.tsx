@@ -1,10 +1,11 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import { theme } from '../../../theme';
-import { Plus, FileText, Download } from 'lucide-react';
-import type { Invoice, InvoiceStatus } from '../../../types/database';
+import { Download, FileText, Plus, Send } from "lucide-react";
+import { useEffect, useState } from "react";
+import styled from "styled-components";
+import { theme } from "../../../theme";
+import type { Invoice, InvoiceStatus } from "../../../types/database";
+import toast from "react-hot-toast";
 
 const Container = styled.div`
   max-width: 1400px;
@@ -16,7 +17,7 @@ const Header = styled.header`
   align-items: flex-start;
   margin-bottom: ${theme.spacing.xxxl};
   gap: ${theme.spacing.xl};
-  
+
   @media (max-width: ${theme.breakpoints.md}px) {
     flex-direction: column;
   }
@@ -32,7 +33,7 @@ const Title = styled.h1`
   font-size: 44px;
   color: ${theme.colors.ink1};
   margin-bottom: ${theme.spacing.md};
-  
+
   @media (max-width: ${theme.breakpoints.sm}px) {
     font-size: 32px;
   }
@@ -78,9 +79,12 @@ const StatusFilters = styled.div`
 
 const FilterButton = styled.button<{ $active?: boolean }>`
   padding: ${theme.spacing.sm} ${theme.spacing.lg};
-  background: ${(props) => (props.$active ? theme.colors.brand.primary : 'white')};
-  color: ${(props) => (props.$active ? 'white' : theme.colors.ink1)};
-  border: 2px solid ${(props) => (props.$active ? theme.colors.brand.primary : theme.colors.border)};
+  background: ${(props) =>
+    props.$active ? theme.colors.brand.primary : "white"};
+  color: ${(props) => (props.$active ? "white" : theme.colors.ink1)};
+  border: 2px solid
+    ${(props) =>
+      props.$active ? theme.colors.brand.primary : theme.colors.border};
   border-radius: ${theme.radius.pill};
   font-family: ${theme.font.family.body};
   font-size: 14px;
@@ -117,7 +121,7 @@ const InvoiceHeader = styled.div`
   align-items: flex-start;
   margin-bottom: ${theme.spacing.lg};
   gap: ${theme.spacing.lg};
-  
+
   @media (max-width: ${theme.breakpoints.sm}px) {
     flex-direction: column;
   }
@@ -152,14 +156,14 @@ const StatusBadge = styled.span<{ $status: InvoiceStatus }>`
   font-weight: ${theme.font.weight.medium};
   background: ${(props) => {
     switch (props.$status) {
-      case 'paid':
+      case "paid":
         return theme.colors.status.success;
-      case 'sent':
-      case 'viewed':
+      case "sent":
+      case "viewed":
         return theme.colors.status.info;
-      case 'overdue':
+      case "overdue":
         return theme.colors.status.error;
-      case 'partially_paid':
+      case "partially_paid":
         return theme.colors.status.warning;
       default:
         return theme.colors.border;
@@ -249,26 +253,35 @@ const EmptyText = styled.p`
   margin-bottom: ${theme.spacing.xl};
 `;
 
-const statusLabels: Record<InvoiceStatus | 'all', string> = {
-  all: 'Toutes',
-  draft: 'Brouillon',
-  sent: 'Envoyée',
-  viewed: 'Vue',
-  partially_paid: 'Partiellement payée',
-  paid: 'Payée',
-  overdue: 'En retard',
-  cancelled: 'Annulée',
+const statusLabels: Record<InvoiceStatus | "all", string> = {
+  all: "Toutes",
+  draft: "Brouillon",
+  sent: "Envoyée",
+  viewed: "Vue",
+  partially_paid: "Partiellement payée",
+  paid: "Payée",
+  overdue: "En retard",
+  cancelled: "Annulée",
 };
 
 export default function InvoicesPage() {
-  const [statusFilter, setStatusFilter] = useState<InvoiceStatus | 'all'>('all');
+  const [statusFilter, setStatusFilter] = useState<InvoiceStatus | "all">(
+    "all",
+  );
   const [invoices, setInvoices] = useState<Invoice[]>([]);
+  const [showForm, setShowForm] = useState(false);
+  const [newNumber, setNewNumber] = useState("");
+  const [newStatus, setNewStatus] = useState<InvoiceStatus>("draft");
+  const [newItems, setNewItems] = useState<Array<{ desc: string; qty: string; unitPrice: string }>>([
+    { desc: "", qty: "1", unitPrice: "0" },
+  ]);
+  const [creating, setCreating] = useState(false);
 
   useEffect(() => {
     let active = true;
     (async () => {
       try {
-        const res = await fetch('/api/invoices', { cache: 'no-store' });
+        const res = await fetch("/api/invoices", { cache: "no-store" });
         if (!res.ok) return;
         const data = await res.json();
         if (active) setInvoices(Array.isArray(data) ? data : []);
@@ -279,8 +292,95 @@ export default function InvoicesPage() {
     };
   }, []);
 
+  const handleCreate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const validItems = newItems
+      .map((it) => ({ desc: it.desc.trim(), qty: parseFloat(it.qty), unitPrice: parseFloat(it.unitPrice) }))
+      .filter((it) => it.desc.length > 0 && !Number.isNaN(it.qty) && !Number.isNaN(it.unitPrice));
+    if (!newNumber || validItems.length === 0) {
+      toast.error("Numéro et au moins 1 item requis");
+      return;
+    }
+    setCreating(true);
+    try {
+      const res = await fetch("/api/invoices", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          number: newNumber,
+          status: newStatus,
+          items: validItems.map((it) => ({ ...it, qty: Number(it.qty), unitPrice: Number(it.unitPrice) })),
+          currency: "CAD",
+        }),
+      });
+      if (res.ok) {
+        const created = await res.json();
+        setInvoices((prev) => [created, ...prev]);
+        setShowForm(false);
+        setNewNumber("");
+        setNewStatus("draft");
+        setNewItems([{ desc: "", qty: "1", unitPrice: "0" }]);
+        toast.success("Facture créée");
+      } else {
+        toast.error("Création échouée");
+      }
+    } finally {
+      setCreating(false);
+    }
+  };
+
+  const addItemRow = () => {
+    setNewItems((rows) => [...rows, { desc: "", qty: "1", unitPrice: "0" }]);
+  };
+
+  const removeItemRow = (idx: number) => {
+    setNewItems((rows) => rows.filter((_, i) => i !== idx));
+  };
+
+  const updateItemRow = (idx: number, key: "desc" | "qty" | "unitPrice", value: string) => {
+    setNewItems((rows) => rows.map((r, i) => (i === idx ? { ...r, [key]: value } : r)));
+  };
+
+  const handleUpdateStatus = async (id: string, status: InvoiceStatus) => {
+    try {
+      const res = await fetch(`/api/invoices/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status }),
+      });
+      if (!res.ok) throw new Error("bad");
+      const updated = await res.json();
+      setInvoices((prev) => prev.map((inv) => (inv.id === id ? updated : inv)));
+      toast.success("Statut mis à jour");
+    } catch {
+      toast.error("Échec de la mise à jour du statut");
+    }
+  };
+
+  const handleSend = async (inv: Invoice) => {
+    let to = inv.client?.email;
+    if (!to) {
+      const promptEmail = window.prompt("Adresse email du client ?");
+      if (!promptEmail) return;
+      to = promptEmail;
+    }
+    try {
+      const res = await fetch(`/api/invoices/${inv.id}/send`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ to }),
+      });
+      if (!res.ok) throw new Error("send failed");
+      const updated = await res.json();
+      setInvoices((prev) => prev.map((i) => (i.id === inv.id ? updated : i)));
+      toast.success("Facture envoyée");
+    } catch {
+      toast.error("Échec de l'envoi");
+    }
+  };
+
   const filteredInvoices =
-    statusFilter === 'all'
+    statusFilter === "all"
       ? invoices
       : invoices.filter((inv) => inv.status === statusFilter);
 
@@ -291,22 +391,128 @@ export default function InvoicesPage() {
           <Title>Factures</Title>
           <Subtitle>Créez et gérez vos factures</Subtitle>
         </HeaderContent>
-        <Button>
+        <Button onClick={() => setShowForm((s) => !s)}>
           <Plus />
           Nouvelle facture
         </Button>
       </Header>
 
-      <StatusFilters>
-        {(['all', 'draft', 'sent', 'paid', 'overdue'] as const).map((status) => (
-          <FilterButton
-            key={status}
-            $active={statusFilter === status}
-            onClick={() => setStatusFilter(status)}
+      {showForm && (
+        <div
+          style={{
+            background: "white",
+            padding: theme.spacing.xxl,
+            borderRadius: theme.radius.lg,
+            boxShadow: theme.shadows.sm,
+            marginBottom: theme.spacing.xxl,
+          }}
+        >
+          <form
+            onSubmit={handleCreate}
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: theme.spacing.lg,
+            }}
           >
-            {statusLabels[status]}
-          </FilterButton>
-        ))}
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: theme.spacing.lg }}>
+              <input
+                type="text"
+                placeholder="Numéro"
+                value={newNumber}
+                onChange={(e) => setNewNumber(e.target.value)}
+                required
+                style={{ border: `2px solid ${theme.colors.border}`, borderRadius: theme.radius.md, padding: theme.spacing.md }}
+              />
+              <select
+                value={newStatus}
+                onChange={(e) => setNewStatus(e.target.value as InvoiceStatus)}
+                style={{ border: `2px solid ${theme.colors.border}`, borderRadius: theme.radius.md, padding: theme.spacing.md }}
+              >
+                {(["draft", "sent", "paid", "overdue"] as const).map((s) => (
+                  <option key={s} value={s}>{statusLabels[s]}</option>
+                ))}
+              </select>
+            </div>
+
+            <div style={{ fontFamily: theme.font.family.body, color: theme.colors.ink2, fontSize: 14 }}>
+              Lignes
+            </div>
+            {newItems.map((row, idx) => (
+              <div key={idx} style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr auto", gap: theme.spacing.lg }}>
+                <input
+                  type="text"
+                  placeholder="Description"
+                  value={row.desc}
+                  onChange={(e) => updateItemRow(idx, "desc", e.target.value)}
+                  style={{ border: `2px solid ${theme.colors.border}`, borderRadius: theme.radius.md, padding: theme.spacing.md }}
+                />
+                <input
+                  type="number"
+                  step="0.01"
+                  placeholder="Qté"
+                  value={row.qty}
+                  onChange={(e) => updateItemRow(idx, "qty", e.target.value)}
+                  style={{ border: `2px solid ${theme.colors.border}`, borderRadius: theme.radius.md, padding: theme.spacing.md }}
+                />
+                <input
+                  type="number"
+                  step="0.01"
+                  placeholder="Prix"
+                  value={row.unitPrice}
+                  onChange={(e) => updateItemRow(idx, "unitPrice", e.target.value)}
+                  style={{ border: `2px solid ${theme.colors.border}`, borderRadius: theme.radius.md, padding: theme.spacing.md }}
+                />
+                <Button type="button" onClick={() => removeItemRow(idx)}>
+                  Supprimer
+                </Button>
+              </div>
+            ))}
+            <div>
+              <Button type="button" onClick={addItemRow}>Ajouter une ligne</Button>
+            </div>
+
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 200px", gap: theme.spacing.md, alignItems: "center" }}>
+              <div style={{ color: theme.colors.ink2, fontFamily: theme.font.family.body }}>
+                Aperçu des totaux (TPS + TVQ)
+              </div>
+              <div style={{ textAlign: "right", fontFamily: theme.font.family.body, fontWeight: 600 }}>
+                {(() => {
+                  const subtotal = newItems.reduce((sum, it) => {
+                    const q = parseFloat(it.qty);
+                    const p = parseFloat(it.unitPrice);
+                    if (Number.isNaN(q) || Number.isNaN(p)) return sum;
+                    return sum + q * p;
+                  }, 0);
+                  const tax_tps = +(subtotal * 0.05).toFixed(2);
+                  const tax_tvq = +(subtotal * 0.09975).toFixed(2);
+                  const total = +(subtotal + tax_tps + tax_tvq).toFixed(2);
+                  return new Intl.NumberFormat("fr-CA", { style: "currency", currency: "CAD" }).format(total);
+                })()}
+              </div>
+            </div>
+
+            <div>
+              <Button type="submit" disabled={creating || !newNumber}>
+                {creating ? "Création…" : "Créer"}
+              </Button>
+            </div>
+          </form>
+        </div>
+      )}
+
+      <StatusFilters>
+        {(["all", "draft", "sent", "paid", "overdue"] as const).map(
+          (status) => (
+            <FilterButton
+              key={status}
+              $active={statusFilter === status}
+              onClick={() => setStatusFilter(status)}
+            >
+              {statusLabels[status]}
+            </FilterButton>
+          ),
+        )}
       </StatusFilters>
 
       {filteredInvoices.length === 0 ? (
@@ -316,11 +522,11 @@ export default function InvoicesPage() {
           </EmptyIcon>
           <EmptyTitle>Aucune facture trouvée</EmptyTitle>
           <EmptyText>
-            {statusFilter === 'all'
-              ? 'Commencez par créer votre première facture'
+            {statusFilter === "all"
+              ? "Commencez par créer votre première facture"
               : `Aucune facture avec le statut "${statusLabels[statusFilter]}"`}
           </EmptyText>
-          {statusFilter === 'all' && (
+          {statusFilter === "all" && (
             <Button>
               <Plus />
               Créer une facture
@@ -342,8 +548,25 @@ export default function InvoicesPage() {
                   <StatusBadge $status={invoice.status}>
                     {statusLabels[invoice.status]}
                   </StatusBadge>
-                  <IconButton title="Télécharger PDF" onClick={() => window.open(`/api/invoices/${invoice.id}/pdf`, '_blank')}>
+                  <select
+                    value={invoice.status}
+                    onChange={(e) => handleUpdateStatus(invoice.id, e.target.value as InvoiceStatus)}
+                    style={{ border: `1px solid ${theme.colors.border}`, borderRadius: theme.radius.sm, padding: 6 }}
+                  >
+                    {(["draft", "sent", "paid", "overdue"] as const).map((s) => (
+                      <option key={s} value={s}>{statusLabels[s]}</option>
+                    ))}
+                  </select>
+                  <IconButton
+                    title="Télécharger PDF"
+                    onClick={() =>
+                      window.open(`/api/invoices/${invoice.id}/pdf`, "_blank")
+                    }
+                  >
                     <Download />
+                  </IconButton>
+                  <IconButton title="Envoyer" onClick={() => handleSend(invoice)}>
+                    <Send />
                   </IconButton>
                 </InvoiceActions>
               </InvoiceHeader>
@@ -352,20 +575,20 @@ export default function InvoicesPage() {
                 <MetaItem>
                   <MetaLabel>Date d'émission</MetaLabel>
                   <MetaValue>
-                    {new Date(invoice.issue_date).toLocaleDateString('fr-CA')}
+                    {new Date(invoice.issue_date).toLocaleDateString("fr-CA")}
                   </MetaValue>
                 </MetaItem>
                 <MetaItem>
                   <MetaLabel>Date d'échéance</MetaLabel>
                   <MetaValue>
-                    {new Date(invoice.due_date).toLocaleDateString('fr-CA')}
+                    {new Date(invoice.due_date).toLocaleDateString("fr-CA")}
                   </MetaValue>
                 </MetaItem>
                 <MetaItem>
                   <MetaLabel>Sous-total</MetaLabel>
                   <MetaValue>
-                    {new Intl.NumberFormat('fr-CA', {
-                      style: 'currency',
+                    {new Intl.NumberFormat("fr-CA", {
+                      style: "currency",
                       currency: invoice.currency,
                     }).format(invoice.subtotal)}
                   </MetaValue>
@@ -373,8 +596,8 @@ export default function InvoicesPage() {
                 <MetaItem>
                   <MetaLabel>Total (TPS + TVQ)</MetaLabel>
                   <MetaValue>
-                    {new Intl.NumberFormat('fr-CA', {
-                      style: 'currency',
+                    {new Intl.NumberFormat("fr-CA", {
+                      style: "currency",
                       currency: invoice.currency,
                     }).format(invoice.total)}
                   </MetaValue>

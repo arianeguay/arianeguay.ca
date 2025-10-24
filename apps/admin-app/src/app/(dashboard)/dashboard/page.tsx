@@ -3,6 +3,7 @@
 import styled from 'styled-components';
 import { theme } from '../../../theme';
 import { TrendingUp, Users, FileText, Linkedin } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 const Container = styled.div`
   max-width: 1400px;
@@ -185,6 +186,7 @@ const ActivityTime = styled.span`
 `;
 
 export default function DashboardPage() {
+  const router = useRouter();
   const stats = [
     {
       title: 'Projets actifs',
@@ -221,11 +223,11 @@ export default function DashboardPage() {
   ];
 
   const quickActions = [
-    'Générer un post LinkedIn',
-    'Créer une facture',
-    'Nouveau client',
-    'Nouveau projet',
-    'Commentaires suggérés',
+    { label: 'Générer un post LinkedIn', href: '/linkedin' },
+    { label: 'Créer une facture', href: '/invoices' },
+    { label: 'Nouveau client', href: '/clients' },
+    { label: 'Nouveau projet', href: '/projects' },
+    { label: 'Commentaires suggérés', href: '/linkedin' },
   ];
 
   const activities = [
@@ -271,7 +273,9 @@ export default function DashboardPage() {
         <SectionTitle>Actions rapides</SectionTitle>
         <ActionGrid>
           {quickActions.map((action, index) => (
-            <ActionButton key={index}>{action}</ActionButton>
+            <ActionButton key={index} onClick={() => router.push(action.href)}>
+              {action.label}
+            </ActionButton>
           ))}
         </ActionGrid>
       </QuickActions>

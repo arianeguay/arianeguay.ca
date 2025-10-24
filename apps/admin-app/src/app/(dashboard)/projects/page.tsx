@@ -1,10 +1,11 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import { theme } from '../../../theme';
-import { Plus, FolderKanban } from 'lucide-react';
-import type { Project, ProjectStatus } from '../../../types/database';
+import { FolderKanban, Plus } from "lucide-react";
+import { useEffect, useState } from "react";
+import styled from "styled-components";
+import { theme } from "../../../theme";
+import type { Project, ProjectStatus } from "../../../types/database";
+import Link from "next/link";
 
 const Container = styled.div`
   max-width: 1400px;
@@ -16,7 +17,7 @@ const Header = styled.header`
   align-items: flex-start;
   margin-bottom: ${theme.spacing.xxxl};
   gap: ${theme.spacing.xl};
-  
+
   @media (max-width: ${theme.breakpoints.md}px) {
     flex-direction: column;
   }
@@ -32,7 +33,7 @@ const Title = styled.h1`
   font-size: 44px;
   color: ${theme.colors.ink1};
   margin-bottom: ${theme.spacing.md};
-  
+
   @media (max-width: ${theme.breakpoints.sm}px) {
     font-size: 32px;
   }
@@ -78,9 +79,12 @@ const StatusFilters = styled.div`
 
 const FilterButton = styled.button<{ $active?: boolean }>`
   padding: ${theme.spacing.sm} ${theme.spacing.lg};
-  background: ${(props) => (props.$active ? theme.colors.brand.primary : 'white')};
-  color: ${(props) => (props.$active ? 'white' : theme.colors.ink1)};
-  border: 2px solid ${(props) => (props.$active ? theme.colors.brand.primary : theme.colors.border)};
+  background: ${(props) =>
+    props.$active ? theme.colors.brand.primary : "white"};
+  color: ${(props) => (props.$active ? "white" : theme.colors.ink1)};
+  border: 2px solid
+    ${(props) =>
+      props.$active ? theme.colors.brand.primary : theme.colors.border};
   border-radius: ${theme.radius.pill};
   font-family: ${theme.font.family.body};
   font-size: 14px;
@@ -117,7 +121,7 @@ const ProjectHeader = styled.div`
   align-items: flex-start;
   margin-bottom: ${theme.spacing.lg};
   gap: ${theme.spacing.lg};
-  
+
   @media (max-width: ${theme.breakpoints.sm}px) {
     flex-direction: column;
   }
@@ -146,11 +150,11 @@ const StatusBadge = styled.span<{ $status: ProjectStatus }>`
   font-weight: ${theme.font.weight.medium};
   background: ${(props) => {
     switch (props.$status) {
-      case 'in_progress':
+      case "in_progress":
         return theme.colors.status.info;
-      case 'completed':
+      case "completed":
         return theme.colors.status.success;
-      case 'cancelled':
+      case "cancelled":
         return theme.colors.status.error;
       default:
         return theme.colors.border;
@@ -215,24 +219,31 @@ const EmptyText = styled.p`
   margin-bottom: ${theme.spacing.xl};
 `;
 
-const statusLabels: Record<ProjectStatus | 'all', string> = {
-  all: 'Tous',
-  draft: 'Brouillon',
-  in_progress: 'En cours',
-  completed: 'Terminé',
-  cancelled: 'Annulé',
+const statusLabels: Record<ProjectStatus | "all", string> = {
+  all: "Tous",
+  draft: "Brouillon",
+  in_progress: "En cours",
+  completed: "Terminé",
+  cancelled: "Annulé",
 };
 
 export default function ProjectsPage() {
-  const [statusFilter, setStatusFilter] = useState<ProjectStatus | 'all'>('all');
+  const [statusFilter, setStatusFilter] = useState<ProjectStatus | "all">(
+    "all",
+  );
 
   const [projects, setProjects] = useState<Project[]>([]);
+  const [showForm, setShowForm] = useState(false);
+  const [newName, setNewName] = useState("");
+  const [newStatus, setNewStatus] = useState<ProjectStatus>("draft");
+  const [newBudget, setNewBudget] = useState("");
+  const [creating, setCreating] = useState(false);
 
   useEffect(() => {
     let active = true;
     (async () => {
       try {
-        const res = await fetch('/api/projects', { cache: 'no-store' });
+        const res = await fetch("/api/projects", { cache: "no-store" });
         if (!res.ok) return;
         const data = await res.json();
         if (active) setProjects(Array.isArray(data) ? data : []);
@@ -243,8 +254,38 @@ export default function ProjectsPage() {
     };
   }, []);
 
+  const handleCreate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newName) return;
+    setCreating(true);
+    try {
+      const payload: any = {
+        name: newName,
+        status: newStatus,
+        currency: "CAD",
+      };
+      const b = parseFloat(newBudget);
+      if (!Number.isNaN(b)) payload.budget = b;
+      const res = await fetch("/api/projects", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (res.ok) {
+        const created = await res.json();
+        setProjects((prev) => [created, ...prev]);
+        setShowForm(false);
+        setNewName("");
+        setNewStatus("draft");
+        setNewBudget("");
+      }
+    } finally {
+      setCreating(false);
+    }
+  };
+
   const filteredProjects =
-    statusFilter === 'all'
+    statusFilter === "all"
       ? projects
       : projects.filter((p) => p.status === statusFilter);
 
@@ -255,14 +296,79 @@ export default function ProjectsPage() {
           <Title>Projets</Title>
           <Subtitle>Gérez vos projets et suivez leur progression</Subtitle>
         </HeaderContent>
-        <Button>
+        <Button onClick={() => setShowForm((s) => !s)}>
           <Plus />
           Nouveau projet
         </Button>
       </Header>
 
+      {showForm && (
+        <div
+          style={{
+            background: "white",
+            padding: theme.spacing.xxl,
+            borderRadius: theme.radius.lg,
+            boxShadow: theme.shadows.sm,
+            marginBottom: theme.spacing.xxl,
+          }}
+        >
+          <form
+            onSubmit={handleCreate}
+            style={{
+              display: "grid",
+              gridTemplateColumns: "2fr 1fr 1fr auto",
+              gap: theme.spacing.lg,
+            }}
+          >
+            <input
+              type="text"
+              placeholder="Nom"
+              value={newName}
+              onChange={(e) => setNewName(e.target.value)}
+              required
+              style={{
+                border: `2px solid ${theme.colors.border}`,
+                borderRadius: theme.radius.md,
+                padding: theme.spacing.md,
+              }}
+            />
+            <select
+              value={newStatus}
+              onChange={(e) => setNewStatus(e.target.value as ProjectStatus)}
+              style={{
+                border: `2px solid ${theme.colors.border}`,
+                borderRadius: theme.radius.md,
+                padding: theme.spacing.md,
+              }}
+            >
+              <option value="draft">Brouillon</option>
+              <option value="in_progress">En cours</option>
+              <option value="completed">Terminé</option>
+              <option value="cancelled">Annulé</option>
+            </select>
+            <input
+              type="number"
+              step="0.01"
+              placeholder="Budget (optionnel)"
+              value={newBudget}
+              onChange={(e) => setNewBudget(e.target.value)}
+              style={{
+                border: `2px solid ${theme.colors.border}`,
+                borderRadius: theme.radius.md,
+                padding: theme.spacing.md,
+              }}
+            />
+            <Button type="submit" disabled={creating || !newName}>
+              {creating ? "Création…" : "Créer"}
+            </Button>
+          </form>
+        </div>
+      )}
+
       <StatusFilters>
-        {(['all', 'draft', 'in_progress', 'completed', 'cancelled'] as const).map((status) => (
+        {(
+          ["all", "draft", "in_progress", "completed", "cancelled"] as const
+        ).map((status) => (
           <FilterButton
             key={status}
             $active={statusFilter === status}
@@ -280,12 +386,12 @@ export default function ProjectsPage() {
           </EmptyIcon>
           <EmptyTitle>Aucun projet trouvé</EmptyTitle>
           <EmptyText>
-            {statusFilter === 'all'
-              ? 'Commencez par créer votre premier projet'
+            {statusFilter === "all"
+              ? "Commencez par créer votre premier projet"
               : `Aucun projet avec le statut "${statusLabels[statusFilter]}"`}
           </EmptyText>
-          {statusFilter === 'all' && (
-            <Button>
+          {statusFilter === "all" && (
+            <Button onClick={() => setShowForm(true)}>
               <Plus />
               Créer un projet
             </Button>
@@ -297,7 +403,9 @@ export default function ProjectsPage() {
             <ProjectCard key={project.id}>
               <ProjectHeader>
                 <div>
-                  <ProjectTitle>{project.name}</ProjectTitle>
+                  <ProjectTitle>
+                    <Link href={`/projects/${project.id}`}>{project.name}</Link>
+                  </ProjectTitle>
                   {project.client && (
                     <ProjectClient>{project.client.name}</ProjectClient>
                   )}
@@ -311,10 +419,10 @@ export default function ProjectsPage() {
                 <p
                   style={{
                     fontFamily: theme.font.family.body,
-                    fontSize: '15px',
+                    fontSize: "15px",
                     color: theme.colors.ink2,
                     marginBottom: theme.spacing.lg,
-                    lineHeight: '1.6',
+                    lineHeight: "1.6",
                   }}
                 >
                   {project.description}
@@ -326,8 +434,8 @@ export default function ProjectsPage() {
                   <MetaItem>
                     <MetaLabel>Budget</MetaLabel>
                     <MetaValue>
-                      {new Intl.NumberFormat('fr-CA', {
-                        style: 'currency',
+                      {new Intl.NumberFormat("fr-CA", {
+                        style: "currency",
                         currency: project.currency,
                       }).format(project.budget)}
                     </MetaValue>
@@ -337,14 +445,14 @@ export default function ProjectsPage() {
                   <MetaItem>
                     <MetaLabel>Échéance</MetaLabel>
                     <MetaValue>
-                      {new Date(project.deadline).toLocaleDateString('fr-CA')}
+                      {new Date(project.deadline).toLocaleDateString("fr-CA")}
                     </MetaValue>
                   </MetaItem>
                 )}
                 {project.tags && project.tags.length > 0 && (
                   <MetaItem>
                     <MetaLabel>Tags</MetaLabel>
-                    <MetaValue>{project.tags.join(', ')}</MetaValue>
+                    <MetaValue>{project.tags.join(", ")}</MetaValue>
                   </MetaItem>
                 )}
               </ProjectMeta>

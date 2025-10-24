@@ -1,5 +1,7 @@
 import { memDb } from '../../../lib/db/memory';
 import type { Project, Client } from '../../../types/database';
+import { z } from 'zod';
+import { getServiceSupabase } from '../../../lib/db/supabase';
 
 export const runtime = 'nodejs';
 
@@ -9,36 +11,53 @@ function withRelations(p: Project): Project {
 }
 
 export async function GET() {
+  const supabase = getServiceSupabase();
+  if (supabase) {
+    const { data, error } = await supabase
+      .from('projects')
+      .select('*, client:clients(*)')
+      .order('created_at', { ascending: false });
+    if (error) return Response.json({ error: error.message }, { status: 500 });
+    // Coerce to our Project type; 'client' already attached by alias
+    return Response.json((data as any[]) ?? []);
+  }
   return Response.json(memDb.projects.map(withRelations));
 }
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json();
+    const projectSchema = z.object({
+      client_id: z.string().optional(),
+      name: z.string().min(1),
+      status: z.enum(['draft', 'in_progress', 'completed', 'cancelled']).default('draft'),
+      budget: z.number().optional(),
+      currency: z.string().min(1).default('CAD'),
+      deadline: z.string().optional(),
+      description: z.string().optional(),
+      tags: z.array(z.string()).default([]),
+    });
+    const body = projectSchema.parse(await req.json());
     const now = new Date().toISOString();
     const id = (globalThis.crypto as any)?.randomUUID?.() ?? Math.random().toString(36).slice(2);
 
-    const project: Project = {
-      id,
-      client_id: body.client_id?.toString(),
-      name: (body.name ?? '').toString(),
-      status: (body.status ?? 'draft') as Project['status'],
-      budget: typeof body.budget === 'number' ? body.budget : undefined,
-      currency: (body.currency ?? 'CAD').toString(),
-      deadline: body.deadline?.toString(),
-      description: body.description?.toString(),
-      tags: Array.isArray(body.tags) ? body.tags.map((t: unknown) => String(t)) : [],
-      created_at: now,
-      updated_at: now,
-    };
-
-    if (!project.name) {
-      return Response.json({ error: 'name is required' }, { status: 400 });
+    const supabase = getServiceSupabase();
+    if (supabase) {
+      const insert = { ...body, id, created_at: now, updated_at: now } as Project;
+      const { data, error } = await supabase
+        .from('projects')
+        .insert(insert)
+        .select('*, client:clients(*)')
+        .single();
+      if (error) return Response.json({ error: error.message }, { status: 500 });
+      return Response.json(data, { status: 201 });
     }
 
+    const project: Project = { id, ...body, created_at: now, updated_at: now } as Project;
     memDb.projects.unshift(project);
     return Response.json(withRelations(project), { status: 201 });
   } catch (e: any) {
+    if (e?.issues) return Response.json({ error: 'validation_error', issues: e.issues }, { status: 400 });
     return Response.json({ error: e?.message ?? 'Invalid JSON' }, { status: 400 });
   }
 }
+

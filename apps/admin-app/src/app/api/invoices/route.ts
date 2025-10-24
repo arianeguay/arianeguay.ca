@@ -1,5 +1,7 @@
 import { memDb } from '../../../lib/db/memory';
 import type { Invoice, InvoiceItem } from '../../../types/database';
+import { z } from 'zod';
+import { getServiceSupabase } from '../../../lib/db/supabase';
 
 export const runtime = 'nodejs';
 
@@ -9,6 +11,15 @@ function withRelations(inv: Invoice): Invoice {
 }
 
 export async function GET() {
+  const supabase = getServiceSupabase();
+  if (supabase) {
+    const { data, error } = await supabase
+      .from('invoices')
+      .select('*, client:clients(*)')
+      .order('created_at', { ascending: false });
+    if (error) return Response.json({ error: error.message }, { status: 500 });
+    return Response.json(data ?? []);
+  }
   return Response.json(memDb.invoices.map(withRelations));
 }
 
@@ -22,13 +33,24 @@ function calcTotals(items: InvoiceItem[]) {
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json();
+    const itemSchema = z.object({ desc: z.string().min(1), qty: z.number().positive(), unitPrice: z.number().nonnegative() });
+    const schema = z.object({
+      number: z.string().min(1),
+      client_id: z.string().optional(),
+      issue_date: z.string().optional(),
+      due_date: z.string().optional(),
+      status: z
+        .enum(['draft', 'sent', 'viewed', 'partially_paid', 'paid', 'overdue', 'cancelled'])
+        .default('draft'),
+      items: z.array(itemSchema).min(1),
+      currency: z.string().min(1).default('CAD'),
+      notes: z.string().optional(),
+    });
+    const body = schema.parse(await req.json());
     const now = new Date().toISOString();
     const id = (globalThis.crypto as any)?.randomUUID?.() ?? Math.random().toString(36).slice(2);
 
-    const items: InvoiceItem[] = Array.isArray(body.items)
-      ? body.items.map((it: any) => ({ desc: String(it.desc), qty: Number(it.qty), unitPrice: Number(it.unitPrice) }))
-      : [];
+    const items: InvoiceItem[] = body.items.map((it) => ({ desc: it.desc, qty: it.qty, unitPrice: it.unitPrice }));
 
     const totals = calcTotals(items);
 
@@ -38,7 +60,7 @@ export async function POST(req: Request) {
       client_id: body.client_id ? String(body.client_id) : undefined,
       issue_date: body.issue_date ? String(body.issue_date) : now.slice(0, 10),
       due_date: body.due_date ? String(body.due_date) : now.slice(0, 10),
-      status: (body.status ?? 'draft') as Invoice['status'],
+      status: body.status as Invoice['status'],
       items,
       subtotal: totals.subtotal,
       tax_tps: totals.tax_tps,
@@ -50,9 +72,17 @@ export async function POST(req: Request) {
       updated_at: now,
     };
 
+    const supabase = getServiceSupabase();
+    if (supabase) {
+      const { data, error } = await supabase.from('invoices').insert(invoice as any).select('*, client:clients(*)').single();
+      if (error) return Response.json({ error: error.message }, { status: 500 });
+      return Response.json(data, { status: 201 });
+    }
     memDb.invoices.unshift(invoice);
     return Response.json(withRelations(invoice), { status: 201 });
   } catch (e: any) {
+    if (e?.issues) return Response.json({ error: 'validation_error', issues: e.issues }, { status: 400 });
     return Response.json({ error: e?.message ?? 'Invalid JSON' }, { status: 400 });
   }
 }
+

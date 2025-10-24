@@ -1,10 +1,12 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import { theme } from '../../../theme';
-import { Plus, Search, Edit, Trash2 } from 'lucide-react';
-import type { Client } from '../../../types/database';
+import { Edit, Plus, Search, Trash2 } from "lucide-react";
+import { useEffect, useState } from "react";
+import styled from "styled-components";
+import { theme } from "../../../theme";
+import type { Client } from "../../../types/database";
+import Link from "next/link";
+import toast from "react-hot-toast";
 
 const Container = styled.div`
   max-width: 1400px;
@@ -16,7 +18,7 @@ const Header = styled.header`
   align-items: flex-start;
   margin-bottom: ${theme.spacing.xxxl};
   gap: ${theme.spacing.xl};
-  
+
   @media (max-width: ${theme.breakpoints.md}px) {
     flex-direction: column;
   }
@@ -32,7 +34,7 @@ const Title = styled.h1`
   font-size: 44px;
   color: ${theme.colors.ink1};
   margin-bottom: ${theme.spacing.md};
-  
+
   @media (max-width: ${theme.breakpoints.sm}px) {
     font-size: 32px;
   }
@@ -90,7 +92,8 @@ const SearchIcon = styled.div`
 const SearchInput = styled.input`
   width: 100%;
   max-width: 500px;
-  padding: ${theme.spacing.md} ${theme.spacing.lg} ${theme.spacing.md} ${theme.spacing.xxxxl};
+  padding: ${theme.spacing.md} ${theme.spacing.lg} ${theme.spacing.md}
+    ${theme.spacing.xxxxl};
   border: 2px solid ${theme.colors.border};
   border-radius: ${theme.radius.md};
   font-family: ${theme.font.family.body};
@@ -223,19 +226,23 @@ const EmptyText = styled.p`
 `;
 
 export default function ClientsPage() {
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [clients, setClients] = useState<Client[]>([]);
   const [loading, setLoading] = useState(false);
   const [showForm, setShowForm] = useState(false);
-  const [newName, setNewName] = useState('');
-  const [newEmail, setNewEmail] = useState('');
-  const [newCompany, setNewCompany] = useState('');
+  const [newName, setNewName] = useState("");
+  const [newEmail, setNewEmail] = useState("");
+  const [newCompany, setNewCompany] = useState("");
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editName, setEditName] = useState("");
+  const [editEmail, setEditEmail] = useState("");
+  const [editCompany, setEditCompany] = useState("");
 
   useEffect(() => {
     let active = true;
     (async () => {
       try {
-        const res = await fetch('/api/clients', { cache: 'no-store' });
+        const res = await fetch("/api/clients", { cache: "no-store" });
         if (!res.ok) return;
         const data = await res.json();
         if (active) setClients(Array.isArray(data) ? data : []);
@@ -251,18 +258,25 @@ export default function ClientsPage() {
     if (!newName) return;
     setLoading(true);
     try {
-      const res = await fetch('/api/clients', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: newName, email: newEmail, company_name: newCompany }),
+      const res = await fetch("/api/clients", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: newName,
+          email: newEmail,
+          company_name: newCompany,
+        }),
       });
       if (res.ok) {
         const created = await res.json();
         setClients((prev) => [created, ...prev]);
         setShowForm(false);
-        setNewName('');
-        setNewEmail('');
-        setNewCompany('');
+        setNewName("");
+        setNewEmail("");
+        setNewCompany("");
+        toast.success("Client ajouté");
+      } else {
+        toast.error("Erreur lors de la création");
       }
     } finally {
       setLoading(false);
@@ -271,14 +285,48 @@ export default function ClientsPage() {
 
   const handleDelete = async (id: string) => {
     try {
-      const res = await fetch(`/api/clients/${id}`, { method: 'DELETE' });
-      if (res.ok) setClients((prev) => prev.filter((c) => c.id !== id));
+      const res = await fetch(`/api/clients/${id}`, { method: "DELETE" });
+      if (res.ok) {
+        setClients((prev) => prev.filter((c) => c.id !== id));
+        toast.success("Client supprimé");
+      } else {
+        toast.error("Suppression échouée");
+      }
     } catch {}
   };
 
-  const filteredClients = clients.filter((client) =>
-    client.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    client.company_name?.toLowerCase().includes(searchQuery.toLowerCase())
+  const startEdit = (client: Client) => {
+    setEditingId(client.id);
+    setEditName(client.name || "");
+    setEditEmail(client.email || "");
+    setEditCompany(client.company_name || "");
+  };
+
+  const cancelEdit = () => {
+    setEditingId(null);
+  };
+
+  const saveEdit = async () => {
+    if (!editingId) return;
+    const res = await fetch(`/api/clients/${editingId}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name: editName, email: editEmail, company_name: editCompany }),
+    });
+    if (!res.ok) {
+      toast.error("Échec de la mise à jour");
+      return;
+    }
+    const updated = await res.json();
+    setClients((prev) => prev.map((c) => (c.id === editingId ? updated : c)));
+    setEditingId(null);
+    toast.success("Client mis à jour");
+  };
+
+  const filteredClients = clients.filter(
+    (client) =>
+      client.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      client.company_name?.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   return (
@@ -295,31 +343,60 @@ export default function ClientsPage() {
       </Header>
 
       {showForm && (
-        <div style={{ background: 'white', padding: theme.spacing.xxl, borderRadius: theme.radius.lg, boxShadow: theme.shadows.sm, marginBottom: theme.spacing.xxl }}>
-          <form onSubmit={handleCreate} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr auto', gap: theme.spacing.lg }}>
+        <div
+          style={{
+            background: "white",
+            padding: theme.spacing.xxl,
+            borderRadius: theme.radius.lg,
+            boxShadow: theme.shadows.sm,
+            marginBottom: theme.spacing.xxl,
+          }}
+        >
+          <form
+            onSubmit={handleCreate}
+            style={{
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr 1fr auto",
+              gap: theme.spacing.lg,
+            }}
+          >
             <input
               type="text"
               placeholder="Nom"
               value={newName}
               onChange={(e) => setNewName(e.target.value)}
               required
-              style={{ border: `2px solid ${theme.colors.border}`, borderRadius: theme.radius.md, padding: theme.spacing.md }}
+              style={{
+                border: `2px solid ${theme.colors.border}`,
+                borderRadius: theme.radius.md,
+                padding: theme.spacing.md,
+              }}
             />
             <input
               type="email"
               placeholder="Email (optionnel)"
               value={newEmail}
               onChange={(e) => setNewEmail(e.target.value)}
-              style={{ border: `2px solid ${theme.colors.border}`, borderRadius: theme.radius.md, padding: theme.spacing.md }}
+              style={{
+                border: `2px solid ${theme.colors.border}`,
+                borderRadius: theme.radius.md,
+                padding: theme.spacing.md,
+              }}
             />
             <input
               type="text"
               placeholder="Entreprise (optionnel)"
               value={newCompany}
               onChange={(e) => setNewCompany(e.target.value)}
-              style={{ border: `2px solid ${theme.colors.border}`, borderRadius: theme.radius.md, padding: theme.spacing.md }}
+              style={{
+                border: `2px solid ${theme.colors.border}`,
+                borderRadius: theme.radius.md,
+                padding: theme.spacing.md,
+              }}
             />
-            <Button type="submit" disabled={loading || !newName}>{loading ? 'Ajout…' : 'Ajouter'}</Button>
+            <Button type="submit" disabled={loading || !newName}>
+              {loading ? "Ajout…" : "Ajouter"}
+            </Button>
           </form>
         </div>
       )}
@@ -342,11 +419,11 @@ export default function ClientsPage() {
           <EmptyTitle>Aucun client trouvé</EmptyTitle>
           <EmptyText>
             {searchQuery
-              ? 'Essayez une autre recherche'
-              : 'Commencez par ajouter votre premier client'}
+              ? "Essayez une autre recherche"
+              : "Commencez par ajouter votre premier client"}
           </EmptyText>
           {!searchQuery && (
-            <Button>
+            <Button onClick={() => setShowForm(true)}>
               <Plus />
               Ajouter un client
             </Button>
@@ -358,20 +435,78 @@ export default function ClientsPage() {
             <ClientCard key={client.id}>
               <ClientHeader>
                 <div>
-                  <ClientName>{client.name}</ClientName>
+                  <ClientName>
+                    <Link href={`/clients/${client.id}`}>{client.name}</Link>
+                  </ClientName>
                   {client.company_name && (
                     <ClientCompany>{client.company_name}</ClientCompany>
                   )}
                 </div>
                 <ClientActions>
-                  <IconButton title="Modifier">
+                  <IconButton
+                    title="Modifier"
+                    onClick={() => startEdit(client)}
+                  >
                     <Edit />
                   </IconButton>
-                  <IconButton title="Supprimer" onClick={() => handleDelete(client.id)}>
+
+                  <IconButton
+                    title="Supprimer"
+                    onClick={() => handleDelete(client.id)}
+                  >
                     <Trash2 />
                   </IconButton>
                 </ClientActions>
               </ClientHeader>
+
+              {editingId === client.id ? (
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "1fr 1fr 1fr auto auto",
+                    gap: theme.spacing.md,
+                    marginBottom: theme.spacing.lg,
+                  }}
+                >
+                  <input
+                    type="text"
+                    value={editName}
+                    onChange={(e) => setEditName(e.target.value)}
+                    placeholder="Nom"
+                    style={{
+                      border: `2px solid ${theme.colors.border}`,
+                      borderRadius: theme.radius.md,
+                      padding: theme.spacing.md,
+                    }}
+                  />
+                  <input
+                    type="email"
+                    value={editEmail}
+                    onChange={(e) => setEditEmail(e.target.value)}
+                    placeholder="Email"
+                    style={{
+                      border: `2px solid ${theme.colors.border}`,
+                      borderRadius: theme.radius.md,
+                      padding: theme.spacing.md,
+                    }}
+                  />
+                  <input
+                    type="text"
+                    value={editCompany}
+                    onChange={(e) => setEditCompany(e.target.value)}
+                    placeholder="Entreprise"
+                    style={{
+                      border: `2px solid ${theme.colors.border}`,
+                      borderRadius: theme.radius.md,
+                      padding: theme.spacing.md,
+                    }}
+                  />
+                  <Button onClick={saveEdit}>Enregistrer</Button>
+                  <Button onClick={cancelEdit} style={{ background: theme.colors.bg, color: theme.colors.ink1 }}>
+                    Annuler
+                  </Button>
+                </div>
+              ) : null}
 
               <ClientInfo>
                 {client.email && (

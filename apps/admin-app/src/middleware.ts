@@ -14,5 +14,10 @@ export const config = {
     "/projects/:path*",
     "/invoices/:path*",
     "/settings/:path*",
+    // Protect app APIs (exclude NextAuth and cron endpoints)
+    "/api/clients/:path*",
+    "/api/projects/:path*",
+    "/api/invoices/:path*",
+    "/api/linkedin/:path*",
   ],
 };

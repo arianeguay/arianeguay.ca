@@ -1,9 +1,11 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import styled from 'styled-components';
-import { theme } from '../../../theme';
-import { Copy, RefreshCw, Plus } from 'lucide-react';
+import { Copy, Plus, RefreshCw } from "lucide-react";
+import { useEffect, useState } from "react";
+import styled from "styled-components";
+import { theme } from "../../../theme";
+import type { LinkedInPost } from "../../../types/database";
+import toast from "react-hot-toast";
 
 const Container = styled.div`
   max-width: 1200px;
@@ -19,7 +21,7 @@ const Title = styled.h1`
   font-size: 44px;
   color: ${theme.colors.ink1};
   margin-bottom: ${theme.spacing.md};
-  
+
   @media (max-width: ${theme.breakpoints.sm}px) {
     font-size: 32px;
   }
@@ -180,8 +182,8 @@ const ToneSelector = styled.div`
 const ToneButton = styled.button<{ $active?: boolean }>`
   padding: ${theme.spacing.sm} ${theme.spacing.lg};
   background: ${(props) =>
-    props.$active ? theme.colors.brand.primary : 'white'};
-  color: ${(props) => (props.$active ? 'white' : theme.colors.ink1)};
+    props.$active ? theme.colors.brand.primary : "white"};
+  color: ${(props) => (props.$active ? "white" : theme.colors.ink1)};
   border: 2px solid
     ${(props) =>
       props.$active ? theme.colors.brand.primary : theme.colors.border};
@@ -244,34 +246,90 @@ const IconButton = styled.button`
 `;
 
 export default function LinkedInPage() {
-  const [activeTab, setActiveTab] = useState<'posts' | 'generate'>('posts');
-  const [postUrl, setPostUrl] = useState('');
-  const [postSnippet, setPostSnippet] = useState('');
-  const [selectedTone, setSelectedTone] = useState<'professional' | 'friendly' | 'playful'>('professional');
+  const [activeTab, setActiveTab] = useState<"posts" | "generate">("posts");
+  const [postUrl, setPostUrl] = useState("");
+  const [postSnippet, setPostSnippet] = useState("");
+  const [selectedTone, setSelectedTone] = useState<
+    "professional" | "friendly" | "playful"
+  >("professional");
   const [generatedComments, setGeneratedComments] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
+  const [posts, setPosts] = useState<LinkedInPost[]>([]);
+  const [loadingPosts, setLoadingPosts] = useState(false);
+  const [statusFilter, setStatusFilter] = useState<
+    "all" | "new" | "queued" | "commented" | "skipped"
+  >("all");
+
+  useEffect(() => {
+    let active = true;
+    (async () => {
+      try {
+        setLoadingPosts(true);
+        const res = await fetch("/api/linkedin/posts", { cache: "no-store" });
+        if (!res.ok) return;
+        const data = await res.json();
+        if (active) setPosts(Array.isArray(data) ? data : []);
+      } finally {
+        setLoadingPosts(false);
+      }
+    })();
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const handleAddPost = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await fetch('/api/linkedin/posts', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch("/api/linkedin/posts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ url: postUrl, snippet: postSnippet }),
       });
+      if (res.ok) {
+        const created: LinkedInPost = await res.json();
+        setPosts((prev) => [created, ...prev]);
+        toast.success("Post enregistré");
+      }
     } catch {}
     finally {
-      setPostUrl('');
-      setPostSnippet('');
+      setPostUrl("");
+      setPostSnippet("");
+    }
+  };
+
+  const updatePostStatus = async (
+    id: string,
+    status: "new" | "queued" | "commented" | "skipped",
+  ) => {
+    try {
+      const res = await fetch(`/api/linkedin/posts/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status }),
+      });
+      if (!res.ok) throw new Error("Request failed");
+      setPosts((prev) => prev.map((p) => (p.id === id ? { ...p, status } : p)));
+      toast.success(
+        status === "queued"
+          ? "Ajouté à la file"
+          : status === "commented"
+          ? "Marqué commenté"
+          : status === "skipped"
+          ? "Ignoré"
+          : "Statut mis à jour",
+      );
+    } catch {
+      toast.error("Échec de la mise à jour du statut");
     }
   };
 
   const handleGenerateComments = async () => {
     setLoading(true);
     try {
-      const res = await fetch('/api/linkedin/generate-comments', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch("/api/linkedin/generate-comments", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ tone: selectedTone, snippet: postSnippet }),
       });
       const data = await res.json();
@@ -296,75 +354,187 @@ export default function LinkedInPage() {
 
       <Tabs>
         <Tab
-          $active={activeTab === 'posts'}
-          onClick={() => setActiveTab('posts')}
+          $active={activeTab === "posts"}
+          onClick={() => setActiveTab("posts")}
         >
           Mes posts
         </Tab>
         <Tab
-          $active={activeTab === 'generate'}
-          onClick={() => setActiveTab('generate')}
+          $active={activeTab === "generate"}
+          onClick={() => setActiveTab("generate")}
         >
           Générer des commentaires
         </Tab>
       </Tabs>
 
-      {activeTab === 'posts' && (
-        <Card>
-          <SectionTitle>Ajouter un post LinkedIn</SectionTitle>
-          <Form onSubmit={handleAddPost}>
-            <div>
-              <Label htmlFor="url">URL du post</Label>
-              <Input
-                id="url"
-                type="url"
-                value={postUrl}
-                onChange={(e) => setPostUrl(e.target.value)}
-                placeholder="https://www.linkedin.com/posts/..."
-              />
-            </div>
+      {activeTab === "posts" && (
+        <>
+          <Card>
+            <SectionTitle>Ajouter un post LinkedIn</SectionTitle>
+            <Form onSubmit={handleAddPost}>
+              <div>
+                <Label htmlFor="url">URL du post</Label>
+                <Input
+                  id="url"
+                  type="url"
+                  value={postUrl}
+                  onChange={(e) => setPostUrl(e.target.value)}
+                  placeholder="https://www.linkedin.com/posts/..."
+                />
+              </div>
 
-            <div>
-              <Label htmlFor="snippet">Extrait du post (optionnel)</Label>
-              <TextArea
-                id="snippet"
-                value={postSnippet}
-                onChange={(e) => setPostSnippet(e.target.value)}
-                placeholder="Collez un extrait du contenu du post..."
-              />
-            </div>
+              <div>
+                <Label htmlFor="snippet">Extrait du post (optionnel)</Label>
+                <TextArea
+                  id="snippet"
+                  value={postSnippet}
+                  onChange={(e) => setPostSnippet(e.target.value)}
+                  placeholder="Collez un extrait du contenu du post..."
+                />
+              </div>
 
-            <Button type="submit">
-              <Plus />
-              Ajouter le post
-            </Button>
-          </Form>
-        </Card>
+              <Button type="submit">
+                <Plus />
+                Ajouter le post
+              </Button>
+            </Form>
+          </Card>
+
+          <Card>
+            <SectionTitle>Mes posts enregistrés</SectionTitle>
+            <div style={{ display: "flex", gap: theme.spacing.md, marginBottom: theme.spacing.lg }}>
+              <label style={{ fontFamily: theme.font.family.body, color: theme.colors.ink2, display: "flex", alignItems: "center", gap: 8 }}>
+                Statut
+                <select
+                  value={statusFilter}
+                  onChange={(e) => setStatusFilter(e.target.value as any)}
+                  style={{ border: `2px solid ${theme.colors.border}`, borderRadius: theme.radius.md, padding: theme.spacing.sm }}
+                >
+                  <option value="all">Tous</option>
+                  <option value="new">Nouveau</option>
+                  <option value="queued">File d'attente</option>
+                  <option value="commented">Commenté</option>
+                  <option value="skipped">Ignoré</option>
+                </select>
+              </label>
+            </div>
+            {loadingPosts && (
+              <p
+                style={{
+                  fontFamily: theme.font.family.body,
+                  color: theme.colors.ink2,
+                }}
+              >
+                Chargement…
+              </p>
+            )}
+            {!loadingPosts && posts.length === 0 && (
+              <p
+                style={{
+                  fontFamily: theme.font.family.body,
+                  color: theme.colors.ink2,
+                }}
+              >
+                Aucun post enregistré.
+              </p>
+            )}
+            {!loadingPosts && posts.length > 0 && (
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: theme.spacing.md,
+                }}
+              >
+                {posts
+                  .filter((p) =>
+                    statusFilter === "all" ? true : (p.status || "new") === statusFilter,
+                  )
+                  .map((p) => (
+                  <div
+                    key={p.id}
+                    style={{
+                      padding: theme.spacing.lg,
+                      border: `1px solid ${theme.colors.border}`,
+                      borderRadius: theme.radius.md,
+                    }}
+                  >
+                    {p.url && (
+                      <a
+                        href={p.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        style={{
+                          color: theme.colors.brand.primary,
+                          textDecoration: "underline",
+                        }}
+                      >
+                        {p.url}
+                      </a>
+                    )}
+                    {p.snippet && (
+                      <p
+                        style={{
+                          marginTop: theme.spacing.sm,
+                          color: theme.colors.ink2,
+                          whiteSpace: "pre-wrap",
+                        }}
+                      >
+                        {p.snippet}
+                      </p>
+                    )}
+                    <p
+                      style={{
+                        marginTop: theme.spacing.sm,
+                        color: theme.colors.ink1,
+                        fontSize: 12,
+                      }}
+                    >
+                      Ajouté le {new Date(p.created_at).toLocaleString("fr-CA")}
+                    </p>
+
+                    <div style={{ display: "flex", gap: theme.spacing.sm, marginTop: theme.spacing.md }}>
+                      <SecondaryButton onClick={() => updatePostStatus(p.id, "queued")} disabled={p.status === "queued"}>
+                        Ajouter à la file
+                      </SecondaryButton>
+                      <SecondaryButton onClick={() => updatePostStatus(p.id, "commented")} disabled={p.status === "commented"}>
+                        Marquer commenté
+                      </SecondaryButton>
+                      <SecondaryButton onClick={() => updatePostStatus(p.id, "skipped")} disabled={p.status === "skipped"}>
+                        Ignorer
+                      </SecondaryButton>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </Card>
+        </>
       )}
 
-      {activeTab === 'generate' && (
+      {activeTab === "generate" && (
         <>
           <Card>
             <SectionTitle>Générer des commentaires</SectionTitle>
-            
+
             <div style={{ marginBottom: theme.spacing.xl }}>
               <Label>Ton</Label>
               <ToneSelector>
                 <ToneButton
-                  $active={selectedTone === 'professional'}
-                  onClick={() => setSelectedTone('professional')}
+                  $active={selectedTone === "professional"}
+                  onClick={() => setSelectedTone("professional")}
                 >
                   Professionnel
                 </ToneButton>
                 <ToneButton
-                  $active={selectedTone === 'friendly'}
-                  onClick={() => setSelectedTone('friendly')}
+                  $active={selectedTone === "friendly"}
+                  onClick={() => setSelectedTone("friendly")}
                 >
                   Amical
                 </ToneButton>
                 <ToneButton
-                  $active={selectedTone === 'playful'}
-                  onClick={() => setSelectedTone('playful')}
+                  $active={selectedTone === "playful"}
+                  onClick={() => setSelectedTone("playful")}
                 >
                   Enjoué
                 </ToneButton>
@@ -373,7 +543,7 @@ export default function LinkedInPage() {
 
             <Button onClick={handleGenerateComments} disabled={loading}>
               {loading ? (
-                'Génération en cours...'
+                "Génération en cours..."
               ) : (
                 <>
                   <RefreshCw />
@@ -397,7 +567,10 @@ export default function LinkedInPage() {
                   </CommentActions>
                 </CommentBox>
               ))}
-              <SecondaryButton onClick={handleGenerateComments} disabled={loading}>
+              <SecondaryButton
+                onClick={handleGenerateComments}
+                disabled={loading}
+              >
                 <RefreshCw />
                 Régénérer
               </SecondaryButton>
