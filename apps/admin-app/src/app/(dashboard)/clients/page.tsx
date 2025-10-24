@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { theme } from '../../../theme';
 import { Plus, Search, Edit, Trash2 } from 'lucide-react';
@@ -224,21 +224,57 @@ const EmptyText = styled.p`
 
 export default function ClientsPage() {
   const [searchQuery, setSearchQuery] = useState('');
-  
-  // Demo data - will be replaced with actual data from database
-  const [clients] = useState<Client[]>([
-    {
-      id: '1',
-      name: 'Marie Tremblay',
-      email: 'marie@example.com',
-      phone: '514-555-0123',
-      company_name: 'Studio Design Inc.',
-      tax_number_tps: '123456789',
-      tax_number_tvq: '987654321',
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    },
-  ]);
+  const [clients, setClients] = useState<Client[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [showForm, setShowForm] = useState(false);
+  const [newName, setNewName] = useState('');
+  const [newEmail, setNewEmail] = useState('');
+  const [newCompany, setNewCompany] = useState('');
+
+  useEffect(() => {
+    let active = true;
+    (async () => {
+      try {
+        const res = await fetch('/api/clients', { cache: 'no-store' });
+        if (!res.ok) return;
+        const data = await res.json();
+        if (active) setClients(Array.isArray(data) ? data : []);
+      } catch {}
+    })();
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const handleCreate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newName) return;
+    setLoading(true);
+    try {
+      const res = await fetch('/api/clients', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: newName, email: newEmail, company_name: newCompany }),
+      });
+      if (res.ok) {
+        const created = await res.json();
+        setClients((prev) => [created, ...prev]);
+        setShowForm(false);
+        setNewName('');
+        setNewEmail('');
+        setNewCompany('');
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    try {
+      const res = await fetch(`/api/clients/${id}`, { method: 'DELETE' });
+      if (res.ok) setClients((prev) => prev.filter((c) => c.id !== id));
+    } catch {}
+  };
 
   const filteredClients = clients.filter((client) =>
     client.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -252,11 +288,41 @@ export default function ClientsPage() {
           <Title>Clients</Title>
           <Subtitle>Gérez vos clients et leurs informations</Subtitle>
         </HeaderContent>
-        <Button>
+        <Button onClick={() => setShowForm((s) => !s)}>
           <Plus />
           Nouveau client
         </Button>
       </Header>
+
+      {showForm && (
+        <div style={{ background: 'white', padding: theme.spacing.xxl, borderRadius: theme.radius.lg, boxShadow: theme.shadows.sm, marginBottom: theme.spacing.xxl }}>
+          <form onSubmit={handleCreate} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr auto', gap: theme.spacing.lg }}>
+            <input
+              type="text"
+              placeholder="Nom"
+              value={newName}
+              onChange={(e) => setNewName(e.target.value)}
+              required
+              style={{ border: `2px solid ${theme.colors.border}`, borderRadius: theme.radius.md, padding: theme.spacing.md }}
+            />
+            <input
+              type="email"
+              placeholder="Email (optionnel)"
+              value={newEmail}
+              onChange={(e) => setNewEmail(e.target.value)}
+              style={{ border: `2px solid ${theme.colors.border}`, borderRadius: theme.radius.md, padding: theme.spacing.md }}
+            />
+            <input
+              type="text"
+              placeholder="Entreprise (optionnel)"
+              value={newCompany}
+              onChange={(e) => setNewCompany(e.target.value)}
+              style={{ border: `2px solid ${theme.colors.border}`, borderRadius: theme.radius.md, padding: theme.spacing.md }}
+            />
+            <Button type="submit" disabled={loading || !newName}>{loading ? 'Ajout…' : 'Ajouter'}</Button>
+          </form>
+        </div>
+      )}
 
       <SearchBar>
         <SearchIcon>
@@ -301,7 +367,7 @@ export default function ClientsPage() {
                   <IconButton title="Modifier">
                     <Edit />
                   </IconButton>
-                  <IconButton title="Supprimer">
+                  <IconButton title="Supprimer" onClick={() => handleDelete(client.id)}>
                     <Trash2 />
                   </IconButton>
                 </ClientActions>

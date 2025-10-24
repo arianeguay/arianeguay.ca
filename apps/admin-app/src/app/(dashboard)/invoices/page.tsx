@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { theme } from '../../../theme';
 import { Plus, FileText, Download } from 'lucide-react';
@@ -262,43 +262,22 @@ const statusLabels: Record<InvoiceStatus | 'all', string> = {
 
 export default function InvoicesPage() {
   const [statusFilter, setStatusFilter] = useState<InvoiceStatus | 'all'>('all');
+  const [invoices, setInvoices] = useState<Invoice[]>([]);
 
-  // Demo data
-  const [invoices] = useState<Invoice[]>([
-    {
-      id: '1',
-      number: '2025-001',
-      issue_date: '2025-01-15',
-      due_date: '2025-02-14',
-      status: 'sent',
-      items: [
-        { desc: 'Développement site web', qty: 1, unitPrice: 5000 },
-        { desc: 'Design UI/UX', qty: 1, unitPrice: 2500 },
-      ],
-      subtotal: 7500,
-      tax_tps: 375,
-      tax_tvq: 748.13,
-      total: 8623.13,
-      currency: 'CAD',
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    },
-    {
-      id: '2',
-      number: '2025-002',
-      issue_date: '2025-01-20',
-      due_date: '2025-02-19',
-      status: 'paid',
-      items: [{ desc: 'Consultation technique', qty: 8, unitPrice: 150 }],
-      subtotal: 1200,
-      tax_tps: 60,
-      tax_tvq: 119.70,
-      total: 1379.70,
-      currency: 'CAD',
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    },
-  ]);
+  useEffect(() => {
+    let active = true;
+    (async () => {
+      try {
+        const res = await fetch('/api/invoices', { cache: 'no-store' });
+        if (!res.ok) return;
+        const data = await res.json();
+        if (active) setInvoices(Array.isArray(data) ? data : []);
+      } catch {}
+    })();
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const filteredInvoices =
     statusFilter === 'all'
@@ -363,7 +342,7 @@ export default function InvoicesPage() {
                   <StatusBadge $status={invoice.status}>
                     {statusLabels[invoice.status]}
                   </StatusBadge>
-                  <IconButton title="Télécharger PDF">
+                  <IconButton title="Télécharger PDF" onClick={() => window.open(`/api/invoices/${invoice.id}/pdf`, '_blank')}>
                     <Download />
                   </IconButton>
                 </InvoiceActions>

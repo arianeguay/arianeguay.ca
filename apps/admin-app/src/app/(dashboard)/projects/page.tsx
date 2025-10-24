@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { theme } from '../../../theme';
 import { Plus, FolderKanban } from 'lucide-react';
@@ -226,33 +226,22 @@ const statusLabels: Record<ProjectStatus | 'all', string> = {
 export default function ProjectsPage() {
   const [statusFilter, setStatusFilter] = useState<ProjectStatus | 'all'>('all');
 
-  // Demo data
-  const [projects] = useState<Project[]>([
-    {
-      id: '1',
-      name: 'Refonte site web',
-      status: 'in_progress',
-      budget: 8500,
-      currency: 'CAD',
-      deadline: '2025-12-15',
-      description: 'Refonte complète du site web avec nouveau design',
-      tags: ['web', 'design'],
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    },
-    {
-      id: '2',
-      name: 'Application mobile',
-      status: 'draft',
-      budget: 15000,
-      currency: 'CAD',
-      deadline: '2026-03-01',
-      description: 'Développement d\'une application mobile native',
-      tags: ['mobile', 'react-native'],
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    },
-  ]);
+  const [projects, setProjects] = useState<Project[]>([]);
+
+  useEffect(() => {
+    let active = true;
+    (async () => {
+      try {
+        const res = await fetch('/api/projects', { cache: 'no-store' });
+        if (!res.ok) return;
+        const data = await res.json();
+        if (active) setProjects(Array.isArray(data) ? data : []);
+      } catch {}
+    })();
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const filteredProjects =
     statusFilter === 'all'

@@ -253,23 +253,34 @@ export default function LinkedInPage() {
 
   const handleAddPost = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Save to database
-    console.log('Add post:', { postUrl, postSnippet });
-    setPostUrl('');
-    setPostSnippet('');
+    try {
+      await fetch('/api/linkedin/posts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: postUrl, snippet: postSnippet }),
+      });
+    } catch {}
+    finally {
+      setPostUrl('');
+      setPostSnippet('');
+    }
   };
 
   const handleGenerateComments = async () => {
     setLoading(true);
-    // TODO: Call OpenAI API
-    setTimeout(() => {
-      setGeneratedComments([
-        "Excellent point ! J'ai aussi remarqué cette tendance dans mes projets récents. La clé est vraiment de rester flexible et d'écouter les besoins des clients. 💡",
-        "Merci pour ce partage inspirant ! Ces conseils vont vraiment m'aider dans mes prochaines collaborations. 🙌",
-        "Totalement d'accord ! C'est exactement ce que j'applique dans ma pratique quotidienne. Super article ! 👏",
-      ]);
+    try {
+      const res = await fetch('/api/linkedin/generate-comments', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tone: selectedTone, snippet: postSnippet }),
+      });
+      const data = await res.json();
+      if (Array.isArray(data?.comments)) setGeneratedComments(data.comments);
+    } catch {
+      // fallback handled server-side already
+    } finally {
       setLoading(false);
-    }, 1500);
+    }
   };
 
   const handleCopy = (text: string) => {

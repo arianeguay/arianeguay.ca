@@ -1,7 +1,8 @@
 'use client';
 
-import { signIn } from 'next-auth/react';
-import { useState } from 'react';
+import { signIn, useSession } from 'next-auth/react';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import styled from 'styled-components';
 import { theme } from '../../../theme';
 
@@ -111,9 +112,18 @@ const Message = styled.div<{ $type: 'success' | 'error' }>`
 `;
 
 export default function SignInPage() {
+  const router = useRouter();
+  const { status } = useSession();
   const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+
+  useEffect(() => {
+    if (status === 'authenticated') {
+      router.replace('/dashboard');
+    }
+  }, [status, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -121,29 +131,18 @@ export default function SignInPage() {
     setMessage(null);
 
     try {
-      const result = await signIn('email', {
+      const result = await signIn('credentials', {
         email,
-        redirect: false,
+        password,
+        redirect: true,
         callbackUrl: '/dashboard',
       });
 
-      if (result?.error) {
-        setMessage({
-          type: 'error',
-          text: 'Une erreur est survenue. Veuillez réessayer.',
-        });
-      } else {
-        setMessage({
-          type: 'success',
-          text: 'Vérifiez votre email pour le lien de connexion !',
-        });
-        setEmail('');
+      if ((result as any)?.error) {
+        setMessage({ type: 'error', text: 'Identifiants invalides.' });
       }
     } catch (error) {
-      setMessage({
-        type: 'error',
-        text: 'Une erreur est survenue. Veuillez réessayer.',
-      });
+      setMessage({ type: 'error', text: 'Une erreur est survenue. Veuillez réessayer.' });
     } finally {
       setLoading(false);
     }
@@ -171,8 +170,21 @@ export default function SignInPage() {
             />
           </div>
 
-          <Button type="submit" disabled={loading || !email}>
-            {loading ? 'Envoi en cours...' : 'Envoyer le lien de connexion'}
+          <div>
+            <Label htmlFor="password">Mot de passe</Label>
+            <Input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Votre mot de passe"
+              required
+              disabled={loading}
+            />
+          </div>
+
+          <Button type="submit" disabled={loading || !email || !password}>
+            {loading ? 'Connexion...' : 'Se connecter'}
           </Button>
 
           {message && (
