@@ -1,18 +1,12 @@
-"use client";
+import styled from 'styled-components';
+import { theme } from '../../../../theme';
+import type { ProjectStatus } from '../../../../types/database';
 
-import { FolderKanban, Plus } from "lucide-react";
-import { useEffect, useState } from "react";
-import styled from "styled-components";
-import { theme } from "../../../theme";
-import type { Project, ProjectStatus } from "../../../types/database";
-import Link from "next/link";
-import ProjectsListView from "./ProjectsList";
-
-const Container = styled.div`
+export const Container = styled.div`
   max-width: 1400px;
 `;
 
-const Header = styled.header`
+export const Header = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -24,11 +18,11 @@ const Header = styled.header`
   }
 `;
 
-const HeaderContent = styled.div`
+export const HeaderContent = styled.div`
   flex: 1;
 `;
 
-const Title = styled.h1`
+export const Title = styled.h1`
   font-family: ${theme.font.family.display};
   font-weight: ${theme.font.weight.bold};
   font-size: 44px;
@@ -40,13 +34,13 @@ const Title = styled.h1`
   }
 `;
 
-const Subtitle = styled.p`
+export const Subtitle = styled.p`
   font-family: ${theme.font.family.body};
   font-size: 16px;
   color: ${theme.colors.ink2};
 `;
 
-const Button = styled.button`
+export const Button = styled.button`
   padding: ${theme.spacing.md} ${theme.spacing.xxl};
   background: ${theme.colors.brand.primary};
   color: white;
@@ -71,21 +65,18 @@ const Button = styled.button`
   }
 `;
 
-const StatusFilters = styled.div`
+export const StatusFilters = styled.div`
   display: flex;
   gap: ${theme.spacing.md};
   margin-bottom: ${theme.spacing.xxl};
   flex-wrap: wrap;
 `;
 
-const FilterButton = styled.button<{ $active?: boolean }>`
+export const FilterButton = styled.button<{ $active?: boolean }>`
   padding: ${theme.spacing.sm} ${theme.spacing.lg};
-  background: ${(props) =>
-    props.$active ? theme.colors.brand.primary : "white"};
-  color: ${(props) => (props.$active ? "white" : theme.colors.ink1)};
-  border: 2px solid
-    ${(props) =>
-      props.$active ? theme.colors.brand.primary : theme.colors.border};
+  background: ${(props) => (props.$active ? theme.colors.brand.primary : 'white')};
+  color: ${(props) => (props.$active ? 'white' : theme.colors.ink1)};
+  border: 2px solid ${(props) => (props.$active ? theme.colors.brand.primary : theme.colors.border)};
   border-radius: ${theme.radius.pill};
   font-family: ${theme.font.family.body};
   font-size: 14px;
@@ -98,13 +89,13 @@ const FilterButton = styled.button<{ $active?: boolean }>`
   }
 `;
 
-const ProjectsList = styled.div`
+export const List = styled.div`
   display: flex;
   flex-direction: column;
   gap: ${theme.spacing.lg};
 `;
 
-const ProjectCard = styled.div`
+export const ProjectCard = styled.div`
   background: white;
   border-radius: ${theme.radius.lg};
   padding: ${theme.spacing.xxl};
@@ -116,7 +107,7 @@ const ProjectCard = styled.div`
   }
 `;
 
-const ProjectHeader = styled.div`
+export const ProjectHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -128,7 +119,7 @@ const ProjectHeader = styled.div`
   }
 `;
 
-const ProjectTitle = styled.h3`
+export const ProjectTitle = styled.h3`
   font-family: ${theme.font.family.display};
   font-weight: ${theme.font.weight.semibold};
   font-size: 20px;
@@ -136,13 +127,13 @@ const ProjectTitle = styled.h3`
   margin-bottom: ${theme.spacing.xs};
 `;
 
-const ProjectClient = styled.p`
+export const ProjectClient = styled.p`
   font-family: ${theme.font.family.body};
   font-size: 14px;
   color: ${theme.colors.ink2};
 `;
 
-const StatusBadge = styled.span<{ $status: ProjectStatus }>`
+export const StatusBadge = styled.span<{ $status: ProjectStatus }>`
   display: inline-flex;
   align-items: center;
   padding: ${theme.spacing.xs} ${theme.spacing.md};
@@ -151,11 +142,11 @@ const StatusBadge = styled.span<{ $status: ProjectStatus }>`
   font-weight: ${theme.font.weight.medium};
   background: ${(props) => {
     switch (props.$status) {
-      case "in_progress":
+      case 'in_progress':
         return theme.colors.status.info;
-      case "completed":
+      case 'completed':
         return theme.colors.status.success;
-      case "cancelled":
+      case 'cancelled':
         return theme.colors.status.error;
       default:
         return theme.colors.border;
@@ -164,19 +155,19 @@ const StatusBadge = styled.span<{ $status: ProjectStatus }>`
   color: white;
 `;
 
-const ProjectMeta = styled.div`
+export const ProjectMeta = styled.div`
   display: flex;
   gap: ${theme.spacing.xxl};
   flex-wrap: wrap;
 `;
 
-const MetaItem = styled.div`
+export const MetaItem = styled.div`
   display: flex;
   flex-direction: column;
   gap: ${theme.spacing.xs};
 `;
 
-const MetaLabel = styled.span`
+export const MetaLabel = styled.span`
   font-family: ${theme.font.family.body};
   font-size: 12px;
   font-weight: ${theme.font.weight.medium};
@@ -185,14 +176,14 @@ const MetaLabel = styled.span`
   letter-spacing: 0.5px;
 `;
 
-const MetaValue = styled.span`
+export const MetaValue = styled.span`
   font-family: ${theme.font.family.body};
   font-size: 16px;
   font-weight: ${theme.font.weight.semibold};
   color: ${theme.colors.ink1};
 `;
 
-const EmptyState = styled.div`
+export const EmptyState = styled.div`
   text-align: center;
   padding: ${theme.spacing.xxxxxl} ${theme.spacing.xxl};
   background: white;
@@ -200,12 +191,12 @@ const EmptyState = styled.div`
   box-shadow: ${theme.shadows.sm};
 `;
 
-const EmptyIcon = styled.div`
+export const EmptyIcon = styled.div`
   font-size: 64px;
   margin-bottom: ${theme.spacing.xl};
 `;
 
-const EmptyTitle = styled.h3`
+export const EmptyTitle = styled.h3`
   font-family: ${theme.font.family.display};
   font-weight: ${theme.font.weight.semibold};
   font-size: 20px;
@@ -213,21 +204,9 @@ const EmptyTitle = styled.h3`
   margin-bottom: ${theme.spacing.md};
 `;
 
-const EmptyText = styled.p`
+export const EmptyText = styled.p`
   font-family: ${theme.font.family.body};
   font-size: 16px;
   color: ${theme.colors.ink2};
   margin-bottom: ${theme.spacing.xl};
 `;
-
-const statusLabels: Record<ProjectStatus | "all", string> = {
-  all: "Tous",
-  draft: "Brouillon",
-  in_progress: "En cours",
-  completed: "Terminé",
-  cancelled: "Annulé",
-};
-
-export default function ProjectsPage() {
-  return <ProjectsListView />;
-}

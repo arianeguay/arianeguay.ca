@@ -10,18 +10,26 @@ function withRelations(p: Project): Project {
   return { ...p, client };
 }
 
-export async function GET() {
+export async function GET(req: Request) {
+  const url = new URL(req.url);
+  const client_id = url.searchParams.get('client_id') || undefined;
+  const status = url.searchParams.get('status') || undefined;
   const supabase = getServiceSupabase();
   if (supabase) {
-    const { data, error } = await supabase
+    let q = supabase
       .from('projects')
       .select('*, client:clients(*)')
       .order('created_at', { ascending: false });
+    if (client_id) q = q.eq('client_id', client_id);
+    if (status) q = q.eq('status', status);
+    const { data, error } = await q;
     if (error) return Response.json({ error: error.message }, { status: 500 });
-    // Coerce to our Project type; 'client' already attached by alias
     return Response.json((data as any[]) ?? []);
   }
-  return Response.json(memDb.projects.map(withRelations));
+  let list = memDb.projects.slice();
+  if (client_id) list = list.filter((p) => p.client_id === client_id);
+  if (status) list = list.filter((p) => p.status === (status as any));
+  return Response.json(list.map(withRelations));
 }
 
 export async function POST(req: Request) {

@@ -1,5 +1,5 @@
 import { memDb } from '../../../../../lib/db/memory';
-import type { LinkedInPost } from '../../../../../types/database';
+import type { LinkedInComment } from '../../../../../types/database';
 import { getServiceSupabase } from '../../../../../lib/db/supabase';
 import { z } from 'zod';
 
@@ -8,11 +8,11 @@ export const runtime = 'nodejs';
 export async function GET(_: Request, { params }: { params: { id: string } }) {
   const supabase = getServiceSupabase();
   if (supabase) {
-    const { data, error } = await supabase.from('linkedin_posts').select('*').eq('id', params.id).single();
+    const { data, error } = await supabase.from('linkedin_comments').select('*').eq('id', params.id).single();
     if (error) return Response.json({ error: error.message }, { status: 404 });
     return Response.json(data);
   }
-  const item = memDb.linkedin_posts.find((p) => p.id === params.id);
+  const item = memDb.linkedin_comments.find((c: LinkedInComment) => c.id === params.id);
   if (!item) return Response.json({ error: 'not found' }, { status: 404 });
   return Response.json(item);
 }
@@ -20,32 +20,26 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
 export async function PUT(req: Request, { params }: { params: { id: string } }) {
   try {
     const schema = z.object({
-      url: z.string().url().optional(),
-      author: z.string().optional(),
-      snippet: z.string().optional(),
-      date: z.string().optional(),
-      like_count: z.number().int().nonnegative().optional(),
-      comment_count: z.number().int().nonnegative().optional(),
-      engagement_score: z.number().int().nonnegative().optional(),
-      status: z.enum(['new', 'queued', 'commented', 'skipped']).optional(),
-      source: z.string().optional(),
+      tone: z.enum(['professional', 'friendly', 'playful']).optional(),
+      content: z.string().min(1).optional(),
+      used: z.boolean().optional(),
     });
     const body = schema.parse(await req.json());
     const supabase = getServiceSupabase();
     if (supabase) {
       const { data, error } = await supabase
-        .from('linkedin_posts')
-        .update({ ...body, updated_at: new Date().toISOString() })
+        .from('linkedin_comments')
+        .update({ ...body })
         .eq('id', params.id)
         .select('*')
         .single();
       if (error) return Response.json({ error: error.message }, { status: 500 });
       return Response.json(data);
     }
-    const idx = memDb.linkedin_posts.findIndex((p) => p.id === params.id);
+    const idx = memDb.linkedin_comments.findIndex((c: LinkedInComment) => c.id === params.id);
     if (idx === -1) return Response.json({ error: 'not found' }, { status: 404 });
-    const next: LinkedInPost = { ...memDb.linkedin_posts[idx], ...body, updated_at: new Date().toISOString() };
-    memDb.linkedin_posts[idx] = next;
+    const next: LinkedInComment = { ...memDb.linkedin_comments[idx], ...body };
+    memDb.linkedin_comments[idx] = next;
     return Response.json(next);
   } catch (e: any) {
     if (e?.issues) return Response.json({ error: 'validation_error', issues: e.issues }, { status: 400 });
@@ -56,13 +50,12 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
 export async function DELETE(_: Request, { params }: { params: { id: string } }) {
   const supabase = getServiceSupabase();
   if (supabase) {
-    const { error } = await supabase.from('linkedin_posts').delete().eq('id', params.id);
+    const { error } = await supabase.from('linkedin_comments').delete().eq('id', params.id);
     if (error) return Response.json({ error: error.message }, { status: 500 });
     return Response.json({ ok: true });
   }
-  const before = memDb.linkedin_posts.length;
-  memDb.linkedin_posts = memDb.linkedin_posts.filter((p) => p.id !== params.id);
-  if (memDb.linkedin_posts.length === before) return Response.json({ error: 'not found' }, { status: 404 });
+  const before = memDb.linkedin_comments.length;
+  memDb.linkedin_comments = memDb.linkedin_comments.filter((c: LinkedInComment) => c.id !== params.id);
+  if (memDb.linkedin_comments.length === before) return Response.json({ error: 'not found' }, { status: 404 });
   return Response.json({ ok: true });
 }
-

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { Edit, Trash2, ArrowLeft } from "lucide-react";
 import toast from "react-hot-toast";
-import type { Project, ProjectStatus } from "../../../../../types/database";
+import type { Project, ProjectStatus, Invoice, Client } from "../../../../../types/database";
 import {
   Container,
   Header,
@@ -17,6 +17,7 @@ import {
   Textarea,
 } from "./styles";
 import { theme } from "../../../../../theme";
+import Link from "next/link";
 
 export default function ProjectDetail() {
   const { id } = useParams<{ id: string }>();
@@ -32,6 +33,9 @@ export default function ProjectDetail() {
   const [deadline, setDeadline] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [tags, setTags] = useState<string>("");
+  const [invoices, setInvoices] = useState<Invoice[]>([]);
+  const [clients, setClients] = useState<Client[]>([]);
+  const [selectedClientId, setSelectedClientId] = useState<string>("");
 
   useEffect(() => {
     let active = true;
@@ -49,14 +53,39 @@ export default function ProjectDetail() {
         setDeadline(data.deadline || "");
         setDescription(data.description || "");
         setTags((data.tags || []).join(", "));
+        setSelectedClientId((data as any).client_id || "");
       } finally {
         setLoading(false);
       }
+    })();
+    (async () => {
+      try {
+        const resp = await fetch(`/api/invoices?project_id=${id}`, { cache: "no-store" });
+        if (resp.ok) {
+          const data = await resp.json();
+          if (active) setInvoices(Array.isArray(data) ? data : []);
+        }
+      } catch {}
     })();
     return () => {
       active = false;
     };
   }, [id]);
+
+  useEffect(() => {
+    let active = true;
+    (async () => {
+      try {
+        const res = await fetch("/api/clients", { cache: "no-store" });
+        if (!res.ok) return;
+        const data = await res.json();
+        if (active) setClients(Array.isArray(data) ? data : []);
+      } catch {}
+    })();
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const save = async () => {
     try {
@@ -77,7 +106,7 @@ export default function ProjectDetail() {
       const res = await fetch(`/api/projects/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({ ...payload, client_id: selectedClientId || undefined }),
       });
       if (!res.ok) throw new Error("update failed");
       const updated: Project = await res.json();
@@ -128,6 +157,27 @@ export default function ProjectDetail() {
 
       {!loading && project && (
         <div style={{ display: "grid", gap: theme.spacing.lg }}>
+          <FieldGroup>
+            <FieldLabel>Client</FieldLabel>
+            {editing ? (
+              <select
+                value={selectedClientId}
+                onChange={(e) => setSelectedClientId(e.target.value)}
+                style={{ border: `2px solid ${theme.colors.border}`, borderRadius: theme.radius.md, padding: theme.spacing.md }}
+              >
+                <option value="">Aucun</option>
+                {clients.map((c) => (
+                  <option key={c.id} value={c.id}>{c.name}</option>
+                ))}
+              </select>
+            ) : project?.client ? (
+              <div style={{ fontFamily: theme.font.family.body }}>
+                <Link href={`/clients/${project.client.id}`}>{project.client.name}</Link>
+              </div>
+            ) : (
+              <div style={{ fontFamily: theme.font.family.body, color: theme.colors.ink2 }}>Aucun</div>
+            )}
+          </FieldGroup>
           <FieldGroup>
             <FieldLabel>Nom</FieldLabel>
             <Input value={name} onChange={(e) => setName(e.target.value)} disabled={!editing} />
@@ -187,6 +237,39 @@ export default function ProjectDetail() {
               <Button onClick={save}>Enregistrer</Button>
             </div>
           )}
+
+          {/* Related invoices */}
+          <div style={{ marginTop: theme.spacing.xxl }}>
+            <h3
+              style={{
+                fontFamily: theme.font.family.display,
+                fontSize: 20,
+                marginBottom: theme.spacing.md,
+                color: theme.colors.ink1,
+              }}
+            >
+              Factures du projet
+            </h3>
+            {invoices.length === 0 ? (
+              <p style={{ color: theme.colors.ink2, fontFamily: theme.font.family.body }}>Aucune facture</p>
+            ) : (
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: theme.spacing.lg }}>
+                {invoices.map((inv) => (
+                  <div key={inv.id} style={{ background: "white", borderRadius: theme.radius.lg, boxShadow: theme.shadows.sm, padding: theme.spacing.xl }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", marginBottom: theme.spacing.sm }}>
+                      <div style={{ fontFamily: theme.font.family.display, fontWeight: 600 }}>Facture #{inv.number}</div>
+                      <span style={{ background: theme.colors.border, color: theme.colors.ink1, fontSize: 12, padding: "4px 10px", borderRadius: 999 }}>
+                        {inv.status}
+                      </span>
+                    </div>
+                    <div style={{ fontFamily: theme.font.family.body, fontSize: 14, color: theme.colors.ink1, fontWeight: 600 }}>
+                      {new Intl.NumberFormat("fr-CA", { style: "currency", currency: inv.currency }).format(inv.total)}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       )}
     </Container>

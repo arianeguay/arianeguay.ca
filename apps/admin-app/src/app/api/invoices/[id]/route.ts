@@ -7,7 +7,8 @@ export const runtime = 'nodejs';
 
 function withRelations(inv: Invoice): Invoice {
   const client = inv.client_id ? memDb.clients.find((c) => c.id === inv.client_id) : undefined;
-  return { ...inv, client };
+  const project = inv.project_id ? memDb.projects.find((p) => p.id === inv.project_id) : undefined;
+  return { ...inv, client, project };
 }
 
 export async function GET(_: Request, { params }: { params: { id: string } }) {
@@ -15,7 +16,7 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
   if (supabase) {
     const { data, error } = await supabase
       .from('invoices')
-      .select('*, client:clients(*)')
+      .select('*, client:clients(*), project:projects(*)')
       .eq('id', params.id)
       .single();
     if (error) return Response.json({ error: error.message }, { status: 404 });
@@ -32,6 +33,7 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
     const schema = z.object({
       number: z.string().min(1).optional(),
       client_id: z.string().optional(),
+      project_id: z.string().optional(),
       issue_date: z.string().optional(),
       due_date: z.string().optional(),
       status: z
@@ -65,7 +67,7 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
         .from('invoices')
         .update(update as any)
         .eq('id', params.id)
-        .select('*, client:clients(*)')
+        .select('*, client:clients(*), project:projects(*)')
         .single();
       if (error) return Response.json({ error: error.message }, { status: 500 });
       return Response.json(data);

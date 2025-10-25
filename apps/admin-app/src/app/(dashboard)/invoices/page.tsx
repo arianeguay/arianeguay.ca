@@ -4,8 +4,9 @@ import { Download, FileText, Plus, Send } from "lucide-react";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { theme } from "../../../theme";
-import type { Invoice, InvoiceStatus } from "../../../types/database";
+import type { Invoice, InvoiceStatus, Client, Project } from "../../../types/database";
 import toast from "react-hot-toast";
+import { useSearchParams } from "next/navigation";
 
 const Container = styled.div`
   max-width: 1400px;
@@ -265,6 +266,7 @@ const statusLabels: Record<InvoiceStatus | "all", string> = {
 };
 
 export default function InvoicesPage() {
+  const searchParams = useSearchParams();
   const [statusFilter, setStatusFilter] = useState<InvoiceStatus | "all">(
     "all",
   );
@@ -276,6 +278,10 @@ export default function InvoicesPage() {
     { desc: "", qty: "1", unitPrice: "0" },
   ]);
   const [creating, setCreating] = useState(false);
+  const [clients, setClients] = useState<Client[]>([]);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [newClientId, setNewClientId] = useState<string>("");
+  const [newProjectId, setNewProjectId] = useState<string>("");
 
   useEffect(() => {
     let active = true;
@@ -287,10 +293,38 @@ export default function InvoicesPage() {
         if (active) setInvoices(Array.isArray(data) ? data : []);
       } catch {}
     })();
+    (async () => {
+      try {
+        const [cRes, pRes] = await Promise.all([
+          fetch("/api/clients", { cache: "no-store" }),
+          fetch("/api/projects", { cache: "no-store" }),
+        ]);
+        if (cRes.ok) {
+          const cs = await cRes.json();
+          if (active) setClients(Array.isArray(cs) ? cs : []);
+        }
+        if (pRes.ok) {
+          const ps = await pRes.json();
+          if (active) setProjects(Array.isArray(ps) ? ps : []);
+        }
+      } catch {}
+    })();
     return () => {
       active = false;
     };
   }, []);
+
+  // Prefill form from URL (?project_id=...&client_id=...)
+  useEffect(() => {
+    const pid = searchParams.get("project_id");
+    const cid = searchParams.get("client_id");
+    if (pid || cid) {
+      setShowForm(true);
+      if (cid) setNewClientId(cid);
+      if (pid) setNewProjectId(pid);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -311,6 +345,8 @@ export default function InvoicesPage() {
           status: newStatus,
           items: validItems.map((it) => ({ ...it, qty: Number(it.qty), unitPrice: Number(it.unitPrice) })),
           currency: "CAD",
+          client_id: newClientId || undefined,
+          project_id: newProjectId || undefined,
         }),
       });
       if (res.ok) {
@@ -320,6 +356,8 @@ export default function InvoicesPage() {
         setNewNumber("");
         setNewStatus("draft");
         setNewItems([{ desc: "", qty: "1", unitPrice: "0" }]);
+        setNewClientId("");
+        setNewProjectId("");
         toast.success("Facture créée");
       } else {
         toast.error("Création échouée");
@@ -415,7 +453,7 @@ export default function InvoicesPage() {
               gap: theme.spacing.lg,
             }}
           >
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: theme.spacing.lg }}>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: theme.spacing.lg }}>
               <input
                 type="text"
                 placeholder="Numéro"
@@ -432,6 +470,33 @@ export default function InvoicesPage() {
                 {(["draft", "sent", "paid", "overdue"] as const).map((s) => (
                   <option key={s} value={s}>{statusLabels[s]}</option>
                 ))}
+              </select>
+              <select
+                value={newClientId}
+                onChange={(e) => {
+                  setNewClientId(e.target.value);
+                  // reset project if the selected project doesn't belong to client
+                  const proj = projects.find((p) => p.id === newProjectId);
+                  if (proj && proj.client_id && e.target.value && proj.client_id !== e.target.value) setNewProjectId("");
+                }}
+                style={{ border: `2px solid ${theme.colors.border}`, borderRadius: theme.radius.md, padding: theme.spacing.md }}
+              >
+                <option value="">Client (optionnel)</option>
+                {clients.map((c) => (
+                  <option key={c.id} value={c.id}>{c.name}</option>
+                ))}
+              </select>
+              <select
+                value={newProjectId}
+                onChange={(e) => setNewProjectId(e.target.value)}
+                style={{ border: `2px solid ${theme.colors.border}`, borderRadius: theme.radius.md, padding: theme.spacing.md }}
+              >
+                <option value="">Projet (optionnel)</option>
+                {projects
+                  .filter((p) => (newClientId ? p.client_id === newClientId : true))
+                  .map((p) => (
+                    <option key={p.id} value={p.id}>{p.name}</option>
+                  ))}
               </select>
             </div>
 
@@ -542,6 +607,11 @@ export default function InvoicesPage() {
                   <InvoiceNumber>Facture #{invoice.number}</InvoiceNumber>
                   {invoice.client && (
                     <ClientName>{invoice.client.name}</ClientName>
+                  )}
+                  {invoice.project && (
+                    <div style={{ fontFamily: theme.font.family.body, fontSize: 13, color: theme.colors.ink2 }}>
+                      Projet: {invoice.project.name}
+                    </div>
                   )}
                 </div>
                 <InvoiceActions>

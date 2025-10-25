@@ -52,6 +52,8 @@ CREATE TABLE IF NOT EXISTS linkedin_posts (
   like_count INTEGER,
   comment_count INTEGER,
   engagement_score INTEGER, -- Calculated field
+  status VARCHAR(50) DEFAULT 'new', -- new, queued, commented, skipped
+  source VARCHAR(50) DEFAULT 'manual', -- manual, discovery
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
@@ -71,6 +73,7 @@ CREATE TABLE IF NOT EXISTS invoices (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   number VARCHAR(50) UNIQUE NOT NULL, -- YYYY-SEQ format
   client_id UUID REFERENCES clients(id) ON DELETE SET NULL,
+  project_id UUID REFERENCES projects(id) ON DELETE SET NULL,
   issue_date DATE NOT NULL,
   due_date DATE NOT NULL,
   status VARCHAR(50) DEFAULT 'draft', -- draft, sent, viewed, partially_paid, paid, overdue, cancelled
@@ -109,8 +112,10 @@ CREATE TABLE IF NOT EXISTS settings (
 -- Create indexes
 CREATE INDEX IF NOT EXISTS idx_projects_client_id ON projects(client_id);
 CREATE INDEX IF NOT EXISTS idx_invoices_client_id ON invoices(client_id);
+CREATE INDEX IF NOT EXISTS idx_invoices_project_id ON invoices(project_id);
 CREATE INDEX IF NOT EXISTS idx_invoices_status ON invoices(status);
 CREATE INDEX IF NOT EXISTS idx_linkedin_posts_date ON linkedin_posts(date DESC);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_linkedin_posts_url ON linkedin_posts((lower(url))) WHERE url IS NOT NULL;
 CREATE INDEX IF NOT EXISTS idx_linkedin_comments_post_id ON linkedin_comments(post_id);
 CREATE INDEX IF NOT EXISTS idx_engagement_metrics_date ON engagement_metrics(date DESC);
 
@@ -130,3 +135,12 @@ CREATE TRIGGER update_invoices_updated_at BEFORE UPDATE ON invoices FOR EACH ROW
 CREATE TRIGGER update_linkedin_posts_updated_at BEFORE UPDATE ON linkedin_posts FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_engagement_metrics_updated_at BEFORE UPDATE ON engagement_metrics FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_settings_updated_at BEFORE UPDATE ON settings FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- Enable Row Level Security (RLS). Service role bypasses RLS automatically.
+ALTER TABLE clients ENABLE ROW LEVEL SECURITY;
+ALTER TABLE projects ENABLE ROW LEVEL SECURITY;
+ALTER TABLE invoices ENABLE ROW LEVEL SECURITY;
+ALTER TABLE linkedin_posts ENABLE ROW LEVEL SECURITY;
+ALTER TABLE linkedin_comments ENABLE ROW LEVEL SECURITY;
+ALTER TABLE engagement_metrics ENABLE ROW LEVEL SECURITY;
+ALTER TABLE settings ENABLE ROW LEVEL SECURITY;

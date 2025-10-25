@@ -1,5 +1,6 @@
 import { memDb } from '../../../../lib/db/memory';
 import type { LinkedInPost } from '../../../../types/database';
+import { getServiceSupabase } from '../../../../lib/db/supabase';
 
 export const runtime = 'nodejs';
 
@@ -109,12 +110,45 @@ export async function GET(req: Request) {
     }
   }
 
-  // Persist new posts in memory, dedupe by URL
-  const existingUrls = new Set((memDb.linkedin_posts || []).map((p) => p.url).filter(Boolean) as string[]);
+  const supabase = getServiceSupabase();
   const now = new Date().toISOString();
   let created = 0;
   let existing = 0;
 
+  if (supabase) {
+    const { data: existingRows } = await supabase
+      .from('linkedin_posts')
+      .select('url');
+    const dedupe = new Set<string>((existingRows || []).map((r: any) => r.url).filter(Boolean));
+    for (const url of found) {
+      if (dedupe.has(url)) {
+        existing++;
+        continue;
+      }
+      const insert: Partial<LinkedInPost> = {
+        url,
+        date: now,
+        like_count: 0,
+        comment_count: 0,
+        engagement_score: 0,
+        status: 'new',
+        source: 'discovery',
+        created_at: now,
+        updated_at: now,
+      } as any;
+      const { error } = await supabase.from('linkedin_posts').insert(insert as any);
+      if (!error) {
+        created++;
+        dedupe.add(url);
+      }
+      if (created >= 50) break;
+    }
+    const { count } = await supabase.from('linkedin_posts').select('*', { count: 'exact', head: true });
+    return Response.json({ ok: true, sources: sources.length, discovered, created, existing, total: count ?? 0 });
+  }
+
+  // Fallback to memory persistence
+  const existingUrls = new Set((memDb.linkedin_posts || []).map((p) => p.url).filter(Boolean) as string[]);
   for (const url of found) {
     if (existingUrls.has(url)) {
       existing++;

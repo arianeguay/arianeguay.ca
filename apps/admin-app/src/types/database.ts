@@ -85,6 +85,7 @@ export interface Invoice {
   id: string;
   number: string;
   client_id?: string;
+  project_id?: string;
   issue_date: string;
   due_date: string;
   status: InvoiceStatus;
@@ -100,6 +101,7 @@ export interface Invoice {
   updated_at: string;
   // Populated relations
   client?: Client;
+  project?: Project;
 }
 
 export interface EngagementMetric {
