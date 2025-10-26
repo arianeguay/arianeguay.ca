@@ -125,7 +125,7 @@ export default function SettingsPage() {
           <SettingLabel>
             <SettingName>Mode sombre</SettingName>
             <SettingDescription>
-              Activer le thème sombre pour l'interface
+              Activer le thème sombre pour l&apos;interface
             </SettingDescription>
           </SettingLabel>
           <Toggle $active={false} />
@@ -169,7 +169,7 @@ export default function SettingsPage() {
           <SettingLabel>
             <SettingName>Résumé hebdomadaire</SettingName>
             <SettingDescription>
-              Recevoir un résumé de l'activité chaque lundi
+              Recevoir un résumé de l&apos;activité chaque lundi
             </SettingDescription>
           </SettingLabel>
           <Toggle $active={true} />

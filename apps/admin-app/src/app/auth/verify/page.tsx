@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import styled from 'styled-components';
-import { theme } from '../../../theme';
+import styled from "styled-components";
+import { theme } from "../../../theme";
 
 const Container = styled.div`
   min-height: 100vh;
@@ -49,11 +49,10 @@ export default function VerifyPage() {
       <Card>
         <Icon>📧</Icon>
         <Title>Vérifiez votre email</Title>
+        <Text>Un lien de connexion a été envoyé à votre adresse email.</Text>
         <Text>
-          Un lien de connexion a été envoyé à votre adresse email.
-        </Text>
-        <Text>
-          Cliquez sur le lien dans l'email pour vous connecter. Le lien est valide pendant 24 heures.
+          Cliquez sur le lien dans l&apos;email pour vous connecter. Le lien est
+          valide pendant 24 heures.
         </Text>
       </Card>
     </Container>

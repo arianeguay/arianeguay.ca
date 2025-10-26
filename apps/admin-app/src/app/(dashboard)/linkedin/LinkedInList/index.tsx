@@ -201,7 +201,7 @@ export default function LinkedInList({ initialPosts }: Props) {
                 >
                   <option value="all">Tous</option>
                   <option value="new">Nouveau</option>
-                  <option value="queued">File d'attente</option>
+                  <option value="queued">File d&apos;attente</option>
                   <option value="commented">Commenté</option>
                   <option value="skipped">Ignoré</option>
                 </select>

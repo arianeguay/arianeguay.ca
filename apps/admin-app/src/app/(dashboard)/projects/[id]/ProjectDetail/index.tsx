@@ -113,7 +113,7 @@ export default function ProjectDetail() {
       setProject(updated);
       setEditing(false);
       toast.success("Projet mis à jour");
-    } catch (e) {
+    } catch (_e) {
       toast.error("Échec de la mise à jour");
     }
   };

@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { signIn, useSession } from 'next-auth/react';
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import styled from 'styled-components';
-import { theme } from '../../../theme';
+import { signIn, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import styled from "styled-components";
+import { theme } from "../../../theme";
 
 const Container = styled.div`
   min-height: 100vh;
@@ -101,27 +101,29 @@ const Button = styled.button`
   }
 `;
 
-const Message = styled.div<{ $type: 'success' | 'error' }>`
+const Message = styled.div<{ $type: "success" | "error" }>`
   padding: ${theme.spacing.md} ${theme.spacing.lg};
   border-radius: ${theme.radius.md};
   font-size: 14px;
   text-align: center;
-  background: ${(props) =>
-    props.$type === 'success' ? '#E8F5E9' : '#FFEBEE'};
-  color: ${(props) => (props.$type === 'success' ? '#2E7D32' : '#C62828')};
+  background: ${(props) => (props.$type === "success" ? "#E8F5E9" : "#FFEBEE")};
+  color: ${(props) => (props.$type === "success" ? "#2E7D32" : "#C62828")};
 `;
 
 export default function SignInPage() {
   const router = useRouter();
   const { status } = useSession();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [message, setMessage] = useState<{
+    type: "success" | "error";
+    text: string;
+  } | null>(null);
 
   useEffect(() => {
-    if (status === 'authenticated') {
-      router.replace('/dashboard');
+    if (status === "authenticated") {
+      router.replace("/dashboard");
     }
   }, [status, router]);
 
@@ -131,18 +133,21 @@ export default function SignInPage() {
     setMessage(null);
 
     try {
-      const result = await signIn('credentials', {
+      const result = await signIn("credentials", {
         email,
         password,
         redirect: true,
-        callbackUrl: '/dashboard',
+        callbackUrl: "/dashboard",
       });
 
       if ((result as any)?.error) {
-        setMessage({ type: 'error', text: 'Identifiants invalides.' });
+        setMessage({ type: "error", text: "Identifiants invalides." });
       }
-    } catch (error) {
-      setMessage({ type: 'error', text: 'Une erreur est survenue. Veuillez réessayer.' });
+    } catch (_error) {
+      setMessage({
+        type: "error",
+        text: "Une erreur est survenue. Veuillez réessayer.",
+      });
     } finally {
       setLoading(false);
     }
@@ -152,9 +157,7 @@ export default function SignInPage() {
     <Container>
       <Card>
         <Title>Admin App</Title>
-        <Subtitle>
-          Connectez-vous à votre espace de gestion freelance
-        </Subtitle>
+        <Subtitle>Connectez-vous à votre espace de gestion freelance</Subtitle>
 
         <Form onSubmit={handleSubmit}>
           <div>
@@ -184,12 +187,10 @@ export default function SignInPage() {
           </div>
 
           <Button type="submit" disabled={loading || !email || !password}>
-            {loading ? 'Connexion...' : 'Se connecter'}
+            {loading ? "Connexion..." : "Se connecter"}
           </Button>
 
-          {message && (
-            <Message $type={message.type}>{message.text}</Message>
-          )}
+          {message && <Message $type={message.type}>{message.text}</Message>}
         </Form>
       </Card>
     </Container>

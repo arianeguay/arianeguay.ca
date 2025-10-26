@@ -1,33 +1,33 @@
-import Link from "next/link";
 import { FileText, Linkedin, TrendingUp, Users } from "lucide-react";
-import { memDb } from "../../../lib/db/memory";
-import { getServiceSupabase } from "../../../lib/db/supabase";
-import { theme } from "../../../theme";
+import Link from "next/link";
 import {
-  Container,
-  Header,
-  Title,
-  Subtitle,
-  Grid,
+  ActionButton,
+  ActionGrid,
+  ActivityCard,
+  ActivityContent,
+  ActivityIcon,
+  ActivityItem,
+  ActivitySection,
+  ActivityText,
+  ActivityTime,
   Card,
   CardHeader,
   CardTitle,
-  IconWrapper,
-  Value,
   Change,
+  Container,
+  Grid,
+  Header,
+  IconWrapper,
   QuickActions,
   SectionTitle,
-  ActionGrid,
-  ActionButton,
-  ActivitySection,
-  ActivityCard,
-  ActivityItem,
-  ActivityIcon,
-  ActivityContent,
-  ActivityText,
-  ActivityTime,
   SmallLink,
+  Subtitle,
+  Title,
+  Value,
 } from "../../../components/dashboard/styles";
+import { memDb } from "../../../lib/db/memory";
+import { getServiceSupabase } from "../../../lib/db/supabase";
+import { theme } from "../../../theme";
 
 export default async function DashboardPage() {
   const supabase = getServiceSupabase();
@@ -101,12 +101,7 @@ export default async function DashboardPage() {
     },
   ];
 
-  const statLinks = [
-    "/projects",
-    "/clients",
-    "/invoices",
-    "/linkedin",
-  ];
+  const statLinks = ["/projects", "/clients", "/invoices", "/linkedin"];
 
   const quickActions = [
     { label: "Générer un post LinkedIn", href: "/linkedin" },
@@ -117,7 +112,8 @@ export default async function DashboardPage() {
   ];
 
   // Recent activities: combine latest items across invoices, projects, and linkedin posts
-  let activities: { text: string; time: string; ts: string; href: string }[] = [];
+  let activities: { text: string; time: string; ts: string; href: string }[] =
+    [];
   if (supabase) {
     const [ri, rp, rl] = await Promise.all([
       supabase
@@ -199,7 +195,7 @@ export default async function DashboardPage() {
     <Container>
       <Header>
         <Title>Dashboard</Title>
-        <Subtitle>Vue d'ensemble de votre activité freelance</Subtitle>
+        <Subtitle>Vue d&apos;ensemble de votre activité freelance</Subtitle>
       </Header>
 
       <Grid>

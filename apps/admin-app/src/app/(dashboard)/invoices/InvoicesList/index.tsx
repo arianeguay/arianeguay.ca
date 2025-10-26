@@ -415,11 +415,11 @@ export default function InvoicesList({ initialInvoices, initialClients, initialP
 
               <InvoiceMeta>
                 <MetaItem>
-                  <MetaLabel>Date d'émission</MetaLabel>
+                  <MetaLabel>Date d&apos;émission</MetaLabel>
                   <MetaValue>{new Date(invoice.issue_date).toLocaleDateString("fr-CA")}</MetaValue>
                 </MetaItem>
                 <MetaItem>
-                  <MetaLabel>Date d'échéance</MetaLabel>
+                  <MetaLabel>Date d&apos;échéance</MetaLabel>
                   <MetaValue>{new Date(invoice.due_date).toLocaleDateString("fr-CA")}</MetaValue>
                 </MetaItem>
                 <MetaItem>
