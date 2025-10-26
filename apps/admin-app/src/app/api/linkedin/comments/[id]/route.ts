@@ -5,20 +5,22 @@ import { z } from 'zod';
 
 export const runtime = 'nodejs';
 
-export async function GET(_: Request, { params }: { params: { id: string } }) {
+export async function GET(_: Request, { params }: { params: Promise<{ id: string }> }) {
+  const p = await params;
   const supabase = getServiceSupabase();
   if (supabase) {
-    const { data, error } = await supabase.from('linkedin_comments').select('*').eq('id', params.id).single();
+    const { data, error } = await supabase.from('linkedin_comments').select('*').eq('id', p.id).single();
     if (error) return Response.json({ error: error.message }, { status: 404 });
     return Response.json(data);
   }
-  const item = memDb.linkedin_comments.find((c: LinkedInComment) => c.id === params.id);
+  const item = memDb.linkedin_comments.find((c: LinkedInComment) => c.id === p.id);
   if (!item) return Response.json({ error: 'not found' }, { status: 404 });
   return Response.json(item);
 }
 
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
+export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const p = await params;
     const schema = z.object({
       tone: z.enum(['professional', 'friendly', 'playful']).optional(),
       content: z.string().min(1).optional(),
@@ -30,13 +32,13 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
       const { data, error } = await supabase
         .from('linkedin_comments')
         .update({ ...body })
-        .eq('id', params.id)
+        .eq('id', p.id)
         .select('*')
         .single();
       if (error) return Response.json({ error: error.message }, { status: 500 });
       return Response.json(data);
     }
-    const idx = memDb.linkedin_comments.findIndex((c: LinkedInComment) => c.id === params.id);
+    const idx = memDb.linkedin_comments.findIndex((c: LinkedInComment) => c.id === p.id);
     if (idx === -1) return Response.json({ error: 'not found' }, { status: 404 });
     const next: LinkedInComment = { ...memDb.linkedin_comments[idx], ...body };
     memDb.linkedin_comments[idx] = next;
@@ -47,15 +49,16 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
   }
 }
 
-export async function DELETE(_: Request, { params }: { params: { id: string } }) {
+export async function DELETE(_: Request, { params }: { params: Promise<{ id: string }> }) {
+  const p = await params;
   const supabase = getServiceSupabase();
   if (supabase) {
-    const { error } = await supabase.from('linkedin_comments').delete().eq('id', params.id);
+    const { error } = await supabase.from('linkedin_comments').delete().eq('id', p.id);
     if (error) return Response.json({ error: error.message }, { status: 500 });
     return Response.json({ ok: true });
   }
   const before = memDb.linkedin_comments.length;
-  memDb.linkedin_comments = memDb.linkedin_comments.filter((c: LinkedInComment) => c.id !== params.id);
+  memDb.linkedin_comments = memDb.linkedin_comments.filter((c: LinkedInComment) => c.id !== p.id);
   if (memDb.linkedin_comments.length === before) return Response.json({ error: 'not found' }, { status: 404 });
   return Response.json({ ok: true });
 }

@@ -11,24 +11,26 @@ function withRelations(inv: Invoice): Invoice {
   return { ...inv, client, project };
 }
 
-export async function GET(_: Request, { params }: { params: { id: string } }) {
+export async function GET(_: Request, { params }: { params: Promise<{ id: string }> }) {
+  const p = await params;
   const supabase = getServiceSupabase();
   if (supabase) {
     const { data, error } = await supabase
       .from('invoices')
       .select('*, client:clients(*), project:projects(*)')
-      .eq('id', params.id)
+      .eq('id', p.id)
       .single();
     if (error) return Response.json({ error: error.message }, { status: 404 });
     return Response.json(data);
   }
-  const item = memDb.invoices.find((i) => i.id === params.id);
+  const item = memDb.invoices.find((i) => i.id === p.id);
   if (!item) return Response.json({ error: 'not found' }, { status: 404 });
   return Response.json(withRelations(item));
 }
 
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
+export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const p = await params;
     const itemSchema = z.object({ desc: z.string().min(1), qty: z.number().positive(), unitPrice: z.number().nonnegative() });
     const schema = z.object({
       number: z.string().min(1).optional(),
@@ -57,7 +59,7 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
     const supabase = getServiceSupabase();
     if (supabase) {
       // Fetch current for totals if needed
-      const currResp = await supabase.from('invoices').select('*').eq('id', params.id).single();
+      const currResp = await supabase.from('invoices').select('*').eq('id', p.id).single();
       if (currResp.error) return Response.json({ error: currResp.error.message }, { status: 404 });
       const current = currResp.data as Invoice;
       const items = body.items ? body.items.map((it) => ({ desc: it.desc, qty: it.qty, unitPrice: it.unitPrice })) : undefined;
@@ -66,14 +68,14 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
       const { data, error } = await supabase
         .from('invoices')
         .update(update as any)
-        .eq('id', params.id)
+        .eq('id', p.id)
         .select('*, client:clients(*), project:projects(*)')
         .single();
       if (error) return Response.json({ error: error.message }, { status: 500 });
       return Response.json(data);
     }
 
-    const idx = memDb.invoices.findIndex((i) => i.id === params.id);
+    const idx = memDb.invoices.findIndex((i) => i.id === p.id);
     if (idx === -1) return Response.json({ error: 'not found' }, { status: 404 });
     const current = memDb.invoices[idx];
     const nextBase: Invoice = { ...current, ...body } as Invoice;
@@ -88,15 +90,16 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
   }
 }
 
-export async function DELETE(_: Request, { params }: { params: { id: string } }) {
+export async function DELETE(_: Request, { params }: { params: Promise<{ id: string }> }) {
+  const p = await params;
   const supabase = getServiceSupabase();
   if (supabase) {
-    const { error } = await supabase.from('invoices').delete().eq('id', params.id);
+    const { error } = await supabase.from('invoices').delete().eq('id', p.id);
     if (error) return Response.json({ error: error.message }, { status: 500 });
     return Response.json({ ok: true });
   }
   const before = memDb.invoices.length;
-  memDb.invoices = memDb.invoices.filter((i) => i.id !== params.id);
+  memDb.invoices = memDb.invoices.filter((i) => i.id !== p.id);
   if (memDb.invoices.length === before) return Response.json({ error: 'not found' }, { status: 404 });
   return Response.json({ ok: true });
 }

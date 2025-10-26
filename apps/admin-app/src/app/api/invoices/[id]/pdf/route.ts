@@ -120,8 +120,9 @@ function InvoiceDoc({ invoice }: { invoice: Invoice }) {
   );
 }
 
-export async function GET(_: Request, { params }: { params: { id: string } }) {
-  const inv = memDb.invoices.find((i) => i.id === params.id);
+export async function GET(_: Request, { params }: { params: Promise<{ id: string }> }) {
+  const p = await params;
+  const inv = memDb.invoices.find((i) => i.id === p.id);
   if (!inv) return new Response('Not found', { status: 404 });
 
   // populate client for PDF context

@@ -3,16 +3,17 @@ import type { Invoice, Client, Project } from "../../../types/database";
 import { getServiceSupabase } from "../../../lib/db/supabase";
 import { memDb } from "../../../lib/db/memory";
 
-export default async function InvoicesPage({ searchParams }: { searchParams?: Record<string, string | string[] | undefined> }) {
+export default async function InvoicesPage({ searchParams }: { searchParams?: Promise<Record<string, string | string[] | undefined>> }) {
   const supabase = getServiceSupabase();
   let invoices: Invoice[] = [];
   let clients: Client[] = [];
   let projects: Project[] = [];
-  const status = (searchParams?.status as string) || undefined;
-  const client_id = (searchParams?.client_id as string) || undefined;
-  const project_id = (searchParams?.project_id as string) || undefined;
-  const page = Math.max(1, parseInt((searchParams?.page as string) || '1', 10));
-  const pageSize = Math.max(1, Math.min(100, parseInt((searchParams?.page_size as string) || '20', 10)));
+  const sp = (await searchParams) ?? {};
+  const status = (sp.status as string) || undefined;
+  const client_id = (sp.client_id as string) || undefined;
+  const project_id = (sp.project_id as string) || undefined;
+  const page = Math.max(1, parseInt((sp.page as string) || '1', 10));
+  const pageSize = Math.max(1, Math.min(100, parseInt((sp.page_size as string) || '20', 10)));
   const from = (page - 1) * pageSize;
   const to = from + pageSize - 1;
   if (supabase) {

@@ -10,24 +10,26 @@ function withRelations(p: Project): Project {
   return { ...p, client };
 }
 
-export async function GET(_: Request, { params }: { params: { id: string } }) {
+export async function GET(_: Request, { params }: { params: Promise<{ id: string }> }) {
+  const p = await params;
   const supabase = getServiceSupabase();
   if (supabase) {
     const { data, error } = await supabase
       .from('projects')
       .select('*, client:clients(*)')
-      .eq('id', params.id)
+      .eq('id', p.id)
       .single();
     if (error) return Response.json({ error: error.message }, { status: 404 });
     return Response.json(data);
   }
-  const item = memDb.projects.find((p) => p.id === params.id);
+  const item = memDb.projects.find((pp) => pp.id === p.id);
   if (!item) return Response.json({ error: 'not found' }, { status: 404 });
   return Response.json(withRelations(item));
 }
 
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
+export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const p = await params;
     const schema = z.object({
       client_id: z.string().optional(),
       name: z.string().min(1).optional(),
@@ -44,13 +46,13 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
       const { data, error } = await supabase
         .from('projects')
         .update({ ...body, updated_at: new Date().toISOString() })
-        .eq('id', params.id)
+        .eq('id', p.id)
         .select('*, client:clients(*)')
         .single();
       if (error) return Response.json({ error: error.message }, { status: 500 });
       return Response.json(data);
     }
-    const idx = memDb.projects.findIndex((p) => p.id === params.id);
+    const idx = memDb.projects.findIndex((pp) => pp.id === p.id);
     if (idx === -1) return Response.json({ error: 'not found' }, { status: 404 });
     const next: Project = { ...memDb.projects[idx], ...body, updated_at: new Date().toISOString() };
     memDb.projects[idx] = next;
@@ -61,15 +63,16 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
   }
 }
 
-export async function DELETE(_: Request, { params }: { params: { id: string } }) {
+export async function DELETE(_: Request, { params }: { params: Promise<{ id: string }> }) {
+  const p = await params;
   const supabase = getServiceSupabase();
   if (supabase) {
-    const { error } = await supabase.from('projects').delete().eq('id', params.id);
+    const { error } = await supabase.from('projects').delete().eq('id', p.id);
     if (error) return Response.json({ error: error.message }, { status: 500 });
     return Response.json({ ok: true });
   }
   const before = memDb.projects.length;
-  memDb.projects = memDb.projects.filter((p) => p.id !== params.id);
+  memDb.projects = memDb.projects.filter((pp) => pp.id !== p.id);
   if (memDb.projects.length === before) return Response.json({ error: 'not found' }, { status: 404 });
   return Response.json({ ok: true });
 }
