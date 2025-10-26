@@ -5,12 +5,16 @@ import { getServiceSupabase } from '../../../../lib/db/supabase';
 export const runtime = 'nodejs';
 
 function isAuthorized(req: Request): boolean {
-  const url = new URL(req.url);
-  const fromVercelCron = !!req.headers.get('x-vercel-cron');
   const secret = process.env.CRON_SECRET;
-  if (fromVercelCron) return true;
-  if (secret) return url.searchParams.get('secret') === secret;
-  // Allow locally without a secret
+  if (secret) {
+    const auth = req.headers.get('authorization') || '';
+    const bearer = auth.startsWith('Bearer ') ? auth.slice(7).trim() : '';
+    if (bearer === secret) return true;
+    const url = new URL(req.url);
+    if (url.searchParams.get('secret') === secret) return true;
+    return false;
+  }
+  // Without a secret, allow only in non-production for local testing
   return process.env.NODE_ENV !== 'production';
 }
 
@@ -175,4 +179,8 @@ export async function GET(req: Request) {
   }
 
   return Response.json({ ok: true, sources: sources.length, discovered, created, existing, total: memDb.linkedin_posts.length });
+}
+
+export async function POST(req: Request) {
+  return GET(req);
 }
