@@ -5,6 +5,7 @@ A production-ready monorepo containing a Next.js website and Angular admin inter
 ## Overview
 
 This project uses:
+
 - **Nx** for monorepo management
 - **Next.js** (App Router) for the public-facing website
 - **Angular** (v18+ Standalone Components) for the admin interface
@@ -44,22 +45,26 @@ This project uses:
 ### Installation
 
 1. Clone the repository:
+
    ```bash
    git clone <repository-url>
    cd arianeguay.ca
    ```
 
 2. Install dependencies:
+
    ```bash
    pnpm install
    ```
 
 3. Set up environment variables by copying `.env.example` to `.env.local`:
+
    ```bash
    cp .env.example .env.local
    ```
-   
+
    Then fill in the required environment variables:
+
    ```
    CONTENTFUL_SPACE_ID=your_space_id
    CONTENTFUL_CDA_TOKEN=your_delivery_token
@@ -149,7 +154,7 @@ The website can be deployed to Vercel:
 The admin interface can be deployed to Vercel, Netlify, or any static hosting service:
 
 1. Build the admin app: `pnpm build:admin`
-2. Deploy the `dist/apps/admin` folder
+2. Deploy the `dist/apps/admin-app` folder
 
 ## Security Notes
 
