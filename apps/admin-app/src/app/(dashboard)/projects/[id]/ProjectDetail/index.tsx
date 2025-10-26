@@ -139,6 +139,16 @@ export default function ProjectDetail() {
           <Title>Projet</Title>
         </div>
         <div style={{ display: "flex", gap: theme.spacing.md }}>
+          <Secondary
+            onClick={() => {
+              const qs = new URLSearchParams({ project_id: String(id) });
+              const cid = selectedClientId || (project as any)?.client_id;
+              if (cid) qs.set("client_id", cid);
+              router.push(`/invoices?${qs.toString()}`);
+            }}
+          >
+            Nouvelle facture
+          </Secondary>
           <Secondary onClick={() => setEditing((e) => !e)}>
             <Edit /> Modifier
           </Secondary>

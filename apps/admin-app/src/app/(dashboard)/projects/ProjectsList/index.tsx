@@ -39,43 +39,64 @@ const statusLabels: Record<ProjectStatus | "all", string> = {
   cancelled: "Annulé",
 };
 
-export default function ProjectsList() {
+interface Props {
+  initialProjects?: Project[];
+  initialClients?: Client[];
+}
+
+export default function ProjectsList({ initialProjects, initialClients }: Props) {
   const searchParams = useSearchParams();
   const [statusFilter, setStatusFilter] = useState<ProjectStatus | "all">(
     "all",
   );
 
-  const [projects, setProjects] = useState<Project[]>([]);
+  const [projects, setProjects] = useState<Project[]>(initialProjects ?? []);
   const [showForm, setShowForm] = useState(false);
   const [newName, setNewName] = useState("");
   const [newStatus, setNewStatus] = useState<ProjectStatus>("draft");
   const [newBudget, setNewBudget] = useState("");
   const [creating, setCreating] = useState(false);
-  const [clients, setClients] = useState<Client[]>([]);
+  const [clients, setClients] = useState<Client[]>(initialClients ?? []);
   const [newClientId, setNewClientId] = useState<string>("");
+  const [page, setPage] = useState(1);
+  const pageSize = 20;
+  const [hasNext, setHasNext] = useState(false);
 
   useEffect(() => {
     let active = true;
-    (async () => {
-      try {
-        const res = await fetch("/api/projects", { cache: "no-store" });
-        if (!res.ok) return;
-        const data = await res.json();
-        if (active) setProjects(Array.isArray(data) ? data : []);
-      } catch {}
-    })();
-    (async () => {
-      try {
-        const res = await fetch("/api/clients", { cache: "no-store" });
-        if (!res.ok) return;
-        const data = await res.json();
-        if (active) setClients(Array.isArray(data) ? data : []);
-      } catch {}
-    })();
+    // Fetch when no SSR data or when filters/page change
+    if (!initialProjects || statusFilter !== "all" || page !== 1) {
+      (async () => {
+        try {
+          const qs = new URLSearchParams();
+          if (statusFilter !== "all") qs.set("status", statusFilter);
+          qs.set("page", String(page));
+          qs.set("page_size", String(pageSize));
+          const res = await fetch(`/api/projects?${qs.toString()}`, { cache: "no-store" });
+          if (!res.ok) return;
+          const data = await res.json();
+          if (!Array.isArray(data)) return;
+          if (active) {
+            setProjects(data);
+            setHasNext(data.length === pageSize);
+          }
+        } catch {}
+      })();
+    }
+    if (!initialClients) {
+      (async () => {
+        try {
+          const res = await fetch("/api/clients", { cache: "no-store" });
+          if (!res.ok) return;
+          const data = await res.json();
+          if (active) setClients(Array.isArray(data) ? data : []);
+        } catch {}
+      })();
+    }
     return () => {
       active = false;
     };
-  }, []);
+  }, [initialProjects, initialClients, statusFilter, page]);
 
   // Prefill form from URL (?client_id=...)
   useEffect(() => {
@@ -310,6 +331,15 @@ export default function ProjectsList() {
           ))}
         </ProjectsListWrapper>
       )}
+      <div style={{ display: "flex", justifyContent: "space-between", marginTop: theme.spacing.xl }}>
+        <Button onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={page === 1}>
+          Page précédente
+        </Button>
+        <div style={{ fontFamily: theme.font.family.body, color: theme.colors.ink2 }}>Page {page}</div>
+        <Button onClick={() => setPage((p) => p + 1)} disabled={!hasNext}>
+          Page suivante
+        </Button>
+      </div>
     </Container>
   );
 }

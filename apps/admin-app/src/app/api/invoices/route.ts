@@ -16,12 +16,17 @@ export async function GET(req: Request) {
   const client_id = url.searchParams.get('client_id') || undefined;
   const project_id = url.searchParams.get('project_id') || undefined;
   const status = url.searchParams.get('status') || undefined;
+  const page = Math.max(1, parseInt(url.searchParams.get('page') || '1', 10));
+  const pageSize = Math.max(1, Math.min(100, parseInt(url.searchParams.get('page_size') || '20', 10)));
+  const from = (page - 1) * pageSize;
+  const to = from + pageSize - 1;
   const supabase = getServiceSupabase();
   if (supabase) {
     let q = supabase
       .from('invoices')
       .select('*, client:clients(*), project:projects(*)')
-      .order('created_at', { ascending: false });
+      .order('created_at', { ascending: false })
+      .range(from, to);
     if (client_id) q = q.eq('client_id', client_id);
     if (project_id) q = q.eq('project_id', project_id);
     if (status) q = q.eq('status', status);
@@ -33,7 +38,8 @@ export async function GET(req: Request) {
   if (client_id) list = list.filter((i) => i.client_id === client_id);
   if (project_id) list = list.filter((i) => i.project_id === project_id);
   if (status) list = list.filter((i) => i.status === (status as any));
-  return Response.json(list.map(withRelations));
+  const paged = list.slice(from, to + 1).map(withRelations);
+  return Response.json(paged);
 }
 
 function calcTotals(items: InvoiceItem[]) {

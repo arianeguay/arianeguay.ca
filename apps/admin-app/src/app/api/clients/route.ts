@@ -5,17 +5,39 @@ import { getServiceSupabase } from '../../../lib/db/supabase';
 
 export const runtime = 'nodejs';
 
-export async function GET() {
+export async function GET(req: Request) {
+  const url = new URL(req.url);
+  const q = url.searchParams.get('query') || '';
+  const page = Math.max(1, parseInt(url.searchParams.get('page') || '1', 10));
+  const pageSize = Math.max(1, Math.min(100, parseInt(url.searchParams.get('page_size') || '20', 10)));
+  const from = (page - 1) * pageSize;
+  const to = from + pageSize - 1;
+
   const supabase = getServiceSupabase();
   if (supabase) {
-    const { data, error } = await supabase
+    let sb = supabase
       .from('clients')
       .select('*')
-      .order('created_at', { ascending: false });
+      .order('created_at', { ascending: false })
+      .range(from, to);
+    if (q) {
+      // name or company_name ilike
+      sb = sb.or(`name.ilike.%${q}%,company_name.ilike.%${q}%`);
+    }
+    const { data, error } = await sb;
     if (error) return Response.json({ error: error.message }, { status: 500 });
     return Response.json(data ?? []);
   }
-  return Response.json(memDb.clients);
+  let list = memDb.clients.slice();
+  if (q) {
+    const qq = q.toLowerCase();
+    list = list.filter((c) =>
+      (c.name || '').toLowerCase().includes(qq) ||
+      (c.company_name || '').toLowerCase().includes(qq),
+    );
+  }
+  const paged = list.slice(from, to + 1);
+  return Response.json(paged);
 }
 
 export async function POST(req: Request) {

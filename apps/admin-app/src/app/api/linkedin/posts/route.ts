@@ -5,18 +5,30 @@ import { z } from 'zod';
 
 export const runtime = 'nodejs';
 
-export async function GET() {
+export async function GET(req: Request) {
+  const url = new URL(req.url);
+  const status = url.searchParams.get('status') || undefined;
+  const page = Math.max(1, parseInt(url.searchParams.get('page') || '1', 10));
+  const pageSize = Math.max(1, Math.min(100, parseInt(url.searchParams.get('page_size') || '20', 10)));
+  const from = (page - 1) * pageSize;
+  const to = from + pageSize - 1;
+
   const supabase = getServiceSupabase();
   if (supabase) {
-    const { data, error } = await supabase
+    let q = supabase
       .from('linkedin_posts')
       .select('*')
-      .order('created_at', { ascending: false });
+      .order('created_at', { ascending: false })
+      .range(from, to);
+    if (status) q = q.eq('status', status);
+    const { data, error } = await q;
     if (error) return Response.json({ error: error.message }, { status: 500 });
     return Response.json(data ?? []);
   }
-  const list = [...memDb.linkedin_posts].sort((a, b) => (b.created_at || '').localeCompare(a.created_at || ''));
-  return Response.json(list);
+  let list = [...memDb.linkedin_posts].sort((a, b) => (b.created_at || '').localeCompare(a.created_at || ''));
+  if (status) list = list.filter((p) => (p.status || 'new') === status);
+  const paged = list.slice(from, to + 1);
+  return Response.json(paged);
 }
 
 export async function POST(req: Request) {

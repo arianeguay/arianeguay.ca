@@ -31,9 +31,11 @@ import {
 } from "./styles";
 import { theme } from "../../../../theme";
 
-export default function ClientsList() {
+interface Props { initialClients?: Client[] }
+
+export default function ClientsList({ initialClients }: Props) {
   const [searchQuery, setSearchQuery] = useState("");
-  const [clients, setClients] = useState<Client[]>([]);
+  const [clients, setClients] = useState<Client[]>(initialClients ?? []);
   const [loading, setLoading] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [newName, setNewName] = useState("");
@@ -43,21 +45,37 @@ export default function ClientsList() {
   const [editName, setEditName] = useState("");
   const [editEmail, setEditEmail] = useState("");
   const [editCompany, setEditCompany] = useState("");
+  const [page, setPage] = useState(1);
+  const pageSize = 20;
+  const [hasNext, setHasNext] = useState(false);
 
   useEffect(() => {
     let active = true;
-    (async () => {
-      try {
-        const res = await fetch("/api/clients", { cache: "no-store" });
-        if (!res.ok) return;
-        const data = await res.json();
-        if (active) setClients(Array.isArray(data) ? data : []);
-      } catch {}
-    })();
+    // Fetch when no SSR data or when searching/paginating
+    if (!initialClients || searchQuery.length > 0 || page !== 1) {
+      (async () => {
+        try {
+          setLoading(true);
+          const qs = new URLSearchParams();
+          if (searchQuery) qs.set("query", searchQuery);
+          qs.set("page", String(page));
+          qs.set("page_size", String(pageSize));
+          const res = await fetch(`/api/clients?${qs.toString()}`, { cache: "no-store" });
+          if (!res.ok) return;
+          const data = await res.json();
+          if (active) {
+            setClients(Array.isArray(data) ? data : []);
+            setHasNext(Array.isArray(data) && data.length === pageSize);
+          }
+        } finally {
+          if (active) setLoading(false);
+        }
+      })();
+    }
     return () => {
       active = false;
     };
-  }, []);
+  }, [initialClients, searchQuery, page]);
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -129,11 +147,7 @@ export default function ClientsList() {
     toast.success("Client mis à jour");
   };
 
-  const filteredClients = clients.filter(
-    (client) =>
-      client.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      client.company_name?.toLowerCase().includes(searchQuery.toLowerCase()),
-  );
+  const filteredClients = clients;
 
   return (
     <Container>
@@ -329,6 +343,15 @@ export default function ClientsList() {
           ))}
         </ClientsGrid>
       )}
+      <div style={{ display: "flex", justifyContent: "space-between", marginTop: theme.spacing.xl }}>
+        <Button onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={page === 1}>
+          Page précédente
+        </Button>
+        <div style={{ fontFamily: theme.font.family.body, color: theme.colors.ink2 }}>Page {page}</div>
+        <Button onClick={() => setPage((p) => p + 1)} disabled={!hasNext}>
+          Page suivante
+        </Button>
+      </div>
     </Container>
   );
 }

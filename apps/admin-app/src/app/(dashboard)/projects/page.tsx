@@ -1,233 +1,37 @@
-"use client";
-
-import { FolderKanban, Plus } from "lucide-react";
-import { useEffect, useState } from "react";
-import styled from "styled-components";
-import { theme } from "../../../theme";
-import type { Project, ProjectStatus } from "../../../types/database";
-import Link from "next/link";
 import ProjectsListView from "./ProjectsList";
+import { getServiceSupabase } from "../../../lib/db/supabase";
+import { memDb } from "../../../lib/db/memory";
+import type { Project, Client } from "../../../types/database";
 
-const Container = styled.div`
-  max-width: 1400px;
-`;
-
-const Header = styled.header`
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: ${theme.spacing.xxxl};
-  gap: ${theme.spacing.xl};
-
-  @media (max-width: ${theme.breakpoints.md}px) {
-    flex-direction: column;
+export default async function ProjectsPage({ searchParams }: { searchParams?: Record<string, string | string[] | undefined> }) {
+  const supabase = getServiceSupabase();
+  let projects: Project[] = [];
+  let clients: Client[] = [];
+  const status = (searchParams?.status as string) || undefined;
+  const client_id = (searchParams?.client_id as string) || undefined;
+  const page = Math.max(1, parseInt((searchParams?.page as string) || '1', 10));
+  const pageSize = Math.max(1, Math.min(100, parseInt((searchParams?.page_size as string) || '20', 10)));
+  const from = (page - 1) * pageSize;
+  const to = from + pageSize - 1;
+  if (supabase) {
+    let q = supabase.from('projects').select('*, client:clients(*)').order('created_at', { ascending: false }).range(from, to);
+    if (status) q = q.eq('status', status);
+    if (client_id) q = q.eq('client_id', client_id);
+    const [pRes, cRes] = await Promise.all([
+      q,
+      supabase.from('clients').select('*').order('created_at', { ascending: false }),
+    ]);
+    projects = (pRes.data as any[]) ?? [];
+    clients = (cRes.data as any[]) ?? [];
+  } else {
+    let list = memDb.projects.slice();
+    if (status) list = list.filter((p) => p.status === (status as any));
+    if (client_id) list = list.filter((p) => p.client_id === client_id);
+    projects = list.slice(from, to + 1).map((p) => {
+      const client = p.client_id ? memDb.clients.find((c) => c.id === p.client_id) : undefined;
+      return { ...p, client } as Project;
+    });
+    clients = memDb.clients.slice();
   }
-`;
-
-const HeaderContent = styled.div`
-  flex: 1;
-`;
-
-const Title = styled.h1`
-  font-family: ${theme.font.family.display};
-  font-weight: ${theme.font.weight.bold};
-  font-size: 44px;
-  color: ${theme.colors.ink1};
-  margin-bottom: ${theme.spacing.md};
-
-  @media (max-width: ${theme.breakpoints.sm}px) {
-    font-size: 32px;
-  }
-`;
-
-const Subtitle = styled.p`
-  font-family: ${theme.font.family.body};
-  font-size: 16px;
-  color: ${theme.colors.ink2};
-`;
-
-const Button = styled.button`
-  padding: ${theme.spacing.md} ${theme.spacing.xxl};
-  background: ${theme.colors.brand.primary};
-  color: white;
-  border: none;
-  border-radius: ${theme.radius.md};
-  font-family: ${theme.font.family.body};
-  font-size: 15px;
-  font-weight: ${theme.font.weight.semibold};
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: ${theme.spacing.sm};
-  transition: background ${theme.motion.fast};
-
-  &:hover {
-    background: ${theme.colors.brand.primaryAlt};
-  }
-
-  svg {
-    width: 18px;
-    height: 18px;
-  }
-`;
-
-const StatusFilters = styled.div`
-  display: flex;
-  gap: ${theme.spacing.md};
-  margin-bottom: ${theme.spacing.xxl};
-  flex-wrap: wrap;
-`;
-
-const FilterButton = styled.button<{ $active?: boolean }>`
-  padding: ${theme.spacing.sm} ${theme.spacing.lg};
-  background: ${(props) =>
-    props.$active ? theme.colors.brand.primary : "white"};
-  color: ${(props) => (props.$active ? "white" : theme.colors.ink1)};
-  border: 2px solid
-    ${(props) =>
-      props.$active ? theme.colors.brand.primary : theme.colors.border};
-  border-radius: ${theme.radius.pill};
-  font-family: ${theme.font.family.body};
-  font-size: 14px;
-  font-weight: ${theme.font.weight.medium};
-  cursor: pointer;
-  transition: all ${theme.motion.fast};
-
-  &:hover {
-    border-color: ${theme.colors.brand.primary};
-  }
-`;
-
-const ProjectsList = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${theme.spacing.lg};
-`;
-
-const ProjectCard = styled.div`
-  background: white;
-  border-radius: ${theme.radius.lg};
-  padding: ${theme.spacing.xxl};
-  box-shadow: ${theme.shadows.sm};
-  transition: box-shadow ${theme.motion.fast};
-
-  &:hover {
-    box-shadow: ${theme.shadows.md};
-  }
-`;
-
-const ProjectHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: ${theme.spacing.lg};
-  gap: ${theme.spacing.lg};
-
-  @media (max-width: ${theme.breakpoints.sm}px) {
-    flex-direction: column;
-  }
-`;
-
-const ProjectTitle = styled.h3`
-  font-family: ${theme.font.family.display};
-  font-weight: ${theme.font.weight.semibold};
-  font-size: 20px;
-  color: ${theme.colors.ink1};
-  margin-bottom: ${theme.spacing.xs};
-`;
-
-const ProjectClient = styled.p`
-  font-family: ${theme.font.family.body};
-  font-size: 14px;
-  color: ${theme.colors.ink2};
-`;
-
-const StatusBadge = styled.span<{ $status: ProjectStatus }>`
-  display: inline-flex;
-  align-items: center;
-  padding: ${theme.spacing.xs} ${theme.spacing.md};
-  border-radius: ${theme.radius.pill};
-  font-size: 13px;
-  font-weight: ${theme.font.weight.medium};
-  background: ${(props) => {
-    switch (props.$status) {
-      case "in_progress":
-        return theme.colors.status.info;
-      case "completed":
-        return theme.colors.status.success;
-      case "cancelled":
-        return theme.colors.status.error;
-      default:
-        return theme.colors.border;
-    }
-  }};
-  color: white;
-`;
-
-const ProjectMeta = styled.div`
-  display: flex;
-  gap: ${theme.spacing.xxl};
-  flex-wrap: wrap;
-`;
-
-const MetaItem = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${theme.spacing.xs};
-`;
-
-const MetaLabel = styled.span`
-  font-family: ${theme.font.family.body};
-  font-size: 12px;
-  font-weight: ${theme.font.weight.medium};
-  color: ${theme.colors.ink2};
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-`;
-
-const MetaValue = styled.span`
-  font-family: ${theme.font.family.body};
-  font-size: 16px;
-  font-weight: ${theme.font.weight.semibold};
-  color: ${theme.colors.ink1};
-`;
-
-const EmptyState = styled.div`
-  text-align: center;
-  padding: ${theme.spacing.xxxxxl} ${theme.spacing.xxl};
-  background: white;
-  border-radius: ${theme.radius.lg};
-  box-shadow: ${theme.shadows.sm};
-`;
-
-const EmptyIcon = styled.div`
-  font-size: 64px;
-  margin-bottom: ${theme.spacing.xl};
-`;
-
-const EmptyTitle = styled.h3`
-  font-family: ${theme.font.family.display};
-  font-weight: ${theme.font.weight.semibold};
-  font-size: 20px;
-  color: ${theme.colors.ink1};
-  margin-bottom: ${theme.spacing.md};
-`;
-
-const EmptyText = styled.p`
-  font-family: ${theme.font.family.body};
-  font-size: 16px;
-  color: ${theme.colors.ink2};
-  margin-bottom: ${theme.spacing.xl};
-`;
-
-const statusLabels: Record<ProjectStatus | "all", string> = {
-  all: "Tous",
-  draft: "Brouillon",
-  in_progress: "En cours",
-  completed: "Terminé",
-  cancelled: "Annulé",
-};
-
-export default function ProjectsPage() {
-  return <ProjectsListView />;
+  return <ProjectsListView initialProjects={projects} initialClients={clients} />;
 }

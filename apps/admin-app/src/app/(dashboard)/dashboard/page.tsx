@@ -1,257 +1,205 @@
-'use client';
+import Link from "next/link";
+import { FileText, Linkedin, TrendingUp, Users } from "lucide-react";
+import { memDb } from "../../../lib/db/memory";
+import { getServiceSupabase } from "../../../lib/db/supabase";
+import { theme } from "../../../theme";
+import {
+  Container,
+  Header,
+  Title,
+  Subtitle,
+  Grid,
+  Card,
+  CardHeader,
+  CardTitle,
+  IconWrapper,
+  Value,
+  Change,
+  QuickActions,
+  SectionTitle,
+  ActionGrid,
+  ActionButton,
+  ActivitySection,
+  ActivityCard,
+  ActivityItem,
+  ActivityIcon,
+  ActivityContent,
+  ActivityText,
+  ActivityTime,
+  SmallLink,
+} from "../../../components/dashboard/styles";
 
-import styled from 'styled-components';
-import { theme } from '../../../theme';
-import { TrendingUp, Users, FileText, Linkedin } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+export default async function DashboardPage() {
+  const supabase = getServiceSupabase();
+  let activeProjects = 0;
+  let clientsCount = 0;
+  let pendingInvoices = 0;
+  let postsThisWeek = 0;
+  const oneWeekAgoIso = new Date(
+    Date.now() - 7 * 24 * 60 * 60 * 1000,
+  ).toISOString();
 
-const Container = styled.div`
-  max-width: 1400px;
-`;
-
-const Header = styled.header`
-  margin-bottom: ${theme.spacing.xxxl};
-`;
-
-const Title = styled.h1`
-  font-family: ${theme.font.family.display};
-  font-weight: ${theme.font.weight.bold};
-  font-size: 44px;
-  color: ${theme.colors.ink1};
-  margin-bottom: ${theme.spacing.md};
-  
-  @media (max-width: ${theme.breakpoints.sm}px) {
-    font-size: 32px;
-  }
-`;
-
-const Subtitle = styled.p`
-  font-family: ${theme.font.family.body};
-  font-size: 16px;
-  color: ${theme.colors.ink2};
-`;
-
-const Grid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: ${theme.spacing.xxl};
-  margin-bottom: ${theme.spacing.xxxxl};
-`;
-
-const Card = styled.div`
-  background: white;
-  border-radius: ${theme.radius.lg};
-  padding: ${theme.spacing.xxl};
-  box-shadow: ${theme.shadows.sm};
-  transition: box-shadow ${theme.motion.fast};
-
-  &:hover {
-    box-shadow: ${theme.shadows.md};
-  }
-`;
-
-const CardHeader = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: ${theme.spacing.lg};
-`;
-
-const CardTitle = styled.h3`
-  font-family: ${theme.font.family.display};
-  font-weight: ${theme.font.weight.semibold};
-  font-size: 16px;
-  color: ${theme.colors.ink2};
-`;
-
-const IconWrapper = styled.div<{ $color: string }>`
-  width: 40px;
-  height: 40px;
-  border-radius: ${theme.radius.md};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: ${(props) => props.$color};
-
-  svg {
-    width: 20px;
-    height: 20px;
-    color: white;
-  }
-`;
-
-const Value = styled.div`
-  font-family: ${theme.font.family.display};
-  font-weight: ${theme.font.weight.bold};
-  font-size: 36px;
-  color: ${theme.colors.ink1};
-  margin-bottom: ${theme.spacing.xs};
-`;
-
-const Change = styled.div<{ $positive?: boolean }>`
-  font-family: ${theme.font.family.body};
-  font-size: 14px;
-  color: ${(props) =>
-    props.$positive ? theme.colors.status.success : theme.colors.status.warning};
-  display: flex;
-  align-items: center;
-  gap: ${theme.spacing.xs};
-`;
-
-const QuickActions = styled.div`
-  margin-bottom: ${theme.spacing.xxxxl};
-`;
-
-const SectionTitle = styled.h2`
-  font-family: ${theme.font.family.display};
-  font-weight: ${theme.font.weight.semibold};
-  font-size: 24px;
-  color: ${theme.colors.ink1};
-  margin-bottom: ${theme.spacing.xl};
-`;
-
-const ActionGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: ${theme.spacing.lg};
-`;
-
-const ActionButton = styled.button`
-  background: white;
-  border: 2px solid ${theme.colors.border};
-  border-radius: ${theme.radius.md};
-  padding: ${theme.spacing.xl};
-  font-family: ${theme.font.family.body};
-  font-size: 15px;
-  font-weight: ${theme.font.weight.medium};
-  color: ${theme.colors.ink1};
-  cursor: pointer;
-  transition: all ${theme.motion.fast};
-  text-align: left;
-
-  &:hover {
-    border-color: ${theme.colors.brand.primary};
-    background: rgba(140, 15, 72, 0.02);
+  if (supabase) {
+    const [pRes, cRes, iRes, lRes] = await Promise.all([
+      supabase.from("projects").select("id").eq("status", "in_progress"),
+      supabase.from("clients").select("id"),
+      supabase.from("invoices").select("id").in("status", ["sent", "overdue"]),
+      supabase
+        .from("linkedin_posts")
+        .select("id, created_at")
+        .gte("created_at", oneWeekAgoIso),
+    ]);
+    activeProjects = Array.isArray(pRes.data) ? pRes.data.length : 0;
+    clientsCount = Array.isArray(cRes.data) ? cRes.data.length : 0;
+    pendingInvoices = Array.isArray(iRes.data) ? iRes.data.length : 0;
+    postsThisWeek = Array.isArray(lRes.data) ? lRes.data.length : 0;
+  } else {
+    activeProjects = memDb.projects.filter(
+      (p) => p.status === "in_progress",
+    ).length;
+    clientsCount = memDb.clients.length;
+    pendingInvoices = memDb.invoices.filter((i) =>
+      ["sent", "overdue"].includes(i.status as any),
+    ).length;
+    postsThisWeek = memDb.linkedin_posts.filter(
+      (p) => new Date(p.created_at) >= new Date(oneWeekAgoIso),
+    ).length;
   }
 
-  &:focus-visible {
-    outline: 2px solid ${theme.colors.brand.primary};
-    outline-offset: 2px;
-  }
-`;
-
-const ActivitySection = styled.div``;
-
-const ActivityCard = styled(Card)`
-  padding: ${theme.spacing.xxl};
-`;
-
-const ActivityItem = styled.div`
-  display: flex;
-  gap: ${theme.spacing.lg};
-  padding: ${theme.spacing.lg} 0;
-  border-bottom: 1px solid rgba(130, 123, 127, 0.2);
-
-  &:last-child {
-    border-bottom: none;
-  }
-`;
-
-const ActivityIcon = styled.div`
-  width: 36px;
-  height: 36px;
-  border-radius: ${theme.radius.sm};
-  background: ${theme.colors.accent};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-`;
-
-const ActivityContent = styled.div`
-  flex: 1;
-`;
-
-const ActivityText = styled.p`
-  font-family: ${theme.font.family.body};
-  font-size: 14px;
-  color: ${theme.colors.ink1};
-  margin-bottom: ${theme.spacing.xs};
-`;
-
-const ActivityTime = styled.span`
-  font-family: ${theme.font.family.body};
-  font-size: 12px;
-  color: ${theme.colors.ink2};
-`;
-
-export default function DashboardPage() {
-  const router = useRouter();
   const stats = [
     {
-      title: 'Projets actifs',
-      value: '3',
-      change: '+1 ce mois',
+      title: "Projets actifs",
+      value: String(activeProjects),
+      change: "",
       positive: true,
       icon: TrendingUp,
       color: theme.colors.status.success,
     },
     {
-      title: 'Clients',
-      value: '8',
-      change: '+2 récents',
+      title: "Clients",
+      value: String(clientsCount),
+      change: "",
       positive: true,
       icon: Users,
       color: theme.colors.status.info,
     },
     {
-      title: 'Factures en attente',
-      value: '2',
-      change: 'À relancer',
+      title: "Factures en attente",
+      value: String(pendingInvoices),
+      change: "",
       positive: false,
       icon: FileText,
       color: theme.colors.status.warning,
     },
     {
-      title: 'Posts LinkedIn (semaine)',
-      value: '5',
-      change: 'Objectif: 7',
+      title: "Posts LinkedIn (semaine)",
+      value: String(postsThisWeek),
+      change: "Objectif: 7",
       positive: true,
       icon: Linkedin,
       color: theme.colors.brand.primary,
     },
   ];
 
-  const quickActions = [
-    { label: 'Générer un post LinkedIn', href: '/linkedin' },
-    { label: 'Créer une facture', href: '/invoices' },
-    { label: 'Nouveau client', href: '/clients' },
-    { label: 'Nouveau projet', href: '/projects' },
-    { label: 'Commentaires suggérés', href: '/linkedin' },
+  const statLinks = [
+    "/projects",
+    "/clients",
+    "/invoices",
+    "/linkedin",
   ];
 
-  const activities = [
-    {
-      text: 'Facture #2025-003 envoyée à Client ABC',
-      time: 'Il y a 2 heures',
-    },
-    {
-      text: 'Nouveau commentaire généré pour un post LinkedIn',
-      time: 'Il y a 5 heures',
-    },
-    {
-      text: 'Projet "Refonte site web" passé en statut "En cours"',
-      time: 'Hier',
-    },
+  const quickActions = [
+    { label: "Générer un post LinkedIn", href: "/linkedin" },
+    { label: "Créer une facture", href: "/invoices" },
+    { label: "Nouveau client", href: "/clients" },
+    { label: "Nouveau projet", href: "/projects" },
+    { label: "Commentaires suggérés", href: "/linkedin" },
   ];
+
+  // Recent activities: combine latest items across invoices, projects, and linkedin posts
+  let activities: { text: string; time: string; ts: string; href: string }[] = [];
+  if (supabase) {
+    const [ri, rp, rl] = await Promise.all([
+      supabase
+        .from("invoices")
+        .select("id, number, created_at")
+        .order("created_at", { ascending: false })
+        .limit(3),
+      supabase
+        .from("projects")
+        .select("id, name, status, updated_at, created_at")
+        .order("updated_at", { ascending: false })
+        .limit(3),
+      supabase
+        .from("linkedin_posts")
+        .select("id, url, created_at")
+        .order("created_at", { ascending: false })
+        .limit(3),
+    ]);
+    activities = [
+      ...(ri.data ?? []).map((i: any) => ({
+        text: `Facture #${i.number} créée`,
+        time: new Date(i.created_at).toLocaleString("fr-CA"),
+        ts: i.created_at,
+        href: "/invoices",
+      })),
+      ...(rp.data ?? []).map((p: any) => ({
+        text: `Projet "${p.name}" mis à jour (${p.status})`,
+        time: new Date(p.updated_at || p.created_at).toLocaleString("fr-CA"),
+        ts: p.updated_at || p.created_at,
+        href: `/projects/${p.id}`,
+      })),
+      ...(rl.data ?? []).map((l: any) => ({
+        text: `Post LinkedIn ajouté`,
+        time: new Date(l.created_at).toLocaleString("fr-CA"),
+        ts: l.created_at,
+        href: "/linkedin",
+      })),
+    ];
+  } else {
+    activities = [
+      ...memDb.invoices
+        .slice()
+        .sort((a, b) => +new Date(b.created_at) - +new Date(a.created_at))
+        .slice(0, 3)
+        .map((i) => ({
+          text: `Facture #${i.number} créée`,
+          time: new Date(i.created_at).toLocaleString("fr-CA"),
+          ts: i.created_at,
+          href: "/invoices",
+        })),
+      ...memDb.projects
+        .slice()
+        .sort((a, b) => +new Date(b.updated_at) - +new Date(a.updated_at))
+        .slice(0, 3)
+        .map((p) => ({
+          text: `Projet "${p.name}" mis à jour (${p.status})`,
+          time: new Date(p.updated_at || p.created_at).toLocaleString("fr-CA"),
+          ts: p.updated_at || p.created_at,
+          href: `/projects/${p.id}`,
+        })),
+      ...memDb.linkedin_posts
+        .slice()
+        .sort((a, b) => +new Date(b.created_at) - +new Date(a.created_at))
+        .slice(0, 3)
+        .map((l) => ({
+          text: `Post LinkedIn ajouté`,
+          time: new Date(l.created_at).toLocaleString("fr-CA"),
+          ts: l.created_at,
+          href: "/linkedin",
+        })),
+    ];
+  }
+  activities.sort((a, b) => +new Date(b.ts) - +new Date(a.ts));
+  activities = activities
+    .slice(0, 5)
+    .map(({ text, time, href }) => ({ text, time, href, ts: "" }));
 
   return (
     <Container>
       <Header>
         <Title>Dashboard</Title>
-        <Subtitle>
-          Vue d'ensemble de votre activité freelance
-        </Subtitle>
+        <Subtitle>Vue d'ensemble de votre activité freelance</Subtitle>
       </Header>
 
       <Grid>
@@ -265,6 +213,11 @@ export default function DashboardPage() {
             </CardHeader>
             <Value>{stat.value}</Value>
             <Change $positive={stat.positive}>{stat.change}</Change>
+            <div>
+              <Link href={statLinks[index]}>
+                <SmallLink>Voir tout</SmallLink>
+              </Link>
+            </div>
           </Card>
         ))}
       </Grid>
@@ -273,9 +226,9 @@ export default function DashboardPage() {
         <SectionTitle>Actions rapides</SectionTitle>
         <ActionGrid>
           {quickActions.map((action, index) => (
-            <ActionButton key={index} onClick={() => router.push(action.href)}>
-              {action.label}
-            </ActionButton>
+            <Link key={index} href={action.href}>
+              <ActionButton key={index}>{action.label}</ActionButton>
+            </Link>
           ))}
         </ActionGrid>
       </QuickActions>
@@ -289,6 +242,11 @@ export default function DashboardPage() {
               <ActivityContent>
                 <ActivityText>{activity.text}</ActivityText>
                 <ActivityTime>{activity.time}</ActivityTime>
+                <div>
+                  <Link href={activity.href}>
+                    <SmallLink>Voir</SmallLink>
+                  </Link>
+                </div>
               </ActivityContent>
             </ActivityItem>
           ))}

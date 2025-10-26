@@ -1,8 +1,8 @@
 "use client";
 
-import styled from 'styled-components';
-import { theme } from '../../../../theme';
-import type { ProjectStatus } from '../../../../types/database';
+import styled from "styled-components";
+import { theme } from "../../../../theme";
+import type { InvoiceStatus } from "../../../../types/database";
 
 export const Container = styled.div`
   max-width: 1400px;
@@ -76,9 +76,12 @@ export const StatusFilters = styled.div`
 
 export const FilterButton = styled.button<{ $active?: boolean }>`
   padding: ${theme.spacing.sm} ${theme.spacing.lg};
-  background: ${(props) => (props.$active ? theme.colors.brand.primary : 'white')};
-  color: ${(props) => (props.$active ? 'white' : theme.colors.ink1)};
-  border: 2px solid ${(props) => (props.$active ? theme.colors.brand.primary : theme.colors.border)};
+  background: ${(props) =>
+    props.$active ? theme.colors.brand.primary : "white"};
+  color: ${(props) => (props.$active ? "white" : theme.colors.ink1)};
+  border: 2px solid
+    ${(props) =>
+      props.$active ? theme.colors.brand.primary : theme.colors.border};
   border-radius: ${theme.radius.pill};
   font-family: ${theme.font.family.body};
   font-size: 14px;
@@ -91,13 +94,13 @@ export const FilterButton = styled.button<{ $active?: boolean }>`
   }
 `;
 
-export const List = styled.div`
+export const InvoicesList = styled.div`
   display: flex;
   flex-direction: column;
   gap: ${theme.spacing.lg};
 `;
 
-export const ProjectCard = styled.div`
+export const InvoiceCard = styled.div`
   background: white;
   border-radius: ${theme.radius.lg};
   padding: ${theme.spacing.xxl};
@@ -109,7 +112,7 @@ export const ProjectCard = styled.div`
   }
 `;
 
-export const ProjectHeader = styled.div`
+export const InvoiceHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -121,21 +124,27 @@ export const ProjectHeader = styled.div`
   }
 `;
 
-export const ProjectTitle = styled.h3`
+export const InvoiceNumber = styled.h3`
   font-family: ${theme.font.family.display};
-  font-weight: ${theme.font.weight.semibold};
+  font-weight: ${theme.font.weight.bold};
   font-size: 20px;
   color: ${theme.colors.ink1};
   margin-bottom: ${theme.spacing.xs};
 `;
 
-export const ProjectClient = styled.p`
+export const ClientName = styled.p`
   font-family: ${theme.font.family.body};
   font-size: 14px;
   color: ${theme.colors.ink2};
 `;
 
-export const StatusBadge = styled.span<{ $status: ProjectStatus }>`
+export const InvoiceActions = styled.div`
+  display: flex;
+  gap: ${theme.spacing.md};
+  align-items: center;
+`;
+
+export const StatusBadge = styled.span<{ $status: InvoiceStatus }>`
   display: inline-flex;
   align-items: center;
   padding: ${theme.spacing.xs} ${theme.spacing.md};
@@ -144,12 +153,15 @@ export const StatusBadge = styled.span<{ $status: ProjectStatus }>`
   font-weight: ${theme.font.weight.medium};
   background: ${(props) => {
     switch (props.$status) {
-      case 'in_progress':
-        return theme.colors.status.info;
-      case 'completed':
+      case "paid":
         return theme.colors.status.success;
-      case 'cancelled':
+      case "sent":
+      case "viewed":
+        return theme.colors.status.info;
+      case "overdue":
         return theme.colors.status.error;
+      case "partially_paid":
+        return theme.colors.status.warning;
       default:
         return theme.colors.border;
     }
@@ -157,10 +169,35 @@ export const StatusBadge = styled.span<{ $status: ProjectStatus }>`
   color: white;
 `;
 
-export const ProjectMeta = styled.div`
+export const IconButton = styled.button`
+  width: 36px;
+  height: 36px;
   display: flex;
-  gap: ${theme.spacing.xxl};
-  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid ${theme.colors.border};
+  border-radius: ${theme.radius.sm};
+  color: ${theme.colors.ink2};
+  cursor: pointer;
+  transition: all ${theme.motion.fast};
+
+  &:hover {
+    background: ${theme.colors.bg};
+    border-color: ${theme.colors.brand.primary};
+    color: ${theme.colors.brand.primary};
+  }
+
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+`;
+
+export const InvoiceMeta = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: ${theme.spacing.lg};
 `;
 
 export const MetaItem = styled.div`
