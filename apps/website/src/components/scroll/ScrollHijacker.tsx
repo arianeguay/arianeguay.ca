@@ -7,7 +7,7 @@ const ScrollHijacker: React.FC = () => {
   const headerHeightRef = useRef(0);
   const lastJumpAtRef = useRef(0);
   const touchHandledRef = useRef(false);
-  const wheelAccumRef = useRef(0);
+  const _wheelAccumRef = useRef(0);
   const lastWheelTimeRef = useRef(0);
   const currentSectionRef = useRef<number | null>(null);
   const wheelTimeoutRef = useRef<number | null>(null);
@@ -95,7 +95,7 @@ const ScrollHijacker: React.FC = () => {
       lastScrollYRef.current = viewportTop;
 
       // Find sections with at least 20% visibility
-      let sectionsWithThresholdVisibility = [];
+      const sectionsWithThresholdVisibility = [];
 
       for (let i = 0; i < sections.length; i++) {
         const section = sections[i];
@@ -195,7 +195,7 @@ const ScrollHijacker: React.FC = () => {
     };
 
     // Wheel handler
-    const onWheel = (e: WheelEvent) => {
+    const onWheel = (_e: WheelEvent) => {
       if (!sectionsRef.current.length) return;
 
       // Wait a bit after wheel events to see if we should snap
@@ -237,7 +237,7 @@ const ScrollHijacker: React.FC = () => {
       if (!keys.includes(e.key as any)) return;
 
       // Let default scroll happen, then check if we need to snap
-      const keyTimeout = window.setTimeout(() => {
+      window.setTimeout(() => {
         if (!isAnimatingRef.current) {
           checkForSnap();
         }
@@ -245,14 +245,14 @@ const ScrollHijacker: React.FC = () => {
     };
 
     // Touch handlers for mobile
-    let touchStartY = 0;
+    let _touchStartY = 0;
     const onTouchStart = (e: TouchEvent) => {
       if (!sectionsRef.current.length) return;
       touchHandledRef.current = false;
-      touchStartY = e.touches[0].clientY;
+      _touchStartY = e.touches[0].clientY;
     };
 
-    const onTouchMove = (e: TouchEvent) => {
+    const onTouchMove = (_e: TouchEvent) => {
       if (!sectionsRef.current.length) return;
       if (touchHandledRef.current) return;
 
