@@ -4,12 +4,13 @@ import { getServiceSupabase } from "../../../lib/db/supabase";
 import { memDb } from "../../../lib/db/memory";
 
 
-export default async function ClientsPage({ searchParams }: { searchParams?: Record<string, string | string[] | undefined> }) {
+export default async function ClientsPage({ searchParams }: { searchParams?: Promise<Record<string, string | string[] | undefined>> }) {
   const supabase = getServiceSupabase();
   let clients: Client[] = [];
-  const query = (searchParams?.query as string) || '';
-  const page = Math.max(1, parseInt((searchParams?.page as string) || '1', 10));
-  const pageSize = Math.max(1, Math.min(100, parseInt((searchParams?.page_size as string) || '20', 10)));
+  const sp = (await searchParams) ?? {};
+  const query = (sp.query as string) || '';
+  const page = Math.max(1, parseInt((sp.page as string) || '1', 10));
+  const pageSize = Math.max(1, Math.min(100, parseInt((sp.page_size as string) || '20', 10)));
   const from = (page - 1) * pageSize;
   const to = from + pageSize - 1;
   if (supabase) {
