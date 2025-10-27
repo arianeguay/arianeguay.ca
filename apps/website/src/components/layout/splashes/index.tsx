@@ -4,6 +4,9 @@ import { Fragment } from "react";
 interface BackgroundSplashesProps {
   data: BackgroundSplash[];
 }
+const splashPercent = (number?: number | null) => {
+  return `${number ?? 0}%`;
+};
 const BackgroundSplashesComponent: React.FC<BackgroundSplashesProps> = ({
   data,
 }) => {
@@ -27,9 +30,15 @@ const BackgroundSplashesComponent: React.FC<BackgroundSplashesProps> = ({
             src={splash.asset?.url}
             alt={splash.asset?.title ?? ""}
             style={{
-              left: splash.side === "left" ? (splash.margin ?? "") : "",
-              right: splash.side === "right" ? (splash.margin ?? "") : "",
-              top: splash.top ?? "",
+              left:
+                splash.side === "left"
+                  ? splashPercent(splash.margin)
+                  : undefined,
+              right:
+                splash.side === "right"
+                  ? splashPercent(splash.margin)
+                  : undefined,
+              top: splashPercent(splash.top),
               position: "absolute",
               zIndex: 0,
               userSelect: "none",

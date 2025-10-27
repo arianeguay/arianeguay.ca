@@ -118,6 +118,7 @@ export type ItemsListVariant =
   | "twoColsRight"
   | "twoColsLeft"
   | "verticalScroll"
+  | "verticalRow"
   | "verticalGrid";
 
 export type ItemsListCardVariant = "cards" | "rows" | "faq" | "citation";
@@ -128,11 +129,12 @@ export type ItemsListIncludeAllType =
   | "services"
   | "caseStudy";
 
+export type ItemTypes = ListItem | PageEntry | WorkItem;
 export type ItemsList = {
   __typename: "ItemsList";
   title: string;
   description?: CFMaybe<{ json: Document }>;
-  itemsCollection?: CFMaybe<{ items: (ListItem | PageEntry | WorkItem)[] }>;
+  itemsCollection?: CFMaybe<{ items: ItemTypes[] }>;
   variant?: CFMaybe<ItemsListVariant>;
   background?: CFMaybe<Background>;
   isScreen?: CFMaybe<boolean>;
