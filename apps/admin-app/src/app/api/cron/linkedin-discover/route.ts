@@ -119,7 +119,8 @@ export async function GET(req: Request) {
         _accepted++;
         perSourceCounts.set(src, (perSourceCounts.get(src) || 0) + 1);
       }
-    } catch (_e) {
+    } catch (e) {
+      console.error("error fetching source", src, e);
       // ignore source fetch errors
     }
   }
