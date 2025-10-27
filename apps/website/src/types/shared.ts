@@ -139,6 +139,7 @@ export type ItemsList = {
   primaryCta: CFMaybe<LinkItem>;
   cardVariant?: CFMaybe<ItemsListCardVariant>;
   includeAll?: CFMaybe<ItemsListIncludeAllType>;
+  splashesCollection?: CFMaybe<{ items: BackgroundSplash[] }>;
 };
 
 /** Form model (Contentful) */

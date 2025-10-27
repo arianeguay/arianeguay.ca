@@ -59,6 +59,7 @@ export const ItemsListFields = /* GraphQL */ `
             itemsCollection(limit: 10, locale: $locale) {
               items { ... on ListItem { __typename text title icon { url title } variant } }
             }
+            splashesCollection(limit: 2, locale: $locale) { items { asset { url title } margin top side } }
 `;
 
 export const SeoFields = /* GraphQL */ `

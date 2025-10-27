@@ -75,6 +75,7 @@ const ItemsListSection: React.FC<ItemsListSectionProps> = async ({
     background,
     primaryCta,
     includeAll,
+    splashesCollection,
   } = data;
   const additionalItems = await fetchAdditionalItems(
     "fr",
@@ -87,7 +88,11 @@ const ItemsListSection: React.FC<ItemsListSectionProps> = async ({
     : "left";
 
   return (
-    <Container isScreen={isScreen ?? false} background={background ?? "none"}>
+    <Container
+      splashes={splashesCollection?.items}
+      isScreen={isScreen ?? false}
+      background={background ?? "none"}
+    >
       <ItemsListSectionStyled $variant={variant ?? "twoColsLeft"}>
         <div style={{ maxWidth: "100%", marginInline: "auto" }}>
           {!!title && (
