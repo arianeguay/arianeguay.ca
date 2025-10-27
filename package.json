@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "nx run-many --target=serve --projects=website,admin-app --parallel",
-    "build": "nx affected --target=build --projects=website,admin-app --parallel",
+    "build": "nx run-many --target=build --projects=website,admin-app --parallel",
     "lint": "nx affected --target=lint",
     "format": "nx format:write",
     "typecheck": "nx affected --target=typecheck",
