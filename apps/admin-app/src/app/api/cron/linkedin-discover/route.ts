@@ -110,11 +110,9 @@ export async function GET(req: Request) {
         if (keywords) {
           const lower = html.toLowerCase();
           const matches = keywords.some((k) => lower.includes(k.toLowerCase()));
-          console.log("matches", matches);
           if (!matches) continue;
         }
         found.add(u);
-        console.log("discovered", u);
         discovered++;
         _accepted++;
         perSourceCounts.set(src, (perSourceCounts.get(src) || 0) + 1);

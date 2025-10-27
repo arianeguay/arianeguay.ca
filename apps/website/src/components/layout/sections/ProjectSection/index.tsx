@@ -69,9 +69,9 @@ const ProjectSection: React.FC<ProjectSectionProps> = ({ data }) => {
         )}
         {!!data.gallery && (
           <div style={{ width: "100%", display: "flex", gap: 16 }}>
-            {data.gallery.map((g) => (
-              <Image src={g.url} alt={g.title || ""} />
-            ))}
+            {data.gallery.map(
+              (g) => !!g && <Image src={g.url} alt={g.title || ""} />,
+            )}
           </div>
         )}
         {!!data.liveUrl && (
