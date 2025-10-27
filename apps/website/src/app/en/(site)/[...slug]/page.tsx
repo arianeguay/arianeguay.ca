@@ -8,7 +8,7 @@ import {
   getWorkBySlug,
 } from "apps/website/src/lib/contentful-graphql";
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 export const dynamic = "error";
 export const dynamicParams = false;
@@ -92,7 +92,8 @@ export default async function Page({ params }: PageProps) {
   const parts = resParams.slug;
   const slug = parts?.[parts.length - 1];
   if (!slug) return notFound();
-  // Try Page first
+  if (slug === "home") return redirect("/en");
+
   const page = await getPageBySlug(slug, { locale: "en" });
   if (page && page.sectionsCollection?.items) {
     return <Sections sections={page.sectionsCollection?.items} />;

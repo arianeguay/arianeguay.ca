@@ -1,0 +1,19 @@
+name: Hourly Cron
+on:
+  schedule:
+    - cron: "0 * * * *"  # hourly (UTC)
+  workflow_dispatch:
+jobs:
+  invoke:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call cron endpoint
+        env:
+          CRON_WEBHOOK_URL: ${{ secrets.CRON_WEBHOOK_URL }}
+          CRON_TOKEN: ${{ secrets.CRON_TOKEN }}
+        run: |
+          : "${CRON_WEBHOOK_URL:?Set repo secret CRON_WEBHOOK_URL}"
+          : "${CRON_TOKEN:?Set repo secret CRON_TOKEN}"
+          curl -sS -X POST "$CRON_WEBHOOK_URL" \
+            -H "Authorization: Bearer $CRON_TOKEN" \
+            -H "User-Agent: gh-cron" || exit 1

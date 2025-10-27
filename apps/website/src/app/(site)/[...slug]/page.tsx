@@ -8,7 +8,7 @@ import {
   getWorkBySlug,
 } from "apps/website/src/lib/contentful-graphql";
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 export const dynamic = "error";
 export const dynamicParams = false;
@@ -17,10 +17,12 @@ export const revalidate = false;
 export async function generateStaticParams() {
   const entries = await getAllPageSlugsWithParents("fr");
   const projects = await getAllWorkSlugsWithParents("fr");
-  const pageEntries = entries.map((e) => ({
-    slug: [e.parentSlug, e.slug].filter(Boolean),
-    type: "page",
-  }));
+  const pageEntries = entries
+    .filter((e) => e.slug && e.slug !== "home")
+    .map((e) => ({
+      slug: [e.parentSlug, e.slug].filter(Boolean),
+      type: "page",
+    }));
 
   const workEntries = projects.map((e) => ({
     slug: [e.slug].filter(Boolean),
@@ -90,8 +92,8 @@ export default async function Page({ params }: PageProps) {
   const parts = resParams.slug;
   const slug = parts?.[parts.length - 1];
   if (!slug) return notFound();
+  if (slug === "home") return redirect("/");
 
-  // Try Page first
   const page = await getPageBySlug(slug);
   if (page && page.sectionsCollection?.items) {
     return <Sections sections={page.sectionsCollection?.items} />;

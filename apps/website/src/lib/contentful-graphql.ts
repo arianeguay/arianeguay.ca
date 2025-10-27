@@ -71,7 +71,11 @@ async function fetchGraphQL<T>(
 }
 
 export type PageSlug = { slug: string };
-export type PageSlugWithParent = { slug: string; parentSlug?: string | null };
+export type PageSlugWithParent = {
+  slug: string;
+  noindex: boolean;
+  parentSlug?: string | null;
+};
 
 export async function getAllPageSlugs(
   locale: string = DEFAULT_LOCALE,
@@ -105,6 +109,9 @@ export async function getAllPageSlugsWithParents(
         items {
           ${PageFieldsSlugs}
           parentPage { slug }
+          seo {
+            noindex
+          }
         }
       }
     }
@@ -115,6 +122,7 @@ export async function getAllPageSlugsWithParents(
       items: Array<{
         slug?: string | null;
         parentPage?: { slug?: string | null } | null;
+        seo?: { noindex?: boolean | null } | null;
       }>;
     };
   }>(query, { locale });
@@ -122,6 +130,7 @@ export async function getAllPageSlugsWithParents(
   const entries = (data.pageCollection?.items || []).map((i) => ({
     slug: i?.slug || "",
     parentSlug: i?.parentPage?.slug || null,
+    noindex: i?.seo?.noindex || false,
   }));
   return entries.filter((e) => Boolean(e.slug)) as PageSlugWithParent[];
 }
@@ -244,10 +253,13 @@ export async function getSimplePageBySlug(
       }
     }
   `;
-  //Fetch other locale
-  const dataOtherLocale = await fetchGraphQL<{
-    pageCollection: { items: PageEntry[] };
-  }>(queryOtherLocale, { id, preview, locale: otherLocale });
+  const dataOtherLocale = id
+    ? await fetchGraphQL<{
+        pageCollection: { items: PageEntry[] };
+      }>(queryOtherLocale, { id, preview, locale: otherLocale })
+    : ({ pageCollection: { items: [] } } as {
+        pageCollection: { items: PageEntry[] };
+      });
 
   return {
     page: data.pageCollection?.items?.[0] ?? null,

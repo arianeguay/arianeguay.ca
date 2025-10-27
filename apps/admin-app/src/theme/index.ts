@@ -1,0 +1,150 @@
+// Admin App Theme - Reuses tokens from apps/website/src/theme
+
+const colors = {
+  accent: '#F6C2D4',
+  ink1: '#111114',
+  ink2: '#3A3A44',
+  inkLight: '#FFFFFF',
+  bg: '#F9F6F8',
+  card: 'rgba(255,255,255,0.8)',
+  border: '#827B7F',
+  brand: {
+    primary: '#8C0F48',
+    primaryAlt: '#A11656',
+  },
+  status: {
+    success: '#4E8A66',
+    warning: '#EAAA19',
+    error: '#A75B4E',
+    info: '#437C90',
+  },
+  gradients: {
+    gradient1: 'linear-gradient(327deg, #E29C45 13.27%, #F4C46A 46.95%, #A75B4E 80.64%)',
+    gradient2: 'linear-gradient(353deg, #E29C45 4.64%, #A75B4E 45.11%, #6A4A4A 85.58%)',
+  },
+};
+
+const font = {
+  family: {
+    display: `'Manrope', ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial`,
+    body: `'Inter', ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial`,
+  },
+  weight: {
+    regular: 400,
+    medium: 500,
+    semibold: 600,
+    bold: 700,
+  },
+} as const;
+
+type FontWeight = keyof typeof font.weight;
+type FontFamily = keyof typeof font.family;
+
+interface Typography {
+  family: FontFamily;
+  weight: FontWeight;
+  size: number;
+  letterSpacing: number;
+  transform?: string;
+}
+
+export type TypographyElement =
+  | 'caption'
+  | 'overline'
+  | 'h1'
+  | 'h2'
+  | 'h3'
+  | 'h4'
+  | 'h5'
+  | 'h6'
+  | 'subtitle1'
+  | 'subtitle2'
+  | 'body1'
+  | 'body2'
+  | 'body3';
+
+const typography: Record<TypographyElement, Typography> = {
+  caption: { family: 'body', weight: 'medium', size: 12, letterSpacing: 0.32 },
+  overline: {
+    family: 'display',
+    weight: 'semibold',
+    size: 11,
+    letterSpacing: 1.28,
+    transform: 'uppercase',
+  },
+  h1: { family: 'display', weight: 'bold', size: 56, letterSpacing: -0.32 },
+  h2: { family: 'display', weight: 'bold', size: 44, letterSpacing: -0.16 },
+  h3: { family: 'display', weight: 'semibold', size: 32, letterSpacing: 0 },
+  h4: { family: 'display', weight: 'semibold', size: 28, letterSpacing: 0 },
+  h5: { family: 'display', weight: 'medium', size: 24, letterSpacing: 0 },
+  h6: { family: 'display', weight: 'medium', size: 20, letterSpacing: 0 },
+  subtitle1: { family: 'display', weight: 'semibold', size: 18, letterSpacing: 0 },
+  subtitle2: { family: 'body', weight: 'medium', size: 16, letterSpacing: 0 },
+  body1: { family: 'body', weight: 'regular', size: 18, letterSpacing: 0 },
+  body2: { family: 'body', weight: 'regular', size: 16, letterSpacing: 0 },
+  body3: { family: 'body', weight: 'regular', size: 14, letterSpacing: 0 },
+} as const;
+
+const radius = {
+  xs: '2px',
+  sm: '4px',
+  md: '8px',
+  lg: '12px',
+  xl: '16px',
+  pill: '9999px',
+};
+
+const shadows = {
+  xs: '0 1px 2px rgba(17,17,20,.05)',
+  sm: '0 2px 8px rgba(17,17,20,.08)',
+  md: '0 6px 18px rgba(17,17,20,.10), 0 1px 0 rgba(140,15,72,.06)',
+  lg: '0 10px 32px rgba(17,17,20,.14), 0 2px 0 rgba(140,15,72,.06)',
+};
+
+const spacing = {
+  none: '0px',
+  xs: '4px',
+  sm: '8px',
+  md: '12px',
+  lg: '16px',
+  xl: '20px',
+  xxl: '24px',
+  xxxl: '32px',
+  xxxxl: '40px',
+  xxxxxl: '48px',
+  xxxxxxl: '64px',
+};
+
+const motion = {
+  fast: '150ms ease-in-out',
+  normal: '220ms ease-in-out',
+  slow: '320ms ease-in-out',
+};
+
+const breakpoints = {
+  xs: 478,
+  sm: 767,
+  md: 1023,
+  lg: 1279,
+  xl: 1440,
+} as const;
+
+export const theme = {
+  colors,
+  font,
+  typography,
+  radius,
+  shadows,
+  spacing,
+  motion,
+  breakpoints,
+  focus: {
+    ringColor: colors.brand.primary,
+    ringWidth: '2px',
+    ringOffset: '3px',
+  },
+};
+
+export default theme;
+
+export type CustomTheme = typeof theme;

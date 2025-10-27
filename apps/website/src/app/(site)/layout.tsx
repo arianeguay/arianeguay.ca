@@ -20,8 +20,8 @@ export async function generateMetadata(
       default: "Ariane Guay",
       template: "%s | Ariane Guay",
     },
-    description: "Personal website and portfolio of Ariane Guay",
-    keywords: ["design", "development", "portfolio"],
+    description: "Site web et portfolio d'Ariane Guay",
+    keywords: ["design", "développement", "portfolio"],
     metadataBase: new URL(
       process.env.NEXT_PUBLIC_SITE_URL ||
         process.env.SITE_URL ||
@@ -29,7 +29,7 @@ export async function generateMetadata(
     ),
     openGraph: {
       type: "website",
-      locale: "en_CA",
+      locale: "fr_CA",
       siteName: "Ariane Guay",
     },
     robots: {
@@ -64,7 +64,7 @@ export default async function SiteLayout(props: LayoutConfig) {
             <Script id="ga-setup" strategy="afterInteractive">
               {`
                 window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
+                function gtag(){dataLayer.push(arguments);} 
                 gtag('js', new Date());
                 gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}', { anonymize_ip: true });
               `}
