@@ -50,7 +50,11 @@ async function fetchGraphQL<T>(
 }
 
 export type PageSlug = { slug: string };
-export type PageSlugWithParent = { slug: string; parentSlug?: string | null };
+export type PageSlugWithParent = {
+  slug: string;
+  noindex: boolean;
+  parentSlug?: string | null;
+};
 
 export async function getAllPageSlugs(
   locale: string = DEFAULT_LOCALE,
@@ -84,6 +88,7 @@ export async function getAllPageSlugsWithParents(
         items {
           slug
           parentPage { slug }
+          noindex
         }
       }
     }

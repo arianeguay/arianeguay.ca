@@ -27,7 +27,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       getAllPageSlugsWithParents("en"),
     ]);
 
-    for (const { slug, parentSlug } of frSlugs) {
+    for (const { slug, parentSlug, noindex } of frSlugs) {
+      if (noindex) continue;
       // Avoid duplicating homepage if slug corresponds to root
       if (!slug || slug === "/" || slug === "index" || slug === "home")
         continue;
@@ -41,7 +42,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       });
     }
 
-    for (const { slug, parentSlug } of enSlugs) {
+    for (const { slug, parentSlug, noindex } of enSlugs) {
+      if (noindex) continue;
       if (!slug || slug === "/" || slug === "index" || slug === "home")
         continue;
       const url = parentSlug
