@@ -29,7 +29,7 @@ export async function generateMetadata(
     ),
     openGraph: {
       type: "website",
-      locale: "en_CA",
+      locale: "fr_CA",
       siteName: "Ariane Guay",
     },
     robots: {
@@ -64,7 +64,7 @@ export default async function SiteLayout(props: LayoutConfig) {
             <Script id="ga-setup" strategy="afterInteractive">
               {`
                 window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
+                function gtag(){dataLayer.push(arguments);} 
                 gtag('js', new Date());
                 gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}', { anonymize_ip: true });
               `}

@@ -1,8 +1,11 @@
 import type { MetadataRoute } from "next";
-import { getAllPageSlugs } from "../lib/contentful-graphql";
+import { getAllPageSlugsWithParents } from "../lib/contentful-graphql";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.SITE_URL || "https://arianeguay.ca";
+  const baseUrl =
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    process.env.SITE_URL ||
+    "https://arianeguay.ca";
 
   // Homepage entry
   const entries: MetadataRoute.Sitemap = [
@@ -20,24 +23,32 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   try {
     const [frSlugs, enSlugs] = await Promise.all([
-      getAllPageSlugs("fr"),
-      getAllPageSlugs("en"),
+      getAllPageSlugsWithParents("fr"),
+      getAllPageSlugsWithParents("en"),
     ]);
 
-    for (const slug of frSlugs) {
+    for (const { slug, parentSlug } of frSlugs) {
       // Avoid duplicating homepage if slug corresponds to root
-      if (!slug || slug === "/" || slug === "index" || slug === "home") continue;
+      if (!slug || slug === "/" || slug === "index" || slug === "home")
+        continue;
+      const url = parentSlug
+        ? `${baseUrl}/${parentSlug}/${slug}`
+        : `${baseUrl}/${slug}`;
       entries.push({
-        url: `${baseUrl}/${slug}`,
+        url,
         changeFrequency: "weekly",
         priority: 0.7,
       });
     }
 
-    for (const slug of enSlugs) {
-      if (!slug || slug === "/" || slug === "index" || slug === "home") continue;
+    for (const { slug, parentSlug } of enSlugs) {
+      if (!slug || slug === "/" || slug === "index" || slug === "home")
+        continue;
+      const url = parentSlug
+        ? `${baseUrl}/en/${parentSlug}/${slug}`
+        : `${baseUrl}/en/${slug}`;
       entries.push({
-        url: `${baseUrl}/en/${slug}`,
+        url,
         changeFrequency: "weekly",
         priority: 0.7,
       });
