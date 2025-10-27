@@ -6,13 +6,13 @@ import styled, { css } from "styled-components";
 const VerticalStyle = (theme: CustomTheme) => css`
   display: flex;
   flex-direction: column;
-  gap: ${theme.spacing.lg};
+  gap: ${theme.spacing.xl};
 `;
 
 const TwoColsStyle = (side: string, theme: CustomTheme) => css`
   display: flex;
   flex-direction: row;
-  gap: ${theme.spacing.xxxxl};
+  gap: ${theme.spacing.xxxl};
   align-items: center;
   & > * {
     flex: 1;
@@ -51,13 +51,23 @@ const ItemsListSectionStyled = styled.div<{ $variant: ItemsListVariant }>`
 
 export default ItemsListSectionStyled;
 
-export const GridStyled = styled.div`
+export const GridStyled = styled.div<{ $hasOddNb: boolean }>`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: ${({ theme }) => theme.spacing.lg};
 
   grid-auto-rows: 1fr;
   width: 100%;
+  ${({ $hasOddNb }) => {
+    if ($hasOddNb) {
+      return css`
+        *:first-child {
+          grid-column-start: 1;
+          grid-column-end: 3;
+        }
+      `;
+    }
+  }}
   @media screen and (max-width: ${({ theme }) => theme.breakpoints.md}px) {
     grid-template-columns: 1fr;
   }

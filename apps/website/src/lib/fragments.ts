@@ -57,7 +57,7 @@ export const ItemsListFields = /* GraphQL */ `
               page { slug parentPage { slug } }
             }
             itemsCollection(limit: 10, locale: $locale) {
-              items { ... on ListItem { __typename text title icon { url title } variant } }
+              items { ... on ListItem { __typename text title icon { url title } variant page { slug parentPage { slug } sys { locale } } } }
             }
             splashesCollection(limit: 2, locale: $locale) { items { asset { url title } margin top side } }
 `;

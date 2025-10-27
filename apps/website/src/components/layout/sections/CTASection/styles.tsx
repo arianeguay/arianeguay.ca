@@ -8,7 +8,7 @@ export const CtaSectionBodyStyled = styled.div``;
 const ContainerVerticalStyled = (theme: CustomTheme) => css`
   display: flex;
   flex-direction: column;
-  gap: ${theme.spacing.xxxl};
+  gap: ${theme.spacing.lg};
   align-items: center;
 
   ${CtaSectionBodyStyled} {
@@ -22,8 +22,8 @@ const ContainerVerticalStyled = (theme: CustomTheme) => css`
 
 const ContainerVerticalReversedStyled = (theme: CustomTheme) => css`
   display: flex;
-  flex-direction: column;
-  gap: ${theme.spacing.xxxl};
+  flex-direction: column-reverse;
+  gap: ${theme.spacing.lg};
   align-items: center;
 
   ${CtaSectionBodyStyled} {
@@ -38,24 +38,26 @@ const ContainerVerticalReversedStyled = (theme: CustomTheme) => css`
 const ContainerHorizontalStyled = (theme: CustomTheme) => css`
   display: flex;
   flex-direction: row;
-  gap: ${theme.spacing.md};
+  gap: ${theme.spacing.xl};
   align-items: center;
 `;
 
 const ContainerHorizontalReversedStyled = (theme: CustomTheme) => css`
   display: flex;
-  flex-direction: row;
-  gap: ${theme.spacing.md};
+  flex-direction: row-reverse;
+  gap: ${theme.spacing.xl};
   align-items: center;
 `;
 
 export const CtaSectionContentStyled = styled.div<{ $variation: CtaVariation }>`
   display: flex;
   align-items: center;
+
   width: 100%;
   position: relative;
   z-index: 1;
   padding-block: ${({ theme }) => theme.spacing.xl};
+
   ${({ $variation, theme }) => {
     switch ($variation) {
       case "vertical":

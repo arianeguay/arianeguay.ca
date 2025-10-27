@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { Collapse } from "react-collapse";
 import styled, { css, DefaultTheme } from "styled-components";
 
@@ -9,11 +10,13 @@ const CardStyling = (theme: DefaultTheme) => css`
   border-radius: 8px;
   border: ${({ theme }) => theme.colors.border};
   background: rgba(255, 255, 255, 0.8);
-
+  align-self: stretch;
   /* core/shadow/sm */
-  box-shadow: 2px 2px 4px 0 rgba(17, 17, 20, 0.12);
+  box-shadow: ${({ theme }) => theme.shadows.sm};
   color: ${({ theme }) => theme.colors.ink1};
-  p {
+  p,
+  h5,
+  h3 {
     margin: 0;
   }
 `;
@@ -74,4 +77,19 @@ export const FaqHeadingStyled = styled.div`
   display: flex;
   align-items: center;
   gap: ${({ theme }) => theme.spacing.md};
+`;
+
+export const CardLinkStyled = styled(Link)`
+  text-decoration: none;
+
+  & > div {
+    height: 100%;
+  }
+  &:hover {
+    & > div {
+      transform: translateY(-2px);
+      transition: all 0.1s ease-in-out;
+      box-shadow: ${({ theme }) => theme.shadows.md};
+    }
+  }
 `;

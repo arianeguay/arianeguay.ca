@@ -99,7 +99,7 @@ const ItemsListSection: React.FC<ItemsListSectionProps> = async ({
         <div
           style={{
             maxWidth: "100%",
-            marginInline: "auto",
+            marginInline: isVertical ? "auto" : "0",
           }}
         >
           {!!title && (
@@ -117,7 +117,13 @@ const ItemsListSection: React.FC<ItemsListSectionProps> = async ({
             </Typography>
           )}
           {!!primaryCta && (
-            <CTA data={primaryCta} style={{ marginInline: "auto" }} />
+            <CTA
+              data={primaryCta}
+              style={{
+                marginInline: isVertical ? "auto" : "0",
+                marginBlockEnd: "1rem",
+              }}
+            />
           )}
         </div>
         <ItemsListSectionContent

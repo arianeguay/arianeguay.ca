@@ -14,6 +14,7 @@ export type CFSys = {
   publishedAt?: string | null;
   firstPublishedAt?: string | null;
   publishedVersion?: number | null;
+  locale?: string | null;
 };
 
 /** Attach `sys` to any entry (when selected) */
@@ -23,8 +24,7 @@ export type WithSys<T> = T & { sys?: CFSys | null };
 export type CFRef<T> = CFMaybe<WithSys<T>>;
 export type CFRefs<T> = CFCollection<WithSys<T>>;
 
-
 export type CFItem<T, Type extends string> = {
   sys: CFSys;
   __typename: Type;
-} & T
+} & T;
