@@ -88,7 +88,9 @@ export async function getAllPageSlugsWithParents(
         items {
           slug
           parentPage { slug }
-          noindex
+          seo {
+            noindex
+          }
         }
       }
     }
@@ -99,6 +101,7 @@ export async function getAllPageSlugsWithParents(
       items: Array<{
         slug?: string | null;
         parentPage?: { slug?: string | null } | null;
+        seo?: { noindex?: boolean | null } | null;
       }>;
     };
   }>(query, { locale });
@@ -106,6 +109,7 @@ export async function getAllPageSlugsWithParents(
   const entries = (data.pageCollection?.items || []).map((i) => ({
     slug: i?.slug || "",
     parentSlug: i?.parentPage?.slug || null,
+    noindex: i?.seo?.noindex || false,
   }));
 
   return entries.filter((e) => Boolean(e.slug)) as PageSlugWithParent[];
