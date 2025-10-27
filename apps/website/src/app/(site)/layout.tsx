@@ -20,8 +20,8 @@ export async function generateMetadata(
       default: "Ariane Guay",
       template: "%s | Ariane Guay",
     },
-    description: "Personal website and portfolio of Ariane Guay",
-    keywords: ["design", "development", "portfolio"],
+    description: "Site web et portfolio d'Ariane Guay",
+    keywords: ["design", "développement", "portfolio"],
     metadataBase: new URL(
       process.env.NEXT_PUBLIC_SITE_URL ||
         process.env.SITE_URL ||
