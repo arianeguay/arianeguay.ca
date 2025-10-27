@@ -1,21 +1,23 @@
 import { ItemsList } from "apps/website/src/types/shared";
 import ItemRender from "./ItemRender";
-import { GridStyled } from "./styles";
+import { RowStyled } from "./styles";
 
-const Grid: React.FC<ItemsList> = ({ itemsCollection, cardVariant }) => {
+const Row: React.FC<ItemsList> = ({ itemsCollection, cardVariant }) => {
   return (
-    <GridStyled>
+    <RowStyled>
       {itemsCollection?.items.map((item, index) => {
         return (
           <ItemRender
             key={index}
             item={item}
             cardVariant={cardVariant ?? "rows"}
+            textAlign="center"
+            noWrap
           />
         );
       })}
-    </GridStyled>
+    </RowStyled>
   );
 };
 
-export default Grid;
+export default Row;

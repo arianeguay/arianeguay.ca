@@ -2,7 +2,7 @@
 import { ItemsList } from "apps/website/src/types/shared";
 
 import React from "react";
-import Card from "../Card";
+import ItemRender from "../ItemRender";
 import { ScrollerContainer, ScrollerRow } from "./styles";
 
 const Scroller: React.FC<ItemsList> = ({ itemsCollection }) => {
@@ -52,7 +52,7 @@ const Scroller: React.FC<ItemsList> = ({ itemsCollection }) => {
             key={`measure-${index}`}
             style={{ display: "inline-block", marginRight: 16 }}
           >
-            <Card text={item.text} noWrap />
+            <ItemRender item={item} noWrap />
           </span>
         ))}
       </div>
@@ -60,7 +60,7 @@ const Scroller: React.FC<ItemsList> = ({ itemsCollection }) => {
       <ScrollerContainer>
         <ScrollerRow $size={displayItems.length}>
           {displayItems.map((item, index) => (
-            <Card key={index} text={item.text} noWrap />
+            <ItemRender key={index} item={item} noWrap />
           ))}
         </ScrollerRow>
       </ScrollerContainer>

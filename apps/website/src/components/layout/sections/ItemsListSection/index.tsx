@@ -12,6 +12,7 @@ import Typography from "../../../common/typography";
 import Container from "../../container";
 import ItemsListColumns from "./Columns";
 import Grid from "./Grid";
+import Row from "./Row";
 import Scroller from "./Scroller";
 import ItemsListSectionStyled from "./styles";
 
@@ -31,6 +32,8 @@ const ItemsListSectionContent: React.FC<ItemsListSectionProps> = ({ data }) => {
       return <ItemsListColumns {...data} />;
     case "verticalScroll":
       return <Scroller {...data} />;
+    case "verticalRow":
+      return <Row {...data} />;
   }
 };
 
@@ -81,11 +84,10 @@ const ItemsListSection: React.FC<ItemsListSectionProps> = async ({
     "fr",
     includeAll ?? "disabled",
   );
-  const textAlign = ["verticalScroll", "verticalGrid"].includes(
+  const isVertical = ["verticalScroll", "verticalGrid", "verticalRow"].includes(
     variant ?? "column",
-  )
-    ? "center"
-    : "left";
+  );
+  const textAlign = isVertical ? "center" : "left";
 
   return (
     <Container
@@ -94,7 +96,12 @@ const ItemsListSection: React.FC<ItemsListSectionProps> = async ({
       background={background ?? "none"}
     >
       <ItemsListSectionStyled $variant={variant ?? "twoColsLeft"}>
-        <div style={{ maxWidth: "100%", marginInline: "auto" }}>
+        <div
+          style={{
+            maxWidth: "100%",
+            marginInline: "auto",
+          }}
+        >
           {!!title && (
             <Typography
               element={isHero ? "h1" : "h2"}
@@ -109,7 +116,9 @@ const ItemsListSection: React.FC<ItemsListSectionProps> = async ({
               {documentToReactComponents(description.json)}
             </Typography>
           )}
-          {!!primaryCta && <CTA data={primaryCta} />}
+          {!!primaryCta && (
+            <CTA data={primaryCta} style={{ marginInline: "auto" }} />
+          )}
         </div>
         <ItemsListSectionContent
           data={{

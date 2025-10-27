@@ -1,16 +1,5 @@
 import { CustomTheme } from "apps/website/src/theme";
-import {
-  H1,
-  H2,
-  H3,
-  H4,
-  H5,
-  H6,
-  P,
-  Span,
-  Div,
-  TypographyStyledProps,
-} from "./styles";
+import { Div, H1, H2, H3, H4, H5, H6, P, Span } from "./styles";
 type TypographyElement =
   | "h1"
   | "h2"
@@ -53,6 +42,7 @@ interface TypographyProps {
   style?: React.CSSProperties;
   className?: string;
   id?: string;
+  textAlign?: React.CSSProperties["textAlign"];
   noWrap?: boolean;
 }
 const Typography: React.FC<TypographyProps> = ({
@@ -63,12 +53,17 @@ const Typography: React.FC<TypographyProps> = ({
   className,
   id,
   style,
+  textAlign,
 }) => {
   const Element = getTypographyElement(element);
   return (
     <Element
       $variant={variant}
-      style={{ ...style, whiteSpace: noWrap ? "nowrap" : "wrap" }}
+      style={{
+        ...style,
+        textAlign: style?.textAlign ?? textAlign,
+        whiteSpace: noWrap ? "nowrap" : "wrap",
+      }}
       className={className}
       id={id}
     >

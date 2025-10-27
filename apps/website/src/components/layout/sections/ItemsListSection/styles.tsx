@@ -29,13 +29,13 @@ const ItemsListSectionStyled = styled.div<{ $variant: ItemsListVariant }>`
   width: 100%;
   ${({ $variant, theme }) => {
     switch ($variant) {
-      case "verticalGrid":
-        return VerticalStyle(theme);
       case "twoColsLeft":
         return TwoColsStyle("left", theme);
       case "twoColsRight":
         return TwoColsStyle("right", theme);
+      case "verticalGrid":
       case "verticalScroll":
+      case "verticalRow":
         return VerticalStyle(theme);
     }
   }}
@@ -61,4 +61,18 @@ export const GridStyled = styled.div`
   @media screen and (max-width: ${({ theme }) => theme.breakpoints.md}px) {
     grid-template-columns: 1fr;
   }
+`;
+
+export const RowStyled = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: ${({ theme }) => theme.spacing.lg};
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+`;
+export const ColumnStyled = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spacing.md};
 `;

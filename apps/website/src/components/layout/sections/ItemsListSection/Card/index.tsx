@@ -6,12 +6,13 @@ import RowTile from "./Row";
 
 export interface CardProps extends ListItem {
   text: string;
-  variant?: ItemsListCardVariant;
+  cardVariant?: ItemsListCardVariant;
   noWrap?: boolean;
+  textAlign?: React.CSSProperties["textAlign"];
 }
 const Card: React.FC<CardProps> = (props) => {
-  const { variant } = props;
-  switch (variant) {
+  const { cardVariant } = props;
+  switch (cardVariant) {
     case "faq":
       return <FaqTile {...props} />;
     case "rows":

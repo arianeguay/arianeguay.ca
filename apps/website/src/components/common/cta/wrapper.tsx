@@ -6,8 +6,9 @@ import ActionModalWrapper from "./actions-modals";
 interface CTAWrapperProps {
   children: React.ReactNode;
   data: LinkItem;
+  style?: React.CSSProperties;
 }
-const CTAWrapper: React.FC<CTAWrapperProps> = ({ children, data }) => {
+const CTAWrapper: React.FC<CTAWrapperProps> = ({ children, data, style }) => {
   const { url, page, kind, actionForm } = data;
   const { locale } = useLocale();
   switch (kind) {
@@ -16,20 +17,28 @@ const CTAWrapper: React.FC<CTAWrapperProps> = ({ children, data }) => {
       if (!slug) return children;
       const parentSlug: string | undefined = (page as any)?.parentPage?.slug;
       const basePath =
-        slug === "home" ? "/" : parentSlug ? `/${parentSlug}/${slug}` : `/${slug}`;
+        slug === "home"
+          ? "/"
+          : parentSlug
+            ? `/${parentSlug}/${slug}`
+            : `/${slug}`;
       const href = locale === "fr" ? basePath : `/${locale}${basePath}`;
       return (
-        <Link href={href}>
+        <Link href={href} style={style}>
           {children}
         </Link>
       );
     case "External":
       if (!url) return children;
-      return <a href={url}>{children}</a>;
+      return (
+        <a href={url} style={style}>
+          {children}
+        </a>
+      );
     case "Action":
       if (!actionForm) return children;
       return (
-        <ActionModalWrapper actionForm={actionForm}>
+        <ActionModalWrapper actionForm={actionForm} style={style}>
           {children}
         </ActionModalWrapper>
       );
