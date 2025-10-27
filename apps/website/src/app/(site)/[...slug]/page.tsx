@@ -17,12 +17,10 @@ export const revalidate = false;
 export async function generateStaticParams() {
   const entries = await getAllPageSlugsWithParents("fr");
   const projects = await getAllWorkSlugsWithParents("fr");
-  const pageEntries = entries
-    .filter((e) => e.slug && e.slug !== "home")
-    .map((e) => ({
-      slug: [e.parentSlug, e.slug].filter(Boolean),
-      type: "page",
-    }));
+  const pageEntries = entries.map((e) => ({
+    slug: [e.parentSlug, e.slug].filter(Boolean),
+    type: "page",
+  }));
 
   const workEntries = projects.map((e) => ({
     slug: [e.slug].filter(Boolean),
