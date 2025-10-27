@@ -207,10 +207,13 @@ export async function getSimplePageBySlug(
       }
     }
   `;
-  //Fetch other locale
-  const dataOtherLocale = await fetchGraphQL<{
-    pageCollection: { items: PageEntry[] };
-  }>(queryOtherLocale, { id, preview, locale: otherLocale });
+  const dataOtherLocale = id
+    ? await fetchGraphQL<{
+        pageCollection: { items: PageEntry[] };
+      }>(queryOtherLocale, { id, preview, locale: otherLocale })
+    : ({ pageCollection: { items: [] } } as {
+        pageCollection: { items: PageEntry[] };
+      });
 
   return {
     page: data.pageCollection?.items?.[0] ?? null,
