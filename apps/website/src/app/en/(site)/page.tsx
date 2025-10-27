@@ -31,7 +31,7 @@ export async function generateMetadata(): Promise<Metadata> {
       ? { index: false, follow: false }
       : { index: true, follow: true },
     alternates: {
-      canonical: canonicalUrl || `${baseUrl}/en`,
+      canonical: canonicalUrl,
       languages: {
         "fr-CA": `${baseUrl}/`,
         "en-CA": `${baseUrl}/en`,

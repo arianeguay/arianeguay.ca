@@ -72,7 +72,7 @@ export async function generateMetadata({
     description,
     robots: undefined,
     alternates: {
-      canonical: canonicalUrl || currentLocaleUrl,
+      canonical: canonicalUrl,
       languages: {
         "fr-CA": otherLocaleUrl,
         "en-CA": currentLocaleUrl,

@@ -1,9 +1,13 @@
 import type { Metadata } from "next";
-import Sections from "../../components/layout/sections";
-import { getPageBySlug, getSimplePageBySlug, getSiteSettings } from "../../lib/contentful-graphql";
-import Header from "../../components/layout/header";
 import { Footer } from "../../components/layout";
+import Header from "../../components/layout/header";
+import Sections from "../../components/layout/sections";
 import ScrollHijacker from "../../components/scroll/ScrollHijacker";
+import {
+  getPageBySlug,
+  getSimplePageBySlug,
+  getSiteSettings,
+} from "../../lib/contentful-graphql";
 
 export const dynamic = "error";
 export const dynamicParams = false;
@@ -29,7 +33,7 @@ export async function generateMetadata(): Promise<Metadata> {
       ? { index: false, follow: false }
       : { index: true, follow: true },
     alternates: {
-      canonical: canonicalUrl || `${baseUrl}/`,
+      canonical: canonicalUrl,
       languages: {
         "fr-CA": `${baseUrl}/`,
         "en-CA": `${baseUrl}/en`,
