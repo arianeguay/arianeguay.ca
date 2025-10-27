@@ -1,0 +1,26 @@
+{
+  "name": "contentful-cli",
+  "private": true,
+  "version": "0.1.0",
+  "license": "MIT",
+  "type": "commonjs",
+  "scripts": {
+    "dev": "ts-node src/cli.ts --help",
+    "contentful:run-script": "ts-node src/cli.ts scripts",
+    "contentful:migrate": "ts-node src/cli.ts migrate",
+    "contentful:cpt:export": "ts-node src/cli.ts cpt-export",
+    "contentful:cpt:apply": "ts-node src/cli.ts cpt-apply",
+    "contentful:entries:import": "ts-node src/cli.ts entries-import",
+    "contentful:prompt": "ts-node src/cli.ts prompt-template"
+  },
+  "dependencies": {
+    "commander": "^12.1.0",
+    "dotenv": "^16.4.5",
+    "contentful-management": "^10.46.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.7.4",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.3"
+  }
+}

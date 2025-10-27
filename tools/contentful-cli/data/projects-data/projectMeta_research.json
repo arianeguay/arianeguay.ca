@@ -1,0 +1,66 @@
+{
+  "sys": {
+    "id": "meta-research"
+  },
+  "fields": {
+    "internalTitle": {
+      "fr": "Re|Search — meta"
+    },
+    "company": {
+      "fr": "NT2 – UQAM",
+      "en": "NT2 – UQAM"
+    },
+    "role": {
+      "fr": "Front-End, UX de navigation",
+      "en": "Front-End, Navigation UX"
+    },
+    "period": {
+      "fr": "2018–2020",
+      "en": "2018–2020"
+    },
+    "sector": {
+      "fr": "Culture / Recherche",
+      "en": "Culture / Research"
+    },
+    "stack": {
+      "fr": [
+        {
+          "sys": {
+            "type": "Link",
+            "linkType": "Entry",
+            "id": "tag-nodejs"
+          }
+        },
+        {
+          "sys": {
+            "type": "Link",
+            "linkType": "Entry",
+            "id": "tag-react"
+          }
+        },
+        {
+          "sys": {
+            "type": "Link",
+            "linkType": "Entry",
+            "id": "tag-mongodb"
+          }
+        }
+      ]
+    },
+    "links": {
+      "fr": [
+        {
+          "sys": {
+            "type": "Link",
+            "linkType": "Entry",
+            "id": "cta-research-site"
+          }
+        }
+      ]
+    },
+    "location": {
+      "fr": "Montréal, QC",
+      "en": "Montreal, QC"
+    }
+  }
+}

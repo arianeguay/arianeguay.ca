@@ -1,0 +1,14 @@
+{
+  "sys": {
+    "id": "tag-react"
+  },
+  "fields": {
+    "name": {
+      "fr": "React",
+      "en": "React"
+    },
+    "kind": {
+      "fr": "framework"
+    }
+  }
+}

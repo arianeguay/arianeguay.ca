@@ -1,0 +1,14 @@
+{
+  "sys": {
+    "id": "tag-wordpress"
+  },
+  "fields": {
+    "name": {
+      "fr": "WordPress",
+      "en": "WordPress"
+    },
+    "kind": {
+      "fr": "framework"
+    }
+  }
+}

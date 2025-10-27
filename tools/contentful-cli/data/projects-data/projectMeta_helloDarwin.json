@@ -1,0 +1,87 @@
+{
+  "sys": {
+    "id": "meta-hellodarwin"
+  },
+  "fields": {
+    "internalTitle": {
+      "fr": "helloDarwin — meta"
+    },
+    "company": {
+      "fr": "helloDarwin",
+      "en": "helloDarwin"
+    },
+    "role": {
+      "fr": "Front-End, UX/UI, Design System",
+      "en": "Front-End, UX/UI, Design System"
+    },
+    "period": {
+      "fr": "2022–2025 (en cours)",
+      "en": "2022–2025 (ongoing)"
+    },
+    "sector": {
+      "fr": "Entreprise / SaaS",
+      "en": "Enterprise / SaaS"
+    },
+    "stack": {
+      "fr": [
+        {
+          "sys": {
+            "type": "Link",
+            "linkType": "Entry",
+            "id": "tag-react"
+          }
+        },
+        {
+          "sys": {
+            "type": "Link",
+            "linkType": "Entry",
+            "id": "tag-nextjs"
+          }
+        },
+        {
+          "sys": {
+            "type": "Link",
+            "linkType": "Entry",
+            "id": "tag-typescript"
+          }
+        },
+        {
+          "sys": {
+            "type": "Link",
+            "linkType": "Entry",
+            "id": "tag-styledcomponents"
+          }
+        },
+        {
+          "sys": {
+            "type": "Link",
+            "linkType": "Entry",
+            "id": "tag-figma"
+          }
+        },
+        {
+          "sys": {
+            "type": "Link",
+            "linkType": "Entry",
+            "id": "tag-ci-cd"
+          }
+        }
+      ]
+    },
+    "links": {
+      "fr": [
+        {
+          "sys": {
+            "type": "Link",
+            "linkType": "Entry",
+            "id": "cta-hellodarwin-site"
+          }
+        }
+      ]
+    },
+    "location": {
+      "fr": "Montréal, QC",
+      "en": "Montreal, QC"
+    }
+  }
+}

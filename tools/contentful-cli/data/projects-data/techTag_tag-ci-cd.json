@@ -1,0 +1,14 @@
+{
+  "sys": {
+    "id": "tag-ci-cd"
+  },
+  "fields": {
+    "name": {
+      "fr": "CI/CD",
+      "en": "CI/CD"
+    },
+    "kind": {
+      "fr": "infra"
+    }
+  }
+}

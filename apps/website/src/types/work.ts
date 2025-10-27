@@ -1,36 +1,39 @@
+import type { Document } from "@contentful/rich-text-types";
 import type { CFMaybe, CFRef, WithSys } from "../cms/cf-graphql";
+import type { TechTag } from "../taxonomy/tech";
 import type { SEO } from "../types/seo";
 import type {
   CTASection,
   GalleryItem,
-  MetricItem,
-  ProcessPhase,
+  HighlightItem,
   LinkItem,
-  ProjectMeta,
+  MetricItem,
+  ListItem,
+  ProcessPhase,
+  Testimonial,
   WorkItemBase,
-  NextProjectCTA,
 } from "./shared";
-import type { TechTag } from "../taxonomy/tech";
 
 /** Full WorkItem (Project | Case Study) as returned by Contentful GraphQL */
 export type WorkItem = WithSys<
   WorkItemBase & {
-    overviewExcerpt?: CFMaybe<string>;
-    overviewDescription?: CFMaybe<string>;
+    summary?: CFMaybe<{ json: Document }>;
+    overview?: CFMaybe<{ json: Document }>;
 
+    problemStatement?: CFMaybe<ListItem[]>;
+    roleScope?: CFMaybe<ListItem[]>;
     process?: CFMaybe<ProcessPhase[]>;
-    problemAndSolution?: CFMaybe<string>;
-    pointsAether?: CFMaybe<string>;
+    highlights?: CFMaybe<HighlightItem[]>;
 
     metrics?: CFMaybe<MetricItem[]>;
     gallery?: CFMaybe<GalleryItem[]>;
     techStack?: CFMaybe<TechTag[]>;
-    links?: CFMaybe<LinkItem[]>;
+    linksCta?: CFMaybe<LinkItem[]>;
+    testimonial?: CFRef<Testimonial>;
 
     ctaSection?: CFRef<CTASection>;
-    nextProjectCTA?: CFRef<NextProjectCTA>;
 
     seo?: CFRef<SEO>;
-    breadcrumbsJSON?: CFMaybe<unknown>;
+    breadcrumbs?: CFMaybe<unknown>;
   }
 >;

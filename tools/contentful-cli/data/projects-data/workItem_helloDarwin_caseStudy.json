@@ -1,0 +1,458 @@
+{
+  "sys": {
+    "id": "wi-case-refonte-plateforme"
+  },
+  "fields": {
+    "type": {
+      "fr": "caseStudy"
+    },
+    "title": {
+      "fr": "Refonte plateforme & design system — helloDarwin",
+      "en": "Platform redesign & design system — helloDarwin"
+    },
+    "subtitle": {
+      "fr": "Passage au SaaS, design system unifié, performance",
+      "en": "SaaS transition, unified design system, performance"
+    },
+    "summary": {
+      "fr": {
+        "nodeType": "document",
+        "data": {},
+        "content": [
+          {
+            "nodeType": "heading-3",
+            "data": {},
+            "content": [
+              {
+                "nodeType": "text",
+                "value": "Contexte",
+                "marks": [],
+                "data": {}
+              }
+            ]
+          },
+          {
+            "nodeType": "paragraph",
+            "data": {},
+            "content": [
+              {
+                "nodeType": "text",
+                "value": "Plateforme initiale d’agence, non alignée au brand et au produit. Refonte complète du site (15 000 pages dynamiques) puis intégration du design system dans les apps partenaires et clients. Transition au modèle SaaS avec refonte UI/UX (typographie, spacing, cohérence).",
+                "marks": [],
+                "data": {}
+              }
+            ]
+          },
+          {
+            "nodeType": "heading-3",
+            "data": {},
+            "content": [
+              {
+                "nodeType": "text",
+                "value": "Résultats",
+                "marks": [],
+                "data": {}
+              }
+            ]
+          },
+          {
+            "nodeType": "unordered-list",
+            "data": {},
+            "content": [
+              {
+                "nodeType": "list-item",
+                "content": [
+                  {
+                    "nodeType": "paragraph",
+                    "content": [
+                      {
+                        "nodeType": "text",
+                        "value": "Build stabilisé à 2.6 MB ; Lighthouse 60 → 75",
+                        "marks": [],
+                        "data": {}
+                      }
+                    ],
+                    "data": {}
+                  }
+                ],
+                "data": {}
+              },
+              {
+                "nodeType": "list-item",
+                "content": [
+                  {
+                    "nodeType": "paragraph",
+                    "content": [
+                      {
+                        "nodeType": "text",
+                        "value": "Amélioration des conversions et image plus professionnelle",
+                        "marks": [],
+                        "data": {}
+                      }
+                    ],
+                    "data": {}
+                  }
+                ],
+                "data": {}
+              },
+              {
+                "nodeType": "list-item",
+                "content": [
+                  {
+                    "nodeType": "paragraph",
+                    "content": [
+                      {
+                        "nodeType": "text",
+                        "value": "Marketing autonome grâce aux composants du design system",
+                        "marks": [],
+                        "data": {}
+                      }
+                    ],
+                    "data": {}
+                  }
+                ],
+                "data": {}
+              }
+            ]
+          }
+        ]
+      },
+      "en": {
+        "nodeType": "document",
+        "data": {},
+        "content": [
+          {
+            "nodeType": "heading-3",
+            "data": {},
+            "content": [
+              {
+                "nodeType": "text",
+                "value": "Context",
+                "marks": [],
+                "data": {}
+              }
+            ]
+          },
+          {
+            "nodeType": "paragraph",
+            "data": {},
+            "content": [
+              {
+                "nodeType": "text",
+                "value": "Agency-built platform misaligned with brand and product. Full website redesign (15,000 dynamic pages), then design system rolled out across partner/client apps. SaaS transition with UI/UX redesign (typography, spacing, visual cohesion).",
+                "marks": [],
+                "data": {}
+              }
+            ]
+          },
+          {
+            "nodeType": "heading-3",
+            "data": {},
+            "content": [
+              {
+                "nodeType": "text",
+                "value": "Results",
+                "marks": [],
+                "data": {}
+              }
+            ]
+          },
+          {
+            "nodeType": "unordered-list",
+            "data": {},
+            "content": [
+              {
+                "nodeType": "list-item",
+                "content": [
+                  {
+                    "nodeType": "paragraph",
+                    "content": [
+                      {
+                        "nodeType": "text",
+                        "value": "Build kept at 2.6 MB; Lighthouse 60 → 75",
+                        "marks": [],
+                        "data": {}
+                      }
+                    ],
+                    "data": {}
+                  }
+                ],
+                "data": {}
+              },
+              {
+                "nodeType": "list-item",
+                "content": [
+                  {
+                    "nodeType": "paragraph",
+                    "content": [
+                      {
+                        "nodeType": "text",
+                        "value": "Higher conversions and more professional product image",
+                        "marks": [],
+                        "data": {}
+                      }
+                    ],
+                    "data": {}
+                  }
+                ],
+                "data": {}
+              },
+              {
+                "nodeType": "list-item",
+                "content": [
+                  {
+                    "nodeType": "paragraph",
+                    "content": [
+                      {
+                        "nodeType": "text",
+                        "value": "Marketing able to reuse design system components autonomously",
+                        "marks": [],
+                        "data": {}
+                      }
+                    ],
+                    "data": {}
+                  }
+                ],
+                "data": {}
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "slug": {
+      "fr": "case-refonte-plateforme",
+      "en": "case-platform-redesign"
+    },
+    "badge": {
+      "fr": "SaaS • Design System",
+      "en": "SaaS • Design System"
+    },
+
+    "projectMeta": {
+      "fr": {
+        "sys": {
+          "type": "Link",
+          "linkType": "Entry",
+          "id": "meta-hellodarwin"
+        }
+      }
+    },
+    "overview": {
+      "fr": {
+        "nodeType": "document",
+        "data": {},
+        "content": [
+          {
+            "nodeType": "heading-2",
+            "content": [
+              {
+                "nodeType": "text",
+                "value": "Approche & design system",
+                "marks": [],
+                "data": {}
+              }
+            ],
+            "data": {}
+          },
+          {
+            "nodeType": "paragraph",
+            "content": [
+              {
+                "nodeType": "text",
+                "value": "Design system modulaire (Figma + Front), typographie compacte, boutons carrés, spacing optimisé. CI/CD, TypeScript et Styled-components pour stabilité et vélocité.",
+                "marks": [],
+                "data": {}
+              }
+            ],
+            "data": {}
+          }
+        ]
+      },
+      "en": {
+        "nodeType": "document",
+        "data": {},
+        "content": [
+          {
+            "nodeType": "heading-2",
+            "content": [
+              {
+                "nodeType": "text",
+                "value": "Approach & design system",
+                "marks": [],
+                "data": {}
+              }
+            ],
+            "data": {}
+          },
+          {
+            "nodeType": "paragraph",
+            "content": [
+              {
+                "nodeType": "text",
+                "value": "Modular design system (Figma + Front), compact typography, square buttons, optimized spacing. CI/CD, TypeScript and Styled-components for stability and speed.",
+                "marks": [],
+                "data": {}
+              }
+            ],
+            "data": {}
+          }
+        ]
+      }
+    },
+    "problemStatement": {
+      "fr": []
+    },
+    "roleScope": {
+      "fr": []
+    },
+    "process": {
+      "fr": []
+    },
+    "highlights": {
+      "fr": [
+        {
+          "sys": {
+            "type": "Link",
+            "linkType": "Entry",
+            "id": "hl-hellodarwin-1"
+          }
+        },
+        {
+          "sys": {
+            "type": "Link",
+            "linkType": "Entry",
+            "id": "hl-hellodarwin-2"
+          }
+        },
+        {
+          "sys": {
+            "type": "Link",
+            "linkType": "Entry",
+            "id": "hl-hellodarwin-3"
+          }
+        }
+      ]
+    },
+    "metrics": {
+      "fr": [
+        {
+          "sys": {
+            "type": "Link",
+            "linkType": "Entry",
+            "id": "mt-ldh-before-after"
+          }
+        },
+        {
+          "sys": {
+            "type": "Link",
+            "linkType": "Entry",
+            "id": "mt-build-size"
+          }
+        }
+      ]
+    },
+    "gallery": {
+      "fr": []
+    },
+    "techStack": {
+      "fr": [
+        {
+          "sys": {
+            "type": "Link",
+            "linkType": "Entry",
+            "id": "tag-react"
+          }
+        },
+        {
+          "sys": {
+            "type": "Link",
+            "linkType": "Entry",
+            "id": "tag-nextjs"
+          }
+        },
+        {
+          "sys": {
+            "type": "Link",
+            "linkType": "Entry",
+            "id": "tag-typescript"
+          }
+        },
+        {
+          "sys": {
+            "type": "Link",
+            "linkType": "Entry",
+            "id": "tag-styledcomponents"
+          }
+        },
+        {
+          "sys": {
+            "type": "Link",
+            "linkType": "Entry",
+            "id": "tag-figma"
+          }
+        },
+        {
+          "sys": {
+            "type": "Link",
+            "linkType": "Entry",
+            "id": "tag-ci-cd"
+          }
+        }
+      ]
+    },
+    "linksCta": {
+      "fr": [
+        {
+          "sys": {
+            "type": "Link",
+            "linkType": "Entry",
+            "id": "cta-contact"
+          }
+        }
+      ]
+    },
+    "testimonial": {
+      "fr": null
+    },
+    "ctaSection": {
+      "fr": null
+    },
+
+    "seo": {
+      "fr": {
+        "sys": {
+          "type": "Link",
+          "linkType": "Entry",
+          "id": "seo-hellodarwin"
+        }
+      }
+    },
+    "breadcrumbs": {
+      "fr": {
+        "items": [
+          {
+            "label": "Projets",
+            "href": "/projets"
+          },
+          {
+            "label": "Refonte plateforme",
+            "href": "/projets/case-refonte-plateforme"
+          }
+        ]
+      },
+      "en": {
+        "items": [
+          {
+            "label": "Work",
+            "href": "/en/work"
+          },
+          {
+            "label": "Platform redesign",
+            "href": "/en/work/case-platform-redesign"
+          }
+        ]
+      }
+    }
+  }
+}

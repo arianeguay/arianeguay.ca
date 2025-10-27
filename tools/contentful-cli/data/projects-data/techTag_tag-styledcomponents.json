@@ -1,0 +1,14 @@
+{
+  "sys": {
+    "id": "tag-styledcomponents"
+  },
+  "fields": {
+    "name": {
+      "fr": "Styled-components",
+      "en": "Styled-components"
+    },
+    "kind": {
+      "fr": "library"
+    }
+  }
+}

@@ -76,11 +76,16 @@ export const ContainerStyled = styled.div<{
     $background && $background !== "none" && GradientStyle($background, theme)}
 
   ${({ $isScreen }) =>
-    $isScreen &&
-    css`
-      min-height: 100vh;
-      height: auto; /* Allow container to grow beyond 100vh if content requires it */
-    `}
+    $isScreen
+      ? css`
+          min-height: 100vh;
+          height: auto; /* Allow container to grow beyond 100vh if content requires it */
+        `
+      : css`
+          &:first-child {
+            padding-block-start: ${({ theme }) => theme.spacing.xxxxxl};
+          }
+        `}
 
       @media screen and (min-width: ${({ theme }) => theme.breakpoints.sm}px) {
     padding-inline: 20px;

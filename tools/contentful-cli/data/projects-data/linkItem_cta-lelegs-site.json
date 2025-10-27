@@ -1,0 +1,27 @@
+{
+  "sys": {
+    "id": "cta-lelegs-site"
+  },
+  "fields": {
+    "internalTitle": {
+      "fr": "Le Legs — Site"
+    },
+    "label": {
+      "fr": "Voir le site",
+      "en": "View site"
+    },
+    "variant": {
+      "fr": "link"
+    },
+    "kind": {
+      "fr": "External"
+    },
+    "url": {
+      "fr": "https://lelegs.kwahiatonhk.com/",
+      "en": "https://lelegs.kwahiatonhk.com/"
+    },
+    "openInNewTab": {
+      "fr": true
+    }
+  }
+}

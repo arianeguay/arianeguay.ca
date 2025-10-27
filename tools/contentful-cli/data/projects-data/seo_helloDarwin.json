@@ -1,0 +1,31 @@
+{
+  "sys": {
+    "id": "seo-hellodarwin"
+  },
+  "fields": {
+    "seoTitle": {
+      "fr": "Refonte & design system — helloDarwin"
+    },
+    "seoDescription": {
+      "fr": "Étude de cas : refonte site + apps, design system modulaire, performance (Lighthouse 60→75), build 2,6 MB stable."
+    },
+    "ogImage": {
+      "fr": {
+        "sys": {
+          "type": "Link",
+          "linkType": "Asset",
+          "id": "2FHnhz7lWu5YMwW6ehgwc9"
+        }
+      }
+    },
+    "canonicalUrl": {
+      "fr": ""
+    },
+    "noindex": {
+      "fr": false
+    },
+    "structuredData": {
+      "fr": {}
+    }
+  }
+}

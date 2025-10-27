@@ -1,0 +1,14 @@
+{
+  "sys": {
+    "id": "tag-nextjs"
+  },
+  "fields": {
+    "name": {
+      "fr": "Next.js",
+      "en": "Next.js"
+    },
+    "kind": {
+      "fr": "framework"
+    }
+  }
+}

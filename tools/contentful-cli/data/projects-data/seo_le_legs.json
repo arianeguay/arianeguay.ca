@@ -1,0 +1,25 @@
+{
+  "sys": {
+    "id": "seo-lelegs"
+  },
+  "fields": {
+    "seoTitle": {
+      "fr": "Le Legs — Expérience web immersive"
+    },
+    "seoDescription": {
+      "fr": "Exploration interactive dans une « grotte » virtuelle pour une exposition de futurisme autochtone. Front-End & UX immersive."
+    },
+    "ogImage": {
+      "fr": {
+        "sys": {
+          "type": "Link",
+          "linkType": "Asset",
+          "id": "2FHnhz7lWu5YMwW6ehgwc9"
+        }
+      }
+    },
+    "canonicalUrl": {
+      "fr": "https://lelegs.kwahiatonhk.com/"
+    }
+  }
+}

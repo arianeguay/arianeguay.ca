@@ -3,6 +3,7 @@ import CTASection from "./CTASection";
 import ExperienceSectionComponent from "./ExperienceSection";
 import GroupSection from "./Group";
 import ItemsListSection from "./ItemsListSection";
+import ProjectSection from "./ProjectSection";
 interface SectionsProps {
   sections: SectionBlock[];
 }
@@ -39,6 +40,8 @@ const Sections: React.FC<SectionsProps> = ({ sections }) => {
         return (
           <ExperienceSectionComponent key={s.__typename + index} data={s} />
         );
+      case "Project":
+        return <ProjectSection key={s.__typename + index} data={s} />;
     }
   });
 };

@@ -1,0 +1,16 @@
+{
+  "sys": {
+    "id": "mt-build-size"
+  },
+  "fields": {
+    "label": {
+      "fr": "Build size"
+    },
+    "value": {
+      "fr": "2.6 MB"
+    },
+    "context": {
+      "fr": "Stable during growth"
+    }
+  }
+}

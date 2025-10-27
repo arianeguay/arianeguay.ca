@@ -1,0 +1,261 @@
+{
+  "sys": {
+    "space": {
+      "sys": {
+        "type": "Link",
+        "linkType": "Space",
+        "id": "omwxuxoanfvq"
+      }
+    },
+    "id": "itemsList",
+    "type": "ContentType",
+    "createdAt": "2025-10-16T18:47:30.687Z",
+    "updatedAt": "2025-10-22T16:25:40.806Z",
+    "environment": {
+      "sys": {
+        "id": "release-projects",
+        "type": "Link",
+        "linkType": "Environment"
+      }
+    },
+    "publishedVersion": 29,
+    "publishedAt": "2025-10-22T16:25:40.806Z",
+    "firstPublishedAt": "2025-10-16T18:47:30.943Z",
+    "createdBy": {
+      "sys": {
+        "type": "Link",
+        "linkType": "User",
+        "id": "6mHAQajZw9r6s16MM8hgQ6"
+      }
+    },
+    "updatedBy": {
+      "sys": {
+        "type": "Link",
+        "linkType": "User",
+        "id": "6mHAQajZw9r6s16MM8hgQ6"
+      }
+    },
+    "publishedCounter": 15,
+    "version": 30,
+    "publishedBy": {
+      "sys": {
+        "type": "Link",
+        "linkType": "User",
+        "id": "6mHAQajZw9r6s16MM8hgQ6"
+      }
+    },
+    "urn": "crn:contentful:::content:spaces/omwxuxoanfvq/environments/release-projects/content_types/itemsList"
+  },
+  "displayField": "internalTitle",
+  "name": "Items List",
+  "description": "",
+  "fields": [
+    {
+      "id": "internalTitle",
+      "name": "Titre Interne",
+      "type": "Symbol",
+      "localized": false,
+      "required": true,
+      "validations": [],
+      "disabled": false,
+      "omitted": false
+    },
+    {
+      "id": "title",
+      "name": "Titre",
+      "type": "Symbol",
+      "localized": true,
+      "required": false,
+      "validations": [],
+      "disabled": false,
+      "omitted": false
+    },
+    {
+      "id": "description",
+      "name": "Description",
+      "type": "RichText",
+      "localized": true,
+      "required": false,
+      "validations": [
+        {
+          "enabledMarks": [
+            "bold",
+            "italic",
+            "underline",
+            "code",
+            "superscript",
+            "subscript",
+            "strikethrough"
+          ],
+          "message": "Only bold, italic, underline, code, superscript, subscript, and strikethrough marks are allowed"
+        },
+        {
+          "enabledNodeTypes": [
+            "heading-3",
+            "heading-4",
+            "heading-5",
+            "heading-6",
+            "ordered-list",
+            "unordered-list",
+            "hr",
+            "blockquote",
+            "embedded-entry-block",
+            "embedded-asset-block",
+            "table",
+            "asset-hyperlink",
+            "embedded-entry-inline",
+            "entry-hyperlink",
+            "hyperlink"
+          ],
+          "message": "Only heading 3, heading 4, heading 5, heading 6, ordered list, unordered list, horizontal rule, quote, block entry, asset, table, link to asset, inline entry, link to entry, and link to Url nodes are allowed"
+        },
+        {
+          "nodes": {}
+        }
+      ],
+      "disabled": false,
+      "omitted": false
+    },
+    {
+      "id": "primaryCta",
+      "name": "Primary CTA",
+      "type": "Link",
+      "localized": false,
+      "required": false,
+      "validations": [
+        {
+          "linkContentType": [
+            "linkItem"
+          ]
+        }
+      ],
+      "disabled": false,
+      "omitted": false,
+      "linkType": "Entry"
+    },
+    {
+      "id": "variant",
+      "name": "Variant",
+      "type": "Symbol",
+      "localized": false,
+      "required": true,
+      "validations": [
+        {
+          "in": [
+            "twoColsRight",
+            "twoColsLeft",
+            "verticalGrid",
+            "verticalScroll"
+          ]
+        }
+      ],
+      "defaultValue": {
+        "fr": "twoColsRight"
+      },
+      "disabled": false,
+      "omitted": false
+    },
+    {
+      "id": "items",
+      "name": "Éléments",
+      "type": "Array",
+      "localized": false,
+      "required": false,
+      "validations": [],
+      "disabled": false,
+      "omitted": false,
+      "items": {
+        "type": "Link",
+        "validations": [
+          {
+            "linkContentType": [
+              "workItem",
+              "listItem",
+              "testimonial"
+            ]
+          }
+        ],
+        "linkType": "Entry"
+      }
+    },
+    {
+      "id": "background",
+      "name": "Background",
+      "type": "Symbol",
+      "localized": false,
+      "required": true,
+      "validations": [
+        {
+          "in": [
+            "none",
+            "gradient1",
+            "gradient2",
+            "gradient3",
+            "gradient4",
+            "gradient5",
+            "gradient6"
+          ]
+        }
+      ],
+      "defaultValue": {
+        "fr": "none"
+      },
+      "disabled": false,
+      "omitted": false
+    },
+    {
+      "id": "isScreen",
+      "name": "Is Screen",
+      "type": "Boolean",
+      "localized": false,
+      "required": true,
+      "validations": [],
+      "defaultValue": {
+        "fr": false
+      },
+      "disabled": false,
+      "omitted": false
+    },
+    {
+      "id": "cardVariant",
+      "name": "Card Variant",
+      "type": "Symbol",
+      "localized": false,
+      "required": true,
+      "validations": [
+        {
+          "in": [
+            "rows",
+            "cards",
+            "faq"
+          ]
+        }
+      ],
+      "disabled": false,
+      "omitted": false
+    },
+    {
+      "id": "includeAll",
+      "name": "Include all",
+      "type": "Symbol",
+      "localized": false,
+      "required": true,
+      "validations": [
+        {
+          "in": [
+            "disabled",
+            "projects",
+            "services",
+            "caseStudies",
+            "workItems"
+          ]
+        }
+      ],
+      "defaultValue": {
+        "fr": "disabled"
+      },
+      "disabled": false,
+      "omitted": false
+    }
+  ]
+}

@@ -13,7 +13,7 @@ const colors = {
   ink2: "#3A3A44",
   inkLight: "#FFFFFF",
   bg: "#F9F6F8",
-  card: "#FFFFFF",
+  card: "rgba(255,255,255,0.8)",
   border: "#827B7F",
   brand: {
     primary: "#8C0F48",

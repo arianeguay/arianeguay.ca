@@ -1,8 +1,10 @@
 import type { Document } from "@contentful/rich-text-types";
 import type { CFMaybe, CFRef, WithSys } from "../cms/cf-graphql";
+import { PageEntry } from "../lib/contentful-graphql";
 import type { CfAsset } from "../types/asset";
 import type { SEO } from "../types/seo";
 import { SectionBlock } from "./blocks";
+import { WorkItem } from "./work";
 /** Generic link that can resolve to an internal page or an external url */
 export type LinkItemKind = "Internal" | "External" | "Action";
 export type LinkItemVariant =
@@ -27,9 +29,12 @@ export type LinkItem = {
 
 export type ListItemVariant = "card" | "row";
 export type ListItem = {
+  __typename: "ListItem";
   text: string;
   title?: string;
   icon?: CFRef<CfAsset>;
+  variant?: CFMaybe<ListItemVariant>;
+  page?: CFRef<Page>;
 };
 
 export type HighlightItem = {
@@ -43,6 +48,7 @@ export type Background =
   | "gradient3"
   | "gradient4"
   | "gradient5"
+  | "gradient6"
   | "none";
 
 export type CtaVariation =
@@ -90,10 +96,13 @@ export type ProcessPhase = {
 };
 
 export type ProjectMeta = {
-  companyName?: CFMaybe<string>;
-  projectRole?: CFMaybe<string>;
-  year?: CFMaybe<string>;
-  scope?: CFMaybe<string[]>;
+  company: string;
+  role: string;
+  period: string;
+  sector?: CFMaybe<string>;
+  stackCollection?: CFMaybe<{ items: import("../taxonomy/tech").TechTag[] }>;
+  linksCollection?: CFMaybe<{ items: LinkItem[] }>;
+  location?: CFMaybe<string>;
 };
 
 /** Page-level hero */
@@ -112,16 +121,24 @@ export type ItemsListVariant =
   | "verticalGrid";
 
 export type ItemsListCardVariant = "cards" | "rows" | "faq" | "citation";
+export type ItemsListIncludeAllType =
+  | "disabled"
+  | "projects"
+  | "workItems"
+  | "services"
+  | "caseStudy";
 
 export type ItemsList = {
+  __typename: "ItemsList";
   title: string;
   description?: CFMaybe<{ json: Document }>;
-  itemsCollection?: CFMaybe<{ items: ListItem[] }>;
+  itemsCollection?: CFMaybe<{ items: (ListItem | PageEntry | WorkItem)[] }>;
   variant?: CFMaybe<ItemsListVariant>;
   background?: CFMaybe<Background>;
   isScreen?: CFMaybe<boolean>;
   primaryCta: CFMaybe<LinkItem>;
   cardVariant?: CFMaybe<ItemsListCardVariant>;
+  includeAll?: CFMaybe<ItemsListIncludeAllType>;
 };
 
 /** Form model (Contentful) */
@@ -165,6 +182,65 @@ export type Form = {
   rateLimitTimeframe?: CFMaybe<number>; // ms
 };
 
+export interface Project {
+  /** Internal Title */
+  internalTitle: CFMaybe<string>;
+
+  /** Title (localized) */
+  title: CFMaybe<string>;
+
+  /** Type */
+  kind: "caseStudy" | "project";
+
+  /** Company */
+  company?: CFMaybe<string>;
+
+  /** Category (localized) */
+  category?: CFMaybe<string>;
+
+  /** Status */
+  status: "online" | "finished" | "inprogress";
+
+  /** Featured */
+  featured: boolean;
+
+  /** Tags (link to TagGroup entries) */
+  tagsCollection?: CFMaybe<{ items: TagGroup[] }>;
+
+  /** Case Body (localized Rich Text) */
+  caseBody?: { json: Document };
+
+  /** Highlights (localized array of strings) */
+  highlights?: CFMaybe<string[]>;
+
+  /** Confidentiality Note (localized text) */
+  confidentialityNote?: CFMaybe<string>;
+
+  /** Summary (localized text) */
+  summary?: CFMaybe<string>;
+
+  /** Live URL */
+  liveUrl?: CFMaybe<string>;
+
+  /** Repository URL */
+  repoUrl?: CFMaybe<string>;
+
+  /** Cover image */
+  cover?: CFRef<CfAsset>;
+
+  /** Gallery images */
+  gallery?: CFRef<CfAsset>[];
+
+  /** Start Date */
+  startDate?: CFMaybe<string>;
+
+  /** End Date */
+  endDate?: CFMaybe<string>;
+
+  /** Ongoing */
+  ongoing: CFMaybe<boolean>;
+}
+
 export interface Group {
   background?: CFMaybe<Background>;
   isScreen?: CFMaybe<boolean>;
@@ -187,12 +263,23 @@ export type NextProjectCTA = {
 };
 
 /** Work item base used by multiple views (card & detail) */
-export type WorkItemBase = {
+export interface WorkItemBase {
+  __typename: "WorkItem";
   title: string;
   slug: string;
-  type: "Project" | "Case Study";
-  featured?: CFMaybe<boolean>;
-  featuredImage?: CFMaybe<CfAsset>;
+  type: "project" | "caseStudy";
+  subtitle?: CFMaybe<string>;
+  badge?: CFMaybe<string>;
+  cover?: CFMaybe<CfAsset>;
+  projectMeta?: CFMaybe<ProjectMeta>;
+}
+
+export type Testimonial = {
+  quote: string;
+  author?: CFMaybe<string>;
+  roleOrCompany?: CFMaybe<string>;
+  avatar?: CFMaybe<CfAsset>;
+  url?: CFMaybe<string>;
 };
 
 /** Tag model for skills and technologies */
@@ -200,6 +287,10 @@ export type Tag = {
   name: string;
 };
 
+export type TagGroup = {
+  title: string;
+  tagsCollection?: CFMaybe<{ items: Tag[] }>;
+};
 /** Enterprise/Company experience item */
 export type Enterprise = {
   companyName: string;

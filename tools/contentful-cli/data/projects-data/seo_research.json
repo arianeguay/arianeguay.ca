@@ -1,0 +1,31 @@
+{
+  "sys": {
+    "id": "seo-research"
+  },
+  "fields": {
+    "seoTitle": {
+      "fr": "Re|Search — Exposition en ligne"
+    },
+    "seoDescription": {
+      "fr": "Découverte par mots-clés (verbes) sur un CMS sur mesure avec MongoDB. Front-End & UX de navigation."
+    },
+    "ogImage": {
+      "fr": {
+        "sys": {
+          "type": "Link",
+          "linkType": "Asset",
+          "id": "2FHnhz7lWu5YMwW6ehgwc9"
+        }
+      }
+    },
+    "canonicalUrl": {
+      "fr": "https://researchexhibition.org/"
+    },
+    "noindex": {
+      "fr": false
+    },
+    "structuredData": {
+      "fr": {}
+    }
+  }
+}

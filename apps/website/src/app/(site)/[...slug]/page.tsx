@@ -1,8 +1,11 @@
+import ProjectSingle from "apps/website/src/components/layout/project-single";
 import Sections from "apps/website/src/components/layout/sections";
 import {
   getAllPageSlugsWithParents,
+  getAllWorkSlugsWithParents,
   getPageBySlug,
   getSimplePageBySlug,
+  getWorkBySlug,
 } from "apps/website/src/lib/contentful-graphql";
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
@@ -13,16 +16,20 @@ export const revalidate = false;
 
 export async function generateStaticParams() {
   const entries = await getAllPageSlugsWithParents("fr");
-
-  const entriesSlugs = entries
+  const projects = await getAllWorkSlugsWithParents("fr");
+  const pageEntries = entries
     .filter((e) => e.slug && e.slug !== "home")
     .map((e) => ({
       slug: [e.parentSlug, e.slug].filter(Boolean),
+      type: "page",
     }));
 
-  console.log(entriesSlugs);
+  const workEntries = projects.map((e) => ({
+    slug: [e.slug].filter(Boolean),
+    type: "work",
+  }));
 
-  return entriesSlugs;
+  return [...pageEntries, ...workEntries];
 }
 
 interface PageProps {
@@ -34,32 +41,38 @@ export async function generateMetadata({
 }: PageProps): Promise<Metadata> {
   const parts = (await params).slug;
   const slug = parts?.[parts.length - 1];
-  const { page, otherLocalePage } = await getSimplePageBySlug(slug, {
-    locale: "fr",
-  });
-  const seo = page?.seo;
-
-  const title = seo?.seoTitle || page?.title || "Ariane Guay";
-  const description = seo?.seoDescription || undefined;
-  const canonicalUrl = seo?.canonicalUrl || undefined;
+  let title = "Ariane Guay";
+  let description: string | undefined = undefined;
+  let canonicalUrl: string | undefined = undefined;
   const baseUrl =
     process.env.NEXT_PUBLIC_SITE_URL ||
     process.env.SITE_URL ||
     "https://arianeguay.ca";
-
-  const otherLocaleUrl = otherLocalePage?.slug
-    ? `${baseUrl}/en/${otherLocalePage.slug}`
-    : undefined;
+  let otherLocaleUrl: string | undefined = undefined;
 
   const currentLocaleUrl = `${baseUrl}/${parts.join("/")}`;
+  const simple = await getSimplePageBySlug(slug, { locale: "fr" });
+  if (simple.page) {
+    const seo = simple.page.seo;
+    title = seo?.seoTitle || simple.page.title || title;
+    description = seo?.seoDescription || undefined;
+    canonicalUrl = seo?.canonicalUrl || undefined;
+    otherLocaleUrl = simple.otherLocalePage?.slug
+      ? `${baseUrl}/en/${simple.otherLocalePage.slug}`
+      : undefined;
+  } else {
+    const work = await getWorkBySlug(slug, { locale: "fr" });
+    const seo = (work as any)?.seo;
+    title = seo?.seoTitle || work?.title || title;
+    description = seo?.seoDescription || undefined;
+    canonicalUrl = seo?.canonicalUrl || undefined;
+  }
   return {
     title,
     description,
-    robots: seo?.noindex
-      ? { index: false, follow: false }
-      : { index: true, follow: true },
+    robots: undefined,
     alternates: {
-      canonical: canonicalUrl || currentLocaleUrl,
+      canonical: canonicalUrl,
       languages: {
         "fr-CA": currentLocaleUrl,
         "en-CA": otherLocaleUrl,
@@ -69,22 +82,26 @@ export async function generateMetadata({
       title,
       description,
       type: "website",
-      images: seo?.ogImage?.url
-        ? [{ url: seo.ogImage.url, alt: seo.ogImage.title || title }]
-        : undefined,
+      images: undefined,
     },
   };
 }
 
 export default async function Page({ params }: PageProps) {
-  const parts = (await params).slug;
+  const resParams = await params;
+  const parts = resParams.slug;
   const slug = parts?.[parts.length - 1];
   if (!slug) return notFound();
   if (slug === "home") return redirect("/");
 
   const page = await getPageBySlug(slug);
-
-  if (!page || !page.sectionsCollection?.items) return notFound();
-
-  return <Sections sections={page.sectionsCollection?.items} />;
+  if (page && page.sectionsCollection?.items) {
+    return <Sections sections={page.sectionsCollection?.items} />;
+  }
+  // Fallback to WorkItem
+  const work = await getWorkBySlug(slug);
+  if (work) {
+    return <ProjectSingle data={work} />;
+  }
+  return notFound();
 }

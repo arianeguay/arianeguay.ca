@@ -1,0 +1,11 @@
+{
+  "sys": {
+    "id": "hl-bureaux-1"
+  },
+  "fields": {
+    "text": {
+      "fr": "Navigation type OS (icônes, dossiers)",
+      "en": "OS-like navigation (icons, folders)"
+    }
+  }
+}

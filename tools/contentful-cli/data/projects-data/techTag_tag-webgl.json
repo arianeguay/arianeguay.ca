@@ -1,0 +1,14 @@
+{
+  "sys": {
+    "id": "tag-webgl"
+  },
+  "fields": {
+    "name": {
+      "fr": "WebGL",
+      "en": "WebGL"
+    },
+    "kind": {
+      "fr": "library"
+    }
+  }
+}

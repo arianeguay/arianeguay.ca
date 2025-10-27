@@ -1,0 +1,59 @@
+{
+  "sys": {
+    "id": "meta-bureaux"
+  },
+  "fields": {
+    "internalTitle": {
+      "fr": "Bureaux-écrans — meta"
+    },
+    "company": {
+      "fr": "NT2 – UQAM / HANDLING (UCLouvain)",
+      "en": "NT2 – UQAM / HANDLING (UCLouvain)"
+    },
+    "role": {
+      "fr": "Front-End, UX",
+      "en": "Front-End, UX"
+    },
+    "period": {
+      "fr": "2021–2022",
+      "en": "2021–2022"
+    },
+    "sector": {
+      "fr": "Culture / Recherche",
+      "en": "Culture / Research"
+    },
+    "stack": {
+      "fr": [
+        {
+          "sys": {
+            "type": "Link",
+            "linkType": "Entry",
+            "id": "tag-react"
+          }
+        },
+        {
+          "sys": {
+            "type": "Link",
+            "linkType": "Entry",
+            "id": "tag-wordpress"
+          }
+        }
+      ]
+    },
+    "links": {
+      "fr": [
+        {
+          "sys": {
+            "type": "Link",
+            "linkType": "Entry",
+            "id": "cta-bureaux-site"
+          }
+        }
+      ]
+    },
+    "location": {
+      "fr": "Montréal, QC",
+      "en": "Montreal, QC"
+    }
+  }
+}

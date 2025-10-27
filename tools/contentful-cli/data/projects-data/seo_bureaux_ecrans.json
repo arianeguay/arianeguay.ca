@@ -1,0 +1,25 @@
+{
+  "sys": {
+    "id": "seo-bureaux"
+  },
+  "fields": {
+    "seoTitle": {
+      "fr": "Bureaux-écrans — Exposition en ligne"
+    },
+    "seoDescription": {
+      "fr": "Interface inspirée d’un OS pour explorer les coulisses numériques d’auteur·rice·s : icônes, dossiers, outils."
+    },
+    "ogImage": {
+      "fr": {
+        "sys": {
+          "type": "Link",
+          "linkType": "Asset",
+          "id": "2FHnhz7lWu5YMwW6ehgwc9"
+        }
+      }
+    },
+    "canonicalUrl": {
+      "fr": "https://bureaux-ecrans.com/"
+    }
+  }
+}
