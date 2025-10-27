@@ -7,17 +7,19 @@ import { ExperienceSectionCard, ExperienceSectionCardHeader } from "./styles";
 const FormationCard: React.FC<{ data: Formation }> = ({ data }) => {
   return (
     <ExperienceSectionCard>
-      <Typography
-        variant="body2"
-        element="div"
-        style={{ color: theme.colors.brand.primary }}
-      >
-        {data.school}
-      </Typography>
       <ExperienceSectionCardHeader>
-        <Typography variant="h4" element="h4">
-          {data.program}
-        </Typography>
+        <div>
+          <Typography
+            variant="body2"
+            element="div"
+            style={{ color: theme.colors.brand.primary }}
+          >
+            {data.school}
+          </Typography>
+          <Typography variant="h4" element="h4">
+            {data.program}
+          </Typography>
+        </div>
         <Typography
           variant="body2"
           element="div"

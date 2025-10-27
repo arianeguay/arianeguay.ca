@@ -1,8 +1,8 @@
 "use client";
 import { useLocale } from "apps/website/src/context/locale-provider";
 import { LinkItem } from "apps/website/src/types/shared";
-import Link from "next/link";
 import ActionModalWrapper from "./actions-modals";
+import { CtaAnchorStyled, CtaLinkStyled } from "./styles";
 interface CTAWrapperProps {
   children: React.ReactNode;
   data: LinkItem;
@@ -24,16 +24,16 @@ const CTAWrapper: React.FC<CTAWrapperProps> = ({ children, data, style }) => {
             : `/${slug}`;
       const href = locale === "fr" ? basePath : `/${locale}${basePath}`;
       return (
-        <Link href={href} style={style}>
+        <CtaLinkStyled href={href} style={style}>
           {children}
-        </Link>
+        </CtaLinkStyled>
       );
     case "External":
       if (!url) return children;
       return (
-        <a href={url} style={style}>
+        <CtaAnchorStyled href={url} style={style}>
           {children}
-        </a>
+        </CtaAnchorStyled>
       );
     case "Action":
       if (!actionForm) return children;

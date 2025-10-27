@@ -1,5 +1,6 @@
 "use client";
 import { LinkItemVariant } from "apps/website/src/types/shared";
+import Link from "next/link";
 import styled, { css, DefaultTheme } from "styled-components";
 
 const getColoredStyle = (variant: LinkItemVariant, theme: DefaultTheme) => {
@@ -63,4 +64,21 @@ export const CTAStyled = styled.button<{ $variant?: LinkItemVariant }>`
   padding: ${({ theme }) => theme.spacing.sm};
 
   ${({ $variant, theme }) => variantStyle($variant ?? "primary", theme)}
+`;
+
+export const ActionModalWrapperStyled = styled.div`
+  cursor: pointer;
+  width: fit-content;
+`;
+
+export const CtaLinkStyled = styled(Link)`
+  cursor: pointer;
+  width: fit-content;
+  display: block;
+`;
+
+export const CtaAnchorStyled = styled.a`
+  cursor: pointer;
+  width: fit-content;
+  display: block;
 `;

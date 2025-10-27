@@ -3,6 +3,7 @@ import { Form } from "apps/website/src/types/shared";
 import { useState } from "react";
 import FormViewer from "../../form/viewer";
 import Modal from "../../modal";
+import { ActionModalWrapperStyled } from "../styles";
 
 interface ActionModalWrapperProps {
   children: React.ReactNode;
@@ -20,15 +21,12 @@ const ActionModalWrapper: React.FC<ActionModalWrapperProps> = ({
   const handleModal = () => setOpen(!open);
 
   return (
-    <div
-      onClick={handleModal}
-      style={{ cursor: "pointer", width: "fit-content", ...style }}
-    >
+    <ActionModalWrapperStyled onClick={handleModal} style={{ ...style }}>
       {children}
       <Modal open={open} onClose={handleModal}>
         <FormViewer {...actionForm} />
       </Modal>
-    </div>
+    </ActionModalWrapperStyled>
   );
 };
 

@@ -98,7 +98,10 @@ export const ButtonStyled = styled.button<{
 }>`
   cursor: pointer;
   padding: ${({ theme }) => theme.spacing.sm};
-  margin-block: ${({ theme }) => theme.spacing.lg};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: ${({ theme }) => theme.spacing.xs};
   ${({ $variant, theme }) => variantStyle($variant ?? "primary", theme)}
   ${({ $size, theme, $variant }) =>
     getSizeStyle($size ?? "md", theme, $variant ?? "primary")}

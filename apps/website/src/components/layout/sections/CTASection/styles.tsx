@@ -2,6 +2,11 @@
 import { CustomTheme } from "apps/website/src/theme";
 import { CtaVariation } from "apps/website/src/types/shared";
 import styled, { css } from "styled-components";
+import {
+  ActionModalWrapperStyled,
+  CtaAnchorStyled,
+  CtaLinkStyled,
+} from "../../../common/cta/styles";
 
 export const CtaSectionBodyStyled = styled.div``;
 
@@ -12,11 +17,11 @@ const ContainerVerticalStyled = (theme: CustomTheme) => css`
   align-items: center;
 
   ${CtaSectionBodyStyled} {
-    display: flex;
-    flex-direction: column;
-    gap: ${theme.spacing.sm};
-    align-items: center;
     text-align: center;
+
+    ${CtaLinkStyled},${CtaAnchorStyled},${ActionModalWrapperStyled} {
+      margin-inline: auto;
+    }
   }
 `;
 
@@ -27,11 +32,11 @@ const ContainerVerticalReversedStyled = (theme: CustomTheme) => css`
   align-items: center;
 
   ${CtaSectionBodyStyled} {
-    display: flex;
-    flex-direction: column;
-    gap: ${theme.spacing.sm};
-    align-items: center;
     text-align: center;
+
+    ${CtaLinkStyled},${CtaAnchorStyled},${ActionModalWrapperStyled} {
+      margin-inline: auto;
+    }
   }
 `;
 

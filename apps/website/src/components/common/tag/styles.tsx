@@ -12,6 +12,16 @@ export const TagStyled = styled.div`
   background-color: ${({ theme }) => theme.colors.brand.primary};
   color: ${({ theme }) => theme.colors.inkLight};
   ${typeStyle("overline")}
+  margin-block-end: 0;
+  margin-block-start: 0;
+
+  &:not(:last-child) {
+    margin-block-end: 0;
+  }
+
+  &:not(:first-child) {
+    margin-block-start: 0;
+  }
 `;
 
 export const TagGroupStyled = styled.div`
@@ -20,8 +30,4 @@ export const TagGroupStyled = styled.div`
   gap: ${({ theme }) => theme.spacing.xs};
 `;
 
-export const TagGroupContainerStyled = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${({ theme }) => theme.spacing.xs};
-`;
+export const TagGroupContainerStyled = styled.div``;

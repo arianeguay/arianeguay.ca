@@ -55,6 +55,8 @@ interface Typography {
   size: number;
   letterSpacing: number;
   transform?: string;
+  marginBlockStart?: string;
+  marginBlockEnd?: string;
 }
 
 export type TypographyElement =
@@ -79,33 +81,110 @@ export interface ResponsiveTypography {
 }
 // raw token map (sizes in px, letterSpacing in px to match your Figma tokens)
 const typography: Record<TypographyElement, Typography> = {
-  caption: { family: "body", weight: "medium", size: 12, letterSpacing: 0.32 },
+  caption: {
+    family: "body",
+    weight: "medium",
+    size: 12,
+    letterSpacing: 0.32,
+    marginBlockEnd: "0.5rem",
+  },
   overline: {
     family: "display",
     weight: "semibold",
     size: 11,
     letterSpacing: 1.28,
     transform: "uppercase",
+    marginBlockStart: "0.25rem",
+    marginBlockEnd: "0.25rem",
   },
 
-  h1: { family: "display", weight: "bold", size: 56, letterSpacing: -0.32 },
-  h2: { family: "display", weight: "bold", size: 44, letterSpacing: -0.16 },
-  h3: { family: "display", weight: "semibold", size: 32, letterSpacing: 0 },
-  h4: { family: "display", weight: "semibold", size: 28, letterSpacing: 0 },
-  h5: { family: "display", weight: "medium", size: 24, letterSpacing: 0 },
-  h6: { family: "display", weight: "medium", size: 20, letterSpacing: 0 },
+  h1: {
+    family: "display",
+    weight: "bold",
+    size: 56,
+    letterSpacing: -0.32,
+    marginBlockStart: "2rem",
+    marginBlockEnd: "1rem",
+  },
+  h2: {
+    family: "display",
+    weight: "bold",
+    size: 44,
+    letterSpacing: -0.16,
+    marginBlockStart: "1.5rem",
+    marginBlockEnd: "0.75rem",
+  },
+  h3: {
+    family: "display",
+    weight: "semibold",
+    size: 32,
+    letterSpacing: 0,
+    marginBlockStart: "1.25rem",
+    marginBlockEnd: "0.5rem",
+  },
+  h4: {
+    family: "display",
+    weight: "semibold",
+    size: 28,
+    letterSpacing: 0,
+    marginBlockStart: "1rem",
+    marginBlockEnd: "0.5rem",
+  },
+  h5: {
+    family: "display",
+    weight: "medium",
+    size: 24,
+    letterSpacing: 0,
+    marginBlockStart: "0.75rem",
+    marginBlockEnd: "0.4rem",
+  },
+  h6: {
+    family: "display",
+    weight: "medium",
+    size: 20,
+    letterSpacing: 0,
+    marginBlockStart: "0.5rem",
+    marginBlockEnd: "0.3rem",
+  },
 
   subtitle1: {
     family: "display",
     weight: "semibold",
     size: 18,
     letterSpacing: 0,
+    marginBlockStart: "0.5rem",
+    marginBlockEnd: "0.5rem",
   },
-  subtitle2: { family: "body", weight: "medium", size: 16, letterSpacing: 0 },
+  subtitle2: {
+    family: "body",
+    weight: "medium",
+    size: 16,
+    letterSpacing: 0,
+    marginBlockStart: "0.4rem",
+    marginBlockEnd: "0.4rem",
+  },
 
-  body1: { family: "body", weight: "regular", size: 18, letterSpacing: 0 },
-  body2: { family: "body", weight: "regular", size: 16, letterSpacing: 0 },
-  body3: { family: "body", weight: "regular", size: 14, letterSpacing: 0 },
+  body1: {
+    family: "body",
+    weight: "regular",
+    size: 18,
+    letterSpacing: 0,
+    marginBlockEnd: "1rem",
+  },
+  body2: {
+    family: "body",
+    weight: "regular",
+    size: 16,
+    letterSpacing: 0,
+    marginBlockEnd: "0.5rem",
+  },
+  body3: {
+    family: "body",
+    weight: "regular",
+    size: 14,
+    letterSpacing: 0,
+    marginBlockEnd: "0.5rem",
+  },
 } as const;
 
 // Mobile typography with smaller font sizes
@@ -155,9 +234,35 @@ export const typeStyle = (key: keyof typeof typography) => {
   const desktopLh = getLh(desktop);
   const mobileLh = getLh(mobile);
 
+  const marginBlock = (t: Typography) => {
+    if (t.marginBlockEnd && t.marginBlockStart) {
+      return `
+      &:not(:first-child) {
+        margin-block-start: ${t.marginBlockStart};
+      };
+      &:not(:last-child) {
+        margin-block-end: ${t.marginBlockEnd};
+      };
+      `;
+    } else if (t.marginBlockEnd) {
+      return `
+      &:not(:last-child) {
+        margin-block-end: ${t.marginBlockEnd};
+      };
+      `;
+    } else if (t.marginBlockStart) {
+      return `
+      &:not(:first-child) {
+        margin-block-start: ${t.marginBlockStart};
+      };
+      `;
+    } else return "";
+  };
   // Generate base typography style
   const baseStyle = (t: Typography, lh: number) => `
-    font-family: ${t.family === "display" ? font.family.display : font.family.body};
+    font-family: ${
+      t.family === "display" ? font.family.display : font.family.body
+    };
     font-weight: ${font.weight[t.weight]};
     font-size: ${t.size}px;
     line-height: ${lh};
@@ -168,11 +273,25 @@ export const typeStyle = (key: keyof typeof typography) => {
   // Return responsive typography with mobile first approach
   return `
     ${baseStyle(mobile, mobileLh)}
-    
+    ${marginBlock(desktop)}
     @media (min-width: ${breakpoints.sm}px) {
       ${baseStyle(desktop, desktopLh)}
     }
   `;
+};
+
+const spacing = {
+  none: "0px",
+  xs: "4px",
+  sm: "8px",
+  md: "12px",
+  lg: "16px",
+  xl: "20px",
+  xxl: "24px",
+  xxxl: "32px",
+  xxxxl: "40px",
+  xxxxxl: "48px",
+  xxxxxxl: "64px",
 };
 
 const radius = {
@@ -189,20 +308,6 @@ const shadows = {
   sm: "0 2px 8px rgba(17,17,20,.08)",
   md: "0 6px 18px rgba(17,17,20,.10), 0 1px 0 rgba(140,15,72,.06)",
   lg: "0 10px 32px rgba(17,17,20,.14), 0 2px 0 rgba(140,15,72,.06)",
-};
-
-const spacing = {
-  none: "0px",
-  xs: "4px",
-  sm: "8px",
-  md: "12px",
-  lg: "16px",
-  xl: "20px",
-  xxl: "24px",
-  xxxl: "32px",
-  xxxxl: "40px",
-  xxxxxl: "48px",
-  xxxxxxl: "64px",
 };
 
 const motion = {

@@ -1,7 +1,47 @@
 "use client";
 // GlobalStyle.ts
-import { createGlobalStyle } from "styled-components";
+import { createGlobalStyle, css } from "styled-components";
 import theme, { typeStyle } from "./index";
+
+const textStyle = () => css`
+  h1 {
+    ${typeStyle("h1")}
+  }
+  h2 {
+    ${typeStyle("h2")}
+  }
+  h3 {
+    ${typeStyle("h3")}
+  }
+  h4 {
+    ${typeStyle("h4")}
+  }
+  h5 {
+    ${typeStyle("h5")}
+  }
+  h6 {
+    ${typeStyle("h6")}
+  }
+
+  p {
+    ${typeStyle("body1")}
+  }
+
+  small,
+  .caption {
+    ${typeStyle("caption")}
+  }
+  .overline {
+    ${typeStyle("overline")}
+  }
+
+  ul {
+    margin-block: ${theme.spacing.sm};
+    li {
+      margin-inline-start: ${theme.spacing.xl};
+    }
+  }
+`;
 
 export const GlobalStyle = createGlobalStyle`
   :root {
@@ -24,11 +64,12 @@ export const GlobalStyle = createGlobalStyle`
         margin: 0;
         background: ${theme.colors.bg};
         color: ${theme.colors.ink1};
-        ${typeStyle("body2")}
+        ${typeStyle("body1")}
      
       }
       
 
+      ${textStyle()}
     body {
     max-width: 100vw;
     overflow-x: hidden;
@@ -39,30 +80,5 @@ export const GlobalStyle = createGlobalStyle`
           padding: 0;
         }
 
-      h1 {
-        ${typeStyle("h1")}
-      }
-      h2 {
-        ${typeStyle("h2")}
-      }
-      h3 {
-        ${typeStyle("h3")}
-      }
-      h4 {
-        ${typeStyle("h4")}
-      }
-      h5 {
-        ${typeStyle("h5")}
-      }
-      h6 {
-        ${typeStyle("h6")}
-      }
-
-      small,
-      .caption {
-        ${typeStyle("caption")}
-      }
-      .overline {
-        ${typeStyle("overline")}
-      }
+    
     `;

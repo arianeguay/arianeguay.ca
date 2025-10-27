@@ -64,7 +64,7 @@ const Typography: React.FC<TypographyProps> = ({
         textAlign: style?.textAlign ?? textAlign,
         whiteSpace: noWrap ? "nowrap" : "wrap",
       }}
-      className={className}
+      className={[className, variant].filter(Boolean).join(" ")}
       id={id}
     >
       {children}
