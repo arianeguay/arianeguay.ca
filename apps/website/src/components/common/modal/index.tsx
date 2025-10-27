@@ -14,6 +14,17 @@ import {
 
 type ModalSize = "sm" | "md" | "lg" | "xl";
 
+function lockScroll() {
+  const sbw = window.innerWidth - document.documentElement.clientWidth; // scrollbar width
+  document.documentElement.style.setProperty("--sbw", `${sbw}px`);
+  document.documentElement.classList.add("modal-open");
+}
+
+function unlockScroll() {
+  document.documentElement.classList.remove("modal-open");
+  document.documentElement.style.removeProperty("--sbw");
+}
+
 type ModalProps = {
   open: boolean;
   onClose: () => void;
@@ -64,6 +75,17 @@ const Modal = ({
       dialogRef.current?.focus();
     });
     return () => cancelAnimationFrame(id);
+  }, [open]);
+
+  useEffect(() => {
+    if (!open) {
+      unlockScroll();
+      return;
+    }
+    lockScroll();
+    return () => {
+      unlockScroll();
+    };
   }, [open]);
 
   const ariaLabelledBy = useMemo(() => {
