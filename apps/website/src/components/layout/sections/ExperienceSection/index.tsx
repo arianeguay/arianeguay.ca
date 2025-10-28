@@ -16,7 +16,10 @@ const ExperienceSectionComponent: React.FC<ExperienceSectionProps> = ({
   data,
 }) => {
   return (
-    <Container background={data.background || undefined}>
+    <Container
+      background={data.background || undefined}
+      splashes={data.splashesCollection?.items || []}
+    >
       <div>
         <Typography variant="h2" element="h2" style={{ textAlign: "center" }}>
           {data.title}

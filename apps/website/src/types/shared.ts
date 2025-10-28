@@ -335,4 +335,5 @@ export type ExperienceSection = {
   cvFileCta?: CFMaybe<string>;
   cvFileDescription?: CFMaybe<string>;
   background?: CFMaybe<Background>;
+  splashesCollection?: CFMaybe<{ items: BackgroundSplash[] }>;
 };

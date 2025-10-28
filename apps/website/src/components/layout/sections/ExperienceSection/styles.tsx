@@ -89,7 +89,8 @@ export const ExperienceProfileSectionStyled = styled.div`
   border: 1px solid ${({ theme }) => theme.colors.brand.primary};
   padding-inline: ${({ theme }) => theme.spacing.xxxxl};
   padding-block: ${({ theme }) => theme.spacing.xxl};
-  background: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(3px);
 
   hr {
     margin-block-start: ${({ theme }) => theme.spacing.md};

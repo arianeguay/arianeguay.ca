@@ -43,14 +43,14 @@ const ContainerVerticalReversedStyled = (theme: CustomTheme) => css`
 const ContainerHorizontalStyled = (theme: CustomTheme) => css`
   display: flex;
   flex-direction: row;
-  gap: ${theme.spacing.xl};
+  gap: ${theme.spacing.xxxxxl};
   align-items: center;
 `;
 
 const ContainerHorizontalReversedStyled = (theme: CustomTheme) => css`
   display: flex;
   flex-direction: row-reverse;
-  gap: ${theme.spacing.xl};
+  gap: ${theme.spacing.xxxxxl};
   align-items: center;
 `;
 

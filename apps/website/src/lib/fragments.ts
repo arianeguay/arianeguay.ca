@@ -202,6 +202,7 @@ export const ExperienceSectionFields = /* GraphQL */ `
   cvFileTitle
   cvFileCta
   cvFileDescription
+  splashesCollection(limit: 5, locale: $locale) { items { asset { url title } margin top side } }
 `;
 
 export const ProjectFields = /* GraphQL */ `
