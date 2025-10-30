@@ -1,15 +1,19 @@
 "use client";
 
+import { NavItem } from "apps/website/src/types/settings";
 import { useState } from "react";
 import Logo from "../../logo";
-import NavItem from "./NavItem";
+import LanguageSwitcher from "../desktop/LanguageSwitcher";
+import NavItemComponent from "./NavItem";
 import {
   DrawerContentStyled,
+  DrawerFooterStyled,
   DrawerHeaderStyled,
   DrawerStyled,
   MobileToggleStyled,
 } from "./styles";
 import HeaderMobileToggle from "./toggle";
+
 interface MobileNavProps {
   nav: NavItem[];
 }
@@ -29,9 +33,16 @@ const MobileNav = ({ nav }: MobileNavProps) => {
         </DrawerHeaderStyled>
         <DrawerContentStyled>
           {nav.map((item) => (
-            <NavItem currentPath={currentPath} key={item.label} {...item} />
+            <NavItemComponent
+              currentPath={currentPath}
+              key={item.label}
+              {...item}
+            />
           ))}
         </DrawerContentStyled>
+        <DrawerFooterStyled>
+          <LanguageSwitcher type="default" />
+        </DrawerFooterStyled>
       </DrawerStyled>
     </>
   );

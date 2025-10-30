@@ -22,7 +22,7 @@ const DesktopNav: React.FC<DesktopNavProps> = ({ nav }) => {
           currentPath={effectivePath}
         />
       ))}
-      <LanguageSwitcher />
+      <LanguageSwitcher type="small" />
     </HeaderNavStyled>
   );
 };

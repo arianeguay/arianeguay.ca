@@ -1,10 +1,10 @@
 import { useLocale } from "apps/website/src/context/locale-provider";
 import type { NavItem } from "apps/website/src/types/settings";
-import { Page } from "apps/website/src/types/shared";
 import { ChevronDown } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { NavItemStyled } from "../../styles";
+import { getFullHandle } from "../../utils";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,19 +16,7 @@ interface NavItemProps extends NavItem {
   currentPath: string;
 }
 
-const getFullHandle = (page: Page, locale: string) => {
-  const parentSlug: string | undefined = page?.parentPage?.slug;
-
-  if (page.slug === "home") {
-    return locale === "fr" ? "/" : "/en";
-  }
-  const href = [locale !== "fr" && "en", parentSlug, page.slug]
-    .filter(Boolean)
-    .join("/");
-  return `/${href}`;
-};
-
-const NavItem: React.FC<NavItemProps> = ({
+const NavItemComponent: React.FC<NavItemProps> = ({
   label,
   page,
   currentPath,
@@ -85,4 +73,4 @@ const NavItem: React.FC<NavItemProps> = ({
   );
 };
 
-export default NavItem;
+export default NavItemComponent;

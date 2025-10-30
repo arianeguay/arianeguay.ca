@@ -1,23 +1,43 @@
 import { useLocale } from "apps/website/src/context/locale-provider";
 import type { NavItem } from "apps/website/src/types/settings";
-import { MobileNavItemStyled } from "./styles";
+import { getFullHandle } from "../../utils";
+import {
+  MobileNavItemLabel,
+  MobileNavItemStyled,
+  MobileSubNavItemStyled,
+} from "./styles";
 interface NavItemProps extends NavItem {
   currentPath: string;
 }
-const NavItem: React.FC<NavItemProps> = ({ label, page, currentPath }) => {
+const NavItemComponent: React.FC<NavItemProps> = ({
+  label,
+  page,
+  subitemsCollection,
+  currentPath,
+}) => {
   const { locale } = useLocale();
-  const parentSlug: string | undefined = (page as any)?.parentPage?.slug;
-  const basePath =
-    page.slug === "home" ? "/" : parentSlug ? `/${parentSlug}/${page.slug}` : `/${page.slug}`;
-  const localisedHandle = locale === "fr" ? basePath : `/${locale}${basePath}`;
+  const href = getFullHandle(page, locale);
   return (
-    <MobileNavItemStyled
-      href={localisedHandle}
-      $active={currentPath === localisedHandle}
-    >
-      {label}
+    <MobileNavItemStyled>
+      <MobileNavItemLabel
+        $active={currentPath === href}
+        href={href}
+        $hasSubitems={subitemsCollection.items.length > 0}
+      >
+        {label}
+      </MobileNavItemLabel>
+      {subitemsCollection.items.length > 0 &&
+        subitemsCollection.items.map((item) => (
+          <MobileSubNavItemStyled
+            href={getFullHandle(item.page, locale)}
+            $active={currentPath === getFullHandle(item.page, locale)}
+            $variant={item.variant}
+          >
+            {item.label}
+          </MobileSubNavItemStyled>
+        ))}
     </MobileNavItemStyled>
   );
 };
 
-export default NavItem;
+export default NavItemComponent;

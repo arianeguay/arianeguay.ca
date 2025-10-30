@@ -1,8 +1,8 @@
 "use client";
 
 import { useBreakpointDown } from "apps/website/src/hooks/useMediaQuery";
+import { NavItem } from "apps/website/src/types/settings";
 import DesktopNav from "./desktop";
-import NavItem from "./desktop/NavItem";
 import MobileNav from "./mobile";
 
 interface HeaderNavProps {
