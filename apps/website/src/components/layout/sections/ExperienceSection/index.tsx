@@ -65,9 +65,6 @@ const ExperienceSectionComponent: React.FC<ExperienceSectionProps> = ({
       splashes={data.splashesCollection?.items || []}
     >
       <div>
-        <Typography variant="h2" element="h2" style={{ textAlign: "center" }}>
-          {data.title}
-        </Typography>
         <ExperienceProfileSection
           title={data.enterpriseTitle}
           titlePosition="center"
