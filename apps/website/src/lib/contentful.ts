@@ -14,6 +14,7 @@ export const mockData: { siteSettings: SiteSettings } = {
           __typename: "NavItem",
           label: "Home",
           page: { slug: "home" } as any,
+          variant: "default",
           subitemsCollection: { items: [] },
         },
         {
@@ -21,6 +22,7 @@ export const mockData: { siteSettings: SiteSettings } = {
           __typename: "NavItem",
           label: "Blog",
           page: { slug: "blog" } as any,
+          variant: "default",
           subitemsCollection: { items: [] },
         },
         {
@@ -28,6 +30,7 @@ export const mockData: { siteSettings: SiteSettings } = {
           __typename: "NavItem",
           label: "Projects",
           page: { slug: "projects" } as any,
+          variant: "default",
           subitemsCollection: { items: [] },
         },
         {
@@ -35,6 +38,7 @@ export const mockData: { siteSettings: SiteSettings } = {
           __typename: "NavItem",
           label: "About",
           page: { slug: "about" } as any,
+          variant: "default",
           subitemsCollection: { items: [] },
         },
         {
@@ -42,6 +46,7 @@ export const mockData: { siteSettings: SiteSettings } = {
           __typename: "NavItem",
           label: "Contact",
           page: { slug: "contact" } as any,
+          variant: "default",
           subitemsCollection: { items: [] },
         },
       ],
