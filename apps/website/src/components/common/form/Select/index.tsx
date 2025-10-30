@@ -1,11 +1,12 @@
 "use client";
 import React, { forwardRef, useEffect, useMemo, useRef, useState } from "react";
 import {
-  SelectContainer,
   NativeSelect,
-  SelectTrigger,
+  SelectContainer,
   SelectListbox,
   SelectOptionItem,
+  SelectPlaceholder,
+  SelectTrigger,
   SelectValue,
 } from "./styles";
 
@@ -41,21 +42,40 @@ export interface SelectProps
  */
 const Select = forwardRef<HTMLSelectElement, SelectProps>(
   (
-    { error, fullWidth, onChange, sanitize = true, options, value, defaultValue, id, disabled, placeholder, ...props },
+    {
+      error,
+      fullWidth,
+      onChange,
+      sanitize = true,
+      options,
+      value,
+      defaultValue,
+      id,
+      disabled,
+      placeholder,
+      ...props
+    },
     ref,
   ) => {
     const nativeRef = useRef<HTMLSelectElement | null>(null);
     const mergedRef = (node: HTMLSelectElement | null) => {
       nativeRef.current = node;
       if (typeof ref === "function") ref(node);
-      else if (ref) (ref as React.MutableRefObject<HTMLSelectElement | null>).current = node;
+      else if (ref)
+        (ref as React.MutableRefObject<HTMLSelectElement | null>).current =
+          node;
     };
 
     const [open, setOpen] = useState(false);
-    const [uncontrolledValue, setUncontrolledValue] = useState<string | undefined>(
-      typeof value === "string" ? undefined : (defaultValue as string | undefined),
+    const [uncontrolledValue, setUncontrolledValue] = useState<
+      string | undefined
+    >(
+      typeof value === "string"
+        ? undefined
+        : (defaultValue as string | undefined),
     );
-    const currentValue = (value as string | undefined) ?? uncontrolledValue ?? "";
+    const currentValue =
+      (value as string | undefined) ?? uncontrolledValue ?? "";
     const [highlighted, setHighlighted] = useState<number>(-1);
 
     const selectedLabel = useMemo(() => {
@@ -105,7 +125,10 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
         e.preventDefault();
         setOpen(true);
         setHighlighted((prev) => {
-          const next = e.key === "ArrowDown" ? Math.min(prev + 1, options.length - 1) : Math.max(prev - 1, 0);
+          const next =
+            e.key === "ArrowDown"
+              ? Math.min(prev + 1, options.length - 1)
+              : Math.max(prev - 1, 0);
           return next < 0 ? 0 : next;
         });
       } else if (e.key === "Enter" || e.key === " ") {
@@ -176,13 +199,19 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
           $error={error}
           $fullWidth={fullWidth}
         >
-          <SelectValue>{selectedLabel || placeholder || ""}</SelectValue>
+          {selectedLabel ? (
+            <SelectValue>{selectedLabel}</SelectValue>
+          ) : (
+            <SelectPlaceholder>{placeholder}</SelectPlaceholder>
+          )}
         </SelectTrigger>
 
         <SelectListbox
           id={listboxId}
           role="listbox"
-          aria-activedescendant={highlighted >= 0 ? `${listboxId}-opt-${highlighted}` : undefined}
+          aria-activedescendant={
+            highlighted >= 0 ? `${listboxId}-opt-${highlighted}` : undefined
+          }
           tabIndex={-1}
           $open={open}
           onKeyDown={onListKeyDown}
@@ -212,4 +241,3 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
 
 Select.displayName = "Select";
 export default Select;
-

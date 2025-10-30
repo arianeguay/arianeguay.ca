@@ -51,6 +51,13 @@ export const SelectValue = styled.span`
   text-align: left;
 `;
 
+export const SelectPlaceholder = styled.span`
+  flex: 1 1 auto;
+  text-align: left;
+  color: ${({ theme }) => theme.colors.ink2};
+  opacity: 0.7;
+`;
+
 export const SelectListbox = styled.ul<{
   $open?: boolean;
   $maxHeight?: string;

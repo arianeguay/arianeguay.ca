@@ -166,6 +166,7 @@ const FormViewer: React.FC<FormModel> = (props) => {
             value={values[it.fieldName] ?? ""}
             onChange={handleChange}
             disabled={submitting}
+            placeholder={it.placeholder ?? undefined}
             style={{ width: "100%", padding: 12 }}
             options={
               it.options?.map((opt) => ({ value: opt, label: opt })) ?? []
