@@ -193,14 +193,15 @@ export const ExperienceSectionFields = /* GraphQL */ `
   description { json }
   enterpriseTitle
   background
-  enterpriseCollection(limit: 3) { items { companyName dateEnd dateStart description { json } highlights { json } location roleTitle tagsCollection { items { name } } } }
+  enterpriseCollection(limit: 4) { items { companyName dateEnd dateStart description { json } highlights { json } location roleTitle tagsCollection { items { name } } } }
   formationsTitle
-  formationsCollection(limit: 3) { items { school description { json } program years } }
+  formationsCollection(limit: 3) { items { school description { json } program  startDate endDate } }
   competencesTitle
   competencesCollection(limit: 6) { items { title tagsCollection { items { name } } } }
   cvFile { url }
   cvFileTitle
   cvFileCta
+  cvPreview { url title }
   cvFileDescription
   splashesCollection(limit: 5, locale: $locale) { items { asset { url title } margin top side } }
 `;

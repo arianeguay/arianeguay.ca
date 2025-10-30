@@ -310,7 +310,8 @@ export type Enterprise = {
 export type Formation = {
   school: string;
   program: string;
-  years: string;
+  startDate: string;
+  endDate: string;
   description?: CFMaybe<{ json: Document }>;
 };
 
@@ -330,10 +331,11 @@ export type ExperienceSection = {
   formationsCollection?: CFMaybe<{ items: Formation[] }>;
   competencesTitle?: CFMaybe<string>;
   competencesCollection?: CFMaybe<{ items: Competence[] }>;
-  cvFile?: CFMaybe<{ url: string }>;
+  cvFile?: CFMaybe<CfAsset>;
   cvFileTitle?: CFMaybe<string>;
   cvFileCta?: CFMaybe<string>;
   cvFileDescription?: CFMaybe<string>;
+  cvPreview?: CFMaybe<CfAsset>;
   background?: CFMaybe<Background>;
   splashesCollection?: CFMaybe<{ items: BackgroundSplash[] }>;
 };

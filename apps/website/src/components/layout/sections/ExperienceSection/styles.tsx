@@ -34,29 +34,17 @@ export const ExperienceSectionCard = styled.div`
     0 1px 0 0 rgba(140, 15, 72, 0.06);
 `;
 
-export const ExperienceSectionCardHeader = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: ${({ theme }) => theme.spacing.xxl};
-  width: 100%;
-
-  .body2 {
-    margin-block: 0;
-  }
-
-  @media screen and (max-width: ${({ theme }) => theme.breakpoints.md}px) {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: ${({ theme }) => theme.spacing.md};
-  }
-`;
-
 export const ExperienceSectionCardHeading = styled.div`
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.spacing.xs};
+  margin-block-end: ${({ theme }) => theme.spacing.md};
+  .body2 {
+    margin-block: 0;
+  }
+  .h5 {
+    margin-block: 0;
+  }
 `;
 
 export const ExperienceSectionCardFooter = styled.div`
@@ -91,9 +79,14 @@ export const ExperienceProfileSectionStyled = styled.div`
   padding-block: ${({ theme }) => theme.spacing.xxl};
   background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(3px);
-
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.xxxl};
   hr {
     margin-block-start: ${({ theme }) => theme.spacing.md};
     margin-block-end: ${({ theme }) => theme.spacing.lg};
   }
 `;
+
+export const ExperienceProfileSectionContent = styled.div``;

@@ -1,20 +1,64 @@
-import { ExperienceSection } from "apps/website/src/types/shared";
+import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
+import theme from "apps/website/src/theme";
+import "react-vertical-timeline-component/style.min.css";
 import Button from "../../../common/button";
 import { CtaAnchorStyled } from "../../../common/cta/styles";
 import Tag from "../../../common/tag";
 import TagGroup from "../../../common/tag/TagGroup";
 import Typography from "../../../common/typography";
 import Container from "../../container";
-import FormationCard from "./FormationCard";
-import JobExperienceCard from "./JobExperienceCard";
 import ExperienceProfileSection from "./Section";
 import { CompetencesGridStyled } from "./styles";
-interface ExperienceSectionProps {
-  data: ExperienceSection;
-}
+import { ExperienceSectionProps, ExperienceTimelineItem } from "./types";
+import ExperienceSectionVerticalTimeline from "./VerticalTimeline";
+
 const ExperienceSectionComponent: React.FC<ExperienceSectionProps> = ({
   data,
 }) => {
+  // Map Experience + Formation into VerticalTimeline events
+  const expEvents = (data.enterpriseCollection?.items || []).map((e, i) => {
+    const item: ExperienceTimelineItem = {
+      id: `exp-${i}-${e.companyName}-${e.roleTitle}`,
+      date: e.dateEnd || e.dateStart,
+      startDate: e.dateStart,
+      endDate: e.dateEnd || "",
+      title: e.roleTitle,
+      subtitle: e.companyName,
+      color: theme.colors.brand.primary,
+      tags: e.tagsCollection?.items,
+      highlights:
+        !!e.highlights && documentToReactComponents(e.highlights.json),
+      description:
+        !!e.description && documentToReactComponents(e.description.json),
+      type: "experience",
+    };
+    return item;
+  });
+
+  const eduEvents = (data.formationsCollection?.items || []).map((f, i) => {
+    const item: ExperienceTimelineItem = {
+      id: `edu-${i}-${f.school}-${f.program}`,
+      startDate: f.startDate,
+      endDate: f.endDate,
+      date: f.endDate || f.startDate,
+      title: f.program,
+      subtitle: f.school,
+      color: theme.colors.ink2,
+      description:
+        f.description && documentToReactComponents(f.description.json),
+      type: "formation",
+    };
+    return item;
+  });
+
+  const vtlEvents: ExperienceTimelineItem[] = [...expEvents, ...eduEvents].sort(
+    (a, b) => {
+      const dateA = new Date(a.date);
+      const dateB = new Date(b.date);
+      return dateB.getTime() - dateA.getTime();
+    },
+  );
+
   return (
     <Container
       background={data.background || undefined}
@@ -24,15 +68,13 @@ const ExperienceSectionComponent: React.FC<ExperienceSectionProps> = ({
         <Typography variant="h2" element="h2" style={{ textAlign: "center" }}>
           {data.title}
         </Typography>
-        <ExperienceProfileSection title={data.enterpriseTitle}>
-          {data.enterpriseCollection?.items.map((enterprise, index) => (
-            <JobExperienceCard key={index} data={enterprise} />
-          ))}
-        </ExperienceProfileSection>
-        <ExperienceProfileSection title={data.formationsTitle}>
-          {data.formationsCollection?.items.map((formation, index) => (
-            <FormationCard key={index} data={formation} />
-          ))}
+        <ExperienceProfileSection
+          title={data.enterpriseTitle}
+          titlePosition="center"
+        >
+          <div>
+            <ExperienceSectionVerticalTimeline items={vtlEvents} />
+          </div>
         </ExperienceProfileSection>
         <ExperienceProfileSection title={data.competencesTitle}>
           <CompetencesGridStyled>
@@ -45,7 +87,10 @@ const ExperienceSectionComponent: React.FC<ExperienceSectionProps> = ({
             ))}
           </CompetencesGridStyled>
         </ExperienceProfileSection>
-        <ExperienceProfileSection title={data.cvFileTitle}>
+        <ExperienceProfileSection
+          title={data.cvFileTitle}
+          asset={data.cvPreview}
+        >
           <Typography
             variant="h6"
             element="div"
