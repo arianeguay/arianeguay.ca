@@ -26,6 +26,7 @@ const CTASectionComponent: React.FC<CTASectionProps> = ({ data, isHero }) => {
           <img
             src={data.illustration.url}
             alt={data.illustration.title ?? ""}
+            style={{ maxWidth: "65vw" }}
           />
         )}
         <CtaSectionBodyStyled>
