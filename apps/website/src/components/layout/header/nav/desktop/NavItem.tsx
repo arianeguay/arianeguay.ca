@@ -1,6 +1,7 @@
 import { useLocale } from "apps/website/src/context/locale-provider";
 import type { NavItem } from "apps/website/src/types/settings";
 import { Page } from "apps/website/src/types/shared";
+import { ChevronDown } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { NavItemStyled } from "../../styles";
@@ -11,7 +12,6 @@ import {
   DropdownMenuList,
   DropdownMenuTrigger,
 } from "./styles";
-
 interface NavItemProps extends NavItem {
   currentPath: string;
 }
@@ -48,18 +48,23 @@ const NavItem: React.FC<NavItemProps> = ({
               aria-label={label}
               about={`Go to ${label}`}
             >
-              {label} ▾
+              {label} <ChevronDown size={20} />
             </NavItemStyled>
           </DropdownMenuTrigger>
           <DropdownMenuContent $open={open}>
             <DropdownMenuList>
-              {subitemsCollection?.items?.map((subitem) => (
-                <DropdownMenuItem key={subitem.label}>
-                  <Link href={getFullHandle(subitem.page, locale)}>
-                    {subitem.label}
-                  </Link>
-                </DropdownMenuItem>
-              ))}
+              {subitemsCollection?.items?.map((subitem) => {
+                const fullHandle = getFullHandle(subitem.page, locale);
+                return (
+                  <DropdownMenuItem
+                    key={subitem.label}
+                    $active={currentPath === fullHandle}
+                    $variant={subitem.variant ?? "default"}
+                  >
+                    <Link href={fullHandle}>{subitem.label}</Link>
+                  </DropdownMenuItem>
+                );
+              })}
             </DropdownMenuList>
           </DropdownMenuContent>
         </DropdownMenu>

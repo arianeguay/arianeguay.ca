@@ -454,7 +454,8 @@ export async function getSiteSettings(
                         slug
                       }
                   }
-                      subitemsCollection(limit: 5, locale: $locale) {
+                      variant
+                      subitemsCollection(limit: 10, locale: $locale) {
                         items {
                          
                           label
@@ -467,6 +468,7 @@ export async function getSiteSettings(
                                 slug
                               }
                           }
+                              variant
                       }
                       }
                   }

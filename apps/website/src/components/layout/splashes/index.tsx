@@ -40,7 +40,7 @@ const BackgroundSplashesComponent: React.FC<BackgroundSplashesProps> = ({
                   : undefined,
               top: splashPercent(splash.top),
               position: "absolute",
-              zIndex: 0,
+              zIndex: -1,
               userSelect: "none",
             }}
           />

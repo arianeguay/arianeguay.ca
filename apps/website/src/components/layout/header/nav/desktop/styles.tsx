@@ -1,4 +1,5 @@
-import styled from "styled-components";
+import { NavItem } from "apps/website/src/types/settings";
+import styled, { css, DefaultTheme } from "styled-components";
 
 export const DropdownMenu = styled.div`
   position: relative;
@@ -34,12 +35,57 @@ export const DropdownMenuContent = styled.div<{ $open: boolean }>`
 export const DropdownMenuList = styled.div`
   padding: ${({ theme }) => theme.spacing.md};
 `;
-export const DropdownMenuItem = styled.div`
+
+const DropdownMenuItemDefault = (active: boolean, theme: DefaultTheme) => css`
+  ${active
+    ? css`
+        color: ${theme.colors.brand.primary};
+        font-weight: ${theme.font.weight.semibold};
+      `
+    : css`
+        &:hover {
+          background-color: ${theme.colors.brand.primary};
+          color: ${theme.colors.inkLight};
+        }
+      `}
+`;
+const DropdownMenuItemLink = (active: boolean, theme: DefaultTheme) => css`
+  text-decoration: underline;
+  font-weight: ${theme.font.weight.semibold};
+  font-size: ${theme.typography.body1.size};
+  &:not(:last-child) {
+    margin-block-end: ${({ theme }) => theme.spacing.md};
+  }
+  &:not(:first-child) {
+    margin-block-start: ${({ theme }) => theme.spacing.md};
+  }
+
+  ${active
+    ? css`
+        color: ${theme.colors.brand.primaryAlt};
+        text-decoration: none;
+        cursor: not-allowed;
+        & > * {
+          cursor: not-allowed;
+        }
+      `
+    : css`
+        &:hover {
+          color: ${theme.colors.brand.primary};
+          text-decoration: none;
+        }
+      `}
+`;
+
+export const DropdownMenuItem = styled.div<{
+  $active?: boolean;
+  $variant?: NavItem["variant"];
+}>`
   cursor: pointer;
   padding-inline: ${({ theme }) => theme.spacing.lg};
   padding-block: ${({ theme }) => theme.spacing.xs};
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.brand.primary};
-    color: ${({ theme }) => theme.colors.inkLight};
-  }
+  ${({ $active, theme, $variant }) =>
+    $variant === "default"
+      ? DropdownMenuItemDefault(!!$active, theme)
+      : DropdownMenuItemLink(!!$active, theme)}
 `;

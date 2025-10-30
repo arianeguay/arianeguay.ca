@@ -23,6 +23,7 @@ export interface NavItem {
   page: Page;
   subitemsCollection: { items: NavItem[] };
   sys: CFSys;
+  variant: "default" | "link";
 }
 
 export type SiteSettingsFields = {

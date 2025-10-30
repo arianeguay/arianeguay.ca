@@ -62,7 +62,9 @@ export const NavItemStyled = styled(Link)<{ $active?: boolean }>`
 
   font-size: ${({ theme }) => theme.typography.body1.size}px;
   font-weight: ${({ theme }) => theme.font.weight.medium};
-
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.xs};
   ${({ $active, theme }) =>
     $active
       ? css`
